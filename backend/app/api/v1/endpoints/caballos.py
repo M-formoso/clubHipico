@@ -66,16 +66,6 @@ async def buscar_caballos(
     return caballo_service.buscar(db, termino=q, skip=skip, limit=limit)
 
 
-@router.post("/debug")
-async def debug_caballo(request: dict):
-    """Endpoint temporal para debug - ver qué datos llegan"""
-    import json
-    print("=" * 50)
-    print("DEBUG: Datos recibidos del frontend:")
-    print(json.dumps(request, indent=2, default=str))
-    print("=" * 50)
-    return {"received": request}
-
 @router.post(
     "/",
     response_model=CaballoSchema,
@@ -87,18 +77,7 @@ async def crear_caballo(
     current_user: Usuario = Depends(require_admin)
 ):
     """Crea un nuevo caballo."""
-    try:
-        import json
-        print("=" * 50)
-        print("Caballo data validated:")
-        print(json.dumps(caballo.model_dump(), indent=2, default=str))
-        print("=" * 50)
-        return caballo_service.crear(db, caballo)
-    except Exception as e:
-        import traceback
-        print(f"Error creating caballo: {str(e)}")
-        print(f"Traceback: {traceback.format_exc()}")
-        raise
+    return caballo_service.crear(db, caballo)
 
 
 @router.get("/{caballo_id}", response_model=CaballoSchema)

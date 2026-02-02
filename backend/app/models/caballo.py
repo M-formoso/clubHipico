@@ -71,7 +71,7 @@ class Caballo(Base):
     estado = Column(SQLEnum(EstadoCaballoEnum), default=EstadoCaballoEnum.ACTIVO, nullable=False)
 
     # ========== QR CODE ==========
-    qr_code = Column(String(500), nullable=True)  # URL o path del QR generado automáticamente
+    qr_code = Column(Text, nullable=True)  # QR code en base64 o URL
 
     # ========== ALIMENTACIÓN ==========
     grano_balanceado = Column(String(200), nullable=True)

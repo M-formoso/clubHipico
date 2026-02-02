@@ -1,9 +1,12 @@
 from celery import shared_task
 from app.db.session import SessionLocal
-from app.services import historial_medico_service, pago_service, evento_service, alerta_service
+from app.services import pago_service, evento_service, alerta_service
+from app.services import caballo_service
 from app.schemas.alerta import AlertaCreate
 from app.models.alerta import TipoAlertaEnum, PrioridadAlertaEnum
-from datetime import date, timedelta
+from app.models.pago import EstadoPagoEnum
+from datetime import date, datetime, timedelta
+from sqlalchemy import and_
 
 
 @shared_task
@@ -14,26 +17,40 @@ def verificar_vacunas_vencidas():
     """
     db = SessionLocal()
     try:
+        from app.models.caballo import VacunaRegistro
+
         # Obtener vacunas que vencen en los próximos 7 días
-        vacunas_proximas = historial_medico_service.obtener_proximas_vacunas(db, dias=7)
-
-        for vacuna in vacunas_proximas:
-            # Verificar si ya existe una alerta para esta vacuna
-            alerta_data = AlertaCreate(
-                tipo=TipoAlertaEnum.VACUNA,
-                prioridad=PrioridadAlertaEnum.ALTA,
-                titulo=f"Vacuna próxima a vencer - {vacuna.caballo.nombre}",
-                mensaje=f"La vacuna '{vacuna.descripcion or vacuna.medicamento}' del caballo {vacuna.caballo.nombre} vence el {vacuna.proxima_aplicacion}",
-                fecha_evento=vacuna.proxima_aplicacion,
-                entidad_relacionada_tipo="caballo",
-                entidad_relacionada_id=vacuna.caballo_id
+        fecha_limite = date.today() + timedelta(days=7)
+        vacunas_proximas = db.query(VacunaRegistro).filter(
+            and_(
+                VacunaRegistro.proxima_aplicacion.isnot(None),
+                VacunaRegistro.proxima_aplicacion <= fecha_limite,
+                VacunaRegistro.proxima_aplicacion >= date.today()
             )
+        ).all()
 
-            # Crear alerta para todos los administradores
-            alerta_service.crear_para_admins(db, alerta_data)
+        alertas_creadas = 0
+        for vacuna in vacunas_proximas:
+            try:
+                alerta_data = AlertaCreate(
+                    tipo=TipoAlertaEnum.VACUNA,
+                    prioridad=PrioridadAlertaEnum.ALTA,
+                    titulo=f"Vacuna próxima a vencer - {vacuna.caballo.nombre if vacuna.caballo else 'Caballo'}",
+                    mensaje=f"La vacuna '{vacuna.tipo or 'Vacuna'}' vence el {vacuna.proxima_aplicacion.strftime('%d/%m/%Y')}",
+                    fecha_evento=datetime.combine(vacuna.proxima_aplicacion, datetime.min.time()),
+                    entidad_relacionada_tipo="caballo",
+                    entidad_relacionada_id=vacuna.caballo_id
+                )
+
+                # Crear alerta para todos los administradores
+                alerta_service.crear_para_admins(db, alerta_data)
+                alertas_creadas += 1
+            except Exception as e:
+                print(f"Error creando alerta para vacuna {vacuna.id}: {e}")
+                continue
 
         db.commit()
-        return f"Procesadas {len(vacunas_proximas)} vacunas próximas a vencer"
+        return f"Procesadas {len(vacunas_proximas)} vacunas, creadas {alertas_creadas} alertas"
 
     except Exception as e:
         db.rollback()
@@ -50,24 +67,39 @@ def verificar_herrajes_pendientes():
     """
     db = SessionLocal()
     try:
-        # Obtener herrajes que vencen en los próximos 7 días
-        herrajes_proximos = historial_medico_service.obtener_proximos_herrajes(db, dias=7)
+        from app.models.caballo import HerrjeRegistro
 
-        for herraje in herrajes_proximos:
-            alerta_data = AlertaCreate(
-                tipo=TipoAlertaEnum.HERRAJE,
-                prioridad=PrioridadAlertaEnum.MEDIA,
-                titulo=f"Herraje próximo - {herraje.caballo.nombre}",
-                mensaje=f"El herraje del caballo {herraje.caballo.nombre} debe realizarse el {herraje.proxima_aplicacion}",
-                fecha_evento=herraje.proxima_aplicacion,
-                entidad_relacionada_tipo="caballo",
-                entidad_relacionada_id=herraje.caballo_id
+        # Obtener herrajes que vencen en los próximos 3 días
+        fecha_limite = date.today() + timedelta(days=3)
+        herrajes_proximos = db.query(HerrjeRegistro).filter(
+            and_(
+                HerrjeRegistro.proxima_fecha.isnot(None),
+                HerrjeRegistro.proxima_fecha <= fecha_limite,
+                HerrjeRegistro.proxima_fecha >= date.today()
             )
+        ).all()
 
-            alerta_service.crear_para_admins(db, alerta_data)
+        alertas_creadas = 0
+        for herraje in herrajes_proximos:
+            try:
+                alerta_data = AlertaCreate(
+                    tipo=TipoAlertaEnum.HERRAJE,
+                    prioridad=PrioridadAlertaEnum.MEDIA,
+                    titulo=f"Herraje próximo - {herraje.caballo.nombre if herraje.caballo else 'Caballo'}",
+                    mensaje=f"El herraje debe realizarse el {herraje.proxima_fecha.strftime('%d/%m/%Y')}",
+                    fecha_evento=datetime.combine(herraje.proxima_fecha, datetime.min.time()),
+                    entidad_relacionada_tipo="caballo",
+                    entidad_relacionada_id=herraje.caballo_id
+                )
+
+                alerta_service.crear_para_admins(db, alerta_data)
+                alertas_creadas += 1
+            except Exception as e:
+                print(f"Error creando alerta para herraje {herraje.id}: {e}")
+                continue
 
         db.commit()
-        return f"Procesados {len(herrajes_proximos)} herrajes pendientes"
+        return f"Procesados {len(herrajes_proximos)} herrajes, creadas {alertas_creadas} alertas"
 
     except Exception as e:
         db.rollback()
@@ -84,34 +116,50 @@ def verificar_pagos_vencidos():
     """
     db = SessionLocal()
     try:
-        # Obtener pagos vencidos
-        pagos_vencidos = pago_service.obtener_pagos_vencidos(db)
+        from app.models.pago import Pago
 
-        for pago in pagos_vencidos:
-            dias_vencido = (date.today() - pago.fecha_vencimiento).days
-
-            # Determinar prioridad según días de vencimiento
-            if dias_vencido > 30:
-                prioridad = PrioridadAlertaEnum.CRITICA
-            elif dias_vencido > 15:
-                prioridad = PrioridadAlertaEnum.ALTA
-            else:
-                prioridad = PrioridadAlertaEnum.MEDIA
-
-            alerta_data = AlertaCreate(
-                tipo=TipoAlertaEnum.PAGO,
-                prioridad=prioridad,
-                titulo=f"Pago vencido - {pago.cliente.nombre} {pago.cliente.apellido}",
-                mensaje=f"Pago de '{pago.concepto}' por ${pago.monto} vencido hace {dias_vencido} días",
-                fecha_evento=pago.fecha_vencimiento,
-                entidad_relacionada_tipo="pago",
-                entidad_relacionada_id=pago.id
+        # Obtener pagos vencidos o pendientes
+        pagos_vencidos = db.query(Pago).filter(
+            and_(
+                Pago.fecha_vencimiento.isnot(None),
+                Pago.fecha_vencimiento < date.today(),
+                Pago.estado.in_([EstadoPagoEnum.PENDIENTE, EstadoPagoEnum.VENCIDO])
             )
+        ).all()
 
-            alerta_service.crear_para_admins(db, alerta_data)
+        alertas_creadas = 0
+        for pago in pagos_vencidos:
+            try:
+                dias_vencido = (date.today() - pago.fecha_vencimiento).days
+
+                # Determinar prioridad según días de vencimiento
+                if dias_vencido > 30:
+                    prioridad = PrioridadAlertaEnum.CRITICA
+                elif dias_vencido > 15:
+                    prioridad = PrioridadAlertaEnum.ALTA
+                else:
+                    prioridad = PrioridadAlertaEnum.MEDIA
+
+                cliente_nombre = f"{pago.cliente.nombre} {pago.cliente.apellido}" if pago.cliente else "Cliente"
+
+                alerta_data = AlertaCreate(
+                    tipo=TipoAlertaEnum.PAGO,
+                    prioridad=prioridad,
+                    titulo=f"Pago vencido - {cliente_nombre}",
+                    mensaje=f"Pago de '{pago.concepto}' por ${pago.monto} vencido hace {dias_vencido} días",
+                    fecha_evento=datetime.combine(pago.fecha_vencimiento, datetime.min.time()),
+                    entidad_relacionada_tipo="pago",
+                    entidad_relacionada_id=pago.id
+                )
+
+                alerta_service.crear_para_admins(db, alerta_data)
+                alertas_creadas += 1
+            except Exception as e:
+                print(f"Error creando alerta para pago {pago.id}: {e}")
+                continue
 
         db.commit()
-        return f"Procesados {len(pagos_vencidos)} pagos vencidos"
+        return f"Procesados {len(pagos_vencidos)} pagos vencidos, creadas {alertas_creadas} alertas"
 
     except Exception as e:
         db.rollback()
@@ -128,30 +176,57 @@ def enviar_recordatorios_eventos():
     """
     db = SessionLocal()
     try:
-        # Obtener eventos de mañana (próximas 24 horas)
-        eventos_proximos = evento_service.obtener_eventos_proximos(db, dias=1)
+        from app.models.evento import Evento, InscripcionEvento, EstadoEventoEnum, EstadoInscripcionEnum
 
+        # Obtener eventos de mañana (próximas 24-48 horas)
+        fecha_inicio = datetime.now() + timedelta(hours=24)
+        fecha_fin = datetime.now() + timedelta(hours=48)
+
+        eventos_proximos = db.query(Evento).filter(
+            and_(
+                Evento.fecha_inicio >= fecha_inicio,
+                Evento.fecha_inicio <= fecha_fin,
+                Evento.estado == EstadoEventoEnum.PROGRAMADO
+            )
+        ).all()
+
+        alertas_creadas = 0
         for evento in eventos_proximos:
-            # Obtener inscripciones confirmadas
-            inscripciones = evento_service.obtener_inscripciones_evento(db, evento.id)
-
-            for inscripcion in inscripciones:
-                if inscripcion.cliente.usuario_id:
-                    alerta_data = AlertaCreate(
-                        tipo=TipoAlertaEnum.EVENTO,
-                        prioridad=PrioridadAlertaEnum.MEDIA,
-                        titulo=f"Recordatorio: {evento.titulo}",
-                        mensaje=f"Tienes un evento programado mañana a las {evento.fecha_inicio.strftime('%H:%M')}. Ubicación: {evento.ubicacion or 'Por definir'}",
-                        fecha_evento=evento.fecha_inicio.date(),
-                        entidad_relacionada_tipo="evento",
-                        entidad_relacionada_id=evento.id,
-                        usuario_id=inscripcion.cliente.usuario_id
+            try:
+                # Obtener inscripciones confirmadas
+                inscripciones = db.query(InscripcionEvento).filter(
+                    and_(
+                        InscripcionEvento.evento_id == evento.id,
+                        InscripcionEvento.estado == EstadoInscripcionEnum.CONFIRMADO
                     )
+                ).all()
 
-                    alerta_service.crear(db, alerta_data)
+                for inscripcion in inscripciones:
+                    try:
+                        if inscripcion.cliente and inscripcion.cliente.usuario_id:
+                            alerta_data = AlertaCreate(
+                                tipo=TipoAlertaEnum.EVENTO,
+                                prioridad=PrioridadAlertaEnum.MEDIA,
+                                titulo=f"Recordatorio: {evento.titulo}",
+                                mensaje=f"Tienes un evento programado mañana a las {evento.fecha_inicio.strftime('%H:%M')}. Ubicación: {evento.ubicacion or 'Por definir'}",
+                                fecha_evento=evento.fecha_inicio,
+                                entidad_relacionada_tipo="evento",
+                                entidad_relacionada_id=evento.id,
+                                usuario_id=inscripcion.cliente.usuario_id
+                            )
+
+                            alerta_service.crear(db, alerta_data)
+                            alertas_creadas += 1
+                    except Exception as e:
+                        print(f"Error creando alerta para inscripción {inscripcion.id}: {e}")
+                        continue
+
+            except Exception as e:
+                print(f"Error procesando evento {evento.id}: {e}")
+                continue
 
         db.commit()
-        return f"Enviados recordatorios para {len(eventos_proximos)} eventos"
+        return f"Procesados {len(eventos_proximos)} eventos, creadas {alertas_creadas} alertas"
 
     except Exception as e:
         db.rollback()

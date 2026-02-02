@@ -1,10 +1,7 @@
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
 from app.core.config import settings
 from app.api.v1.api import api_router
-import json
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -13,28 +10,6 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
 )
-
-@app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request: Request, exc: RequestValidationError):
-    """Handler para errores de validación 422"""
-    import sys
-
-    errors = exc.errors()
-
-    # Log a stderr para que aparezca en los logs
-    sys.stderr.write("=" * 80 + "\n")
-    sys.stderr.write("VALIDATION ERROR 422:\n")
-    sys.stderr.write(f"URL: {request.url}\n")
-    sys.stderr.write(f"Method: {request.method}\n")
-    sys.stderr.write(f"Validation errors:\n")
-    sys.stderr.write(json.dumps(errors, indent=2) + "\n")
-    sys.stderr.write("=" * 80 + "\n")
-    sys.stderr.flush()
-
-    return JSONResponse(
-        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-        content={"detail": errors},
-    )
 
 # CORS Configuration
 app.add_middleware(

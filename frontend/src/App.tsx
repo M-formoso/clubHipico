@@ -28,6 +28,7 @@ import { ClienteEditPage } from '@/pages/clientes/ClienteEditPage';
 // Eventos
 import { EventosListPage } from '@/pages/eventos/EventosListPage';
 import { EventoCreatePage } from '@/pages/eventos/EventoCreatePage';
+import { EventoDetailPage } from '@/pages/eventos/EventoDetailPage';
 
 // Usuarios
 import { UsuariosListPage } from '@/pages/usuarios/UsuariosListPage';
@@ -37,6 +38,8 @@ import { UsuarioEditPage } from '@/pages/usuarios/UsuarioEditPage';
 
 // Pagos
 import { PagosListPage } from '@/pages/pagos/PagosListPage';
+import { PagoCreatePage } from '@/pages/pagos/PagoCreatePage';
+import { PagoDetailPage } from '@/pages/pagos/PagoDetailPage';
 
 // Reportes
 import { ReportesPage } from '@/pages/reportes/ReportesPage';
@@ -94,7 +97,7 @@ function App() {
           {/* Eventos */}
           <Route path="/eventos" element={<EventosListPage />} />
           <Route path="/eventos/nuevo" element={<EventoCreatePage />} />
-          {/* <Route path="/eventos/:id" element={<EventoDetailPage />} /> */}
+          <Route path="/eventos/:id" element={<EventoDetailPage />} />
 
           {/* Usuarios */}
           <Route path="/usuarios" element={<UsuariosListPage />} />
@@ -104,8 +107,8 @@ function App() {
 
           {/* Pagos */}
           <Route path="/pagos" element={<PagosListPage />} />
-          {/* <Route path="/pagos/nuevo" element={<PagoCreatePage />} /> */}
-          {/* <Route path="/pagos/:id" element={<PagoDetailPage />} /> */}
+          <Route path="/pagos/nuevo" element={<PagoCreatePage />} />
+          <Route path="/pagos/:id" element={<PagoDetailPage />} />
 
           {/* Reportes */}
           <Route path="/reportes" element={<ReportesPage />} />

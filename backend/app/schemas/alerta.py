@@ -150,6 +150,24 @@ class ConfiguracionAlertasBase(BaseModel):
     intervalo_agrupacion: Optional[int] = None
 
 
+class ConfiguracionAlertasCreate(ConfiguracionAlertasBase):
+    """Schema para crear ConfiguracionAlertasUsuario"""
+    usuario_id: UUID4
+
+
+class ConfiguracionAlertasUpdate(BaseModel):
+    """Schema para actualizar ConfiguracionAlertasUsuario"""
+    alertas_sistema: Optional[bool] = None
+    alertas_email: Optional[bool] = None
+    alertas_push: Optional[bool] = None
+    tipos_alertas: Optional[Dict[str, bool]] = None
+    horario_inicio: Optional[str] = None
+    horario_fin: Optional[str] = None
+    dias_semana: Optional[List[int]] = None
+    agrupar_alertas: Optional[bool] = None
+    intervalo_agrupacion: Optional[int] = None
+
+
 class ConfiguracionAlertasSchema(ConfiguracionAlertasBase):
     """Schema de respuesta de ConfiguracionAlertasUsuario"""
     id: UUID4
