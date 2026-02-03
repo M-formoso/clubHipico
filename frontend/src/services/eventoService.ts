@@ -41,24 +41,27 @@ export const eventoService = {
   },
 
   // Inscripciones
+  getInscripciones: async (eventoId: string) => {
+    const { data } = await api.get(`/eventos/${eventoId}/inscripciones`);
+    return data;
+  },
+
   inscribirse: async (eventoId: string, clienteId: string, caballoId?: string) => {
-    const { data } = await api.post(`/eventos/${eventoId}/inscribirse`, {
+    const { data } = await api.post('/eventos/inscripciones', {
+      evento_id: eventoId,
       cliente_id: clienteId,
       caballo_id: caballoId,
     });
     return data;
   },
 
-  desinscribirse: async (eventoId: string, clienteId: string) => {
-    await api.delete(`/eventos/${eventoId}/desinscribirse`, {
-      data: { cliente_id: clienteId },
-    });
+  desinscribirse: async (inscripcionId: string) => {
+    await api.delete(`/eventos/inscripciones/${inscripcionId}`);
   },
 
   // Asistencia
-  marcarAsistencia: async (eventoId: string, inscripcionId: string, asistio: boolean) => {
-    const { data } = await api.put(`/eventos/${eventoId}/asistencia`, {
-      inscripcion_id: inscripcionId,
+  marcarAsistencia: async (_eventoId: string, inscripcionId: string, asistio: boolean) => {
+    const { data } = await api.put(`/eventos/inscripciones/${inscripcionId}/asistencia`, {
       asistio,
     });
     return data;

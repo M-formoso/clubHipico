@@ -20,7 +20,6 @@ import {
   User,
   DollarSign,
   Briefcase,
-  Clock,
 } from 'lucide-react';
 
 const funcionLabels = {

@@ -17,7 +17,6 @@ import { Badge } from '@/components/ui/badge';
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -29,7 +28,6 @@ import {
   Edit,
   Trash2,
   UserCheck,
-  UserX,
   DollarSign,
   AlertCircle,
 } from 'lucide-react';

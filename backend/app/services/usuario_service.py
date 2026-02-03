@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException, status
 from uuid import UUID
@@ -9,6 +9,22 @@ from app.schemas.usuario import UsuarioCreate, UsuarioUpdate
 from app.core.security import get_password_hash
 
 
+def _enriquecer_usuarios_con_info_relacionada(usuarios: List[Usuario]) -> List[Usuario]:
+    """Enriquece los usuarios con información de empleado/cliente."""
+    for usuario in usuarios:
+        if usuario.empleado:
+            usuario.nombre = usuario.empleado.nombre
+            usuario.apellido = usuario.empleado.apellido
+            usuario.dni = usuario.empleado.dni
+            usuario.funcion = usuario.empleado.funcion
+        elif usuario.cliente:
+            usuario.nombre = usuario.cliente.nombre
+            usuario.apellido = usuario.cliente.apellido
+            usuario.dni = usuario.cliente.dni
+            usuario.funcion = None
+    return usuarios
+
+
 def obtener_todos(
     db: Session,
     skip: int = 0,
@@ -16,17 +32,28 @@ def obtener_todos(
     activo_solo: bool = False
 ) -> List[Usuario]:
     """Obtiene lista de usuarios con paginación."""
-    query = db.query(Usuario)
+    query = db.query(Usuario).options(
+        joinedload(Usuario.empleado),
+        joinedload(Usuario.cliente)
+    )
 
     if activo_solo:
         query = query.filter(Usuario.activo == True)
 
-    return query.offset(skip).limit(limit).all()
+    usuarios = query.offset(skip).limit(limit).all()
+    return _enriquecer_usuarios_con_info_relacionada(usuarios)
 
 
 def obtener_por_id(db: Session, usuario_id: UUID) -> Optional[Usuario]:
     """Obtiene un usuario por ID."""
-    return db.query(Usuario).filter(Usuario.id == usuario_id).first()
+    usuario = db.query(Usuario).options(
+        joinedload(Usuario.empleado),
+        joinedload(Usuario.cliente)
+    ).filter(Usuario.id == usuario_id).first()
+
+    if usuario:
+        _enriquecer_usuarios_con_info_relacionada([usuario])
+    return usuario
 
 
 def obtener_por_email(db: Session, email: str) -> Optional[Usuario]:
@@ -124,18 +151,26 @@ def buscar(
     limit: int = 100
 ) -> List[Usuario]:
     """Busca usuarios por email."""
-    return db.query(Usuario).filter(
+    usuarios = db.query(Usuario).options(
+        joinedload(Usuario.empleado),
+        joinedload(Usuario.cliente)
+    ).filter(
         Usuario.email.ilike(f"%{termino}%"),
         Usuario.activo == True
     ).offset(skip).limit(limit).all()
+    return _enriquecer_usuarios_con_info_relacionada(usuarios)
 
 
 def obtener_por_rol(db: Session, rol: RolEnum) -> List[Usuario]:
     """Obtiene usuarios por rol."""
-    return db.query(Usuario).filter(
+    usuarios = db.query(Usuario).options(
+        joinedload(Usuario.empleado),
+        joinedload(Usuario.cliente)
+    ).filter(
         Usuario.rol == rol,
         Usuario.activo == True
     ).all()
+    return _enriquecer_usuarios_con_info_relacionada(usuarios)
 
 
 def actualizar_permisos(

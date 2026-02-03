@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { useParams, useNavigate } from 'react-router-dom';
 import { clienteService } from '@/services/clienteService';
+import { caballoService } from '@/services/caballoService';
+import { pagoService } from '@/services/pagoService';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -20,10 +22,6 @@ import {
   Calendar,
   User,
   DollarSign,
-  AlertCircle,
-  Waves,
-  Receipt,
-  History,
 } from 'lucide-react';
 
 const tipoClienteLabels = {
@@ -62,14 +60,14 @@ export function ClienteDetailPage() {
 
   const { data: caballos } = useQuery({
     queryKey: ['cliente-caballos', id],
-    queryFn: () => clienteService.getCaballos(id!),
-    enabled: false, // Deshabilitar temporalmente hasta implementar el endpoint
+    queryFn: () => caballoService.getAll({ propietario_id: id }),
+    enabled: !!id,
   });
 
   const { data: pagos } = useQuery({
     queryKey: ['cliente-pagos', id],
-    queryFn: () => clienteService.getPagos(id!),
-    enabled: false, // Deshabilitar temporalmente hasta implementar el endpoint
+    queryFn: () => pagoService.getAll({ cliente_id: id }),
+    enabled: !!id,
   });
 
   if (isLoading) {

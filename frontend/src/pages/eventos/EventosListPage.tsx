@@ -19,19 +19,29 @@ export function EventosListPage() {
     queryFn: () => eventoService.getAll(),
   });
 
-  const getEstadoBadgeVariant = (estado: string) => {
+  const getEstadoBadgeColor = (estado: string) => {
     switch (estado) {
       case 'programado':
-        return 'default';
+        return 'bg-blue-100 text-blue-800';
       case 'en_curso':
-        return 'secondary';
+        return 'bg-orange-100 text-orange-800';
       case 'finalizado':
-        return 'success';
+        return 'bg-green-100 text-green-800';
       case 'cancelado':
-        return 'destructive';
+        return 'bg-red-100 text-red-800';
       default:
-        return 'outline';
+        return 'bg-gray-100 text-gray-800';
     }
+  };
+
+  const getEstadoLabel = (estado: string) => {
+    const labels: Record<string, string> = {
+      programado: 'Programado',
+      en_curso: 'En Curso',
+      finalizado: 'Finalizado',
+      cancelado: 'Cancelado',
+    };
+    return labels[estado] || estado;
   };
 
   const getTipoBadgeColor = (tipo: string) => {
@@ -72,19 +82,10 @@ export function EventosListPage() {
             Gestiona clases, competencias y actividades del club
           </p>
         </div>
-        <div className="flex gap-3">
-          <Button
-            variant="outline"
-            onClick={() => navigate('/eventos/calendario')}
-          >
-            <CalendarIcon className="mr-2 h-4 w-4" />
-            Ver Calendario
-          </Button>
-          <Button onClick={() => navigate('/eventos/nuevo')}>
-            <Plus className="mr-2 h-4 w-4" />
-            Nuevo Evento
-          </Button>
-        </div>
+        <Button onClick={() => navigate('/eventos/nuevo')}>
+          <Plus className="mr-2 h-4 w-4" />
+          Nuevo Evento
+        </Button>
       </div>
 
       <div className="flex items-center space-x-4">
@@ -120,16 +121,16 @@ export function EventosListPage() {
 
               <div className="flex flex-wrap gap-2">
                 <Badge
-                  variant={getEstadoBadgeVariant(evento.estado)}
-                  className="capitalize"
+                  className={getEstadoBadgeColor(evento.estado)}
+                  variant="outline"
                 >
-                  {evento.estado.replace('_', ' ')}
+                  {getEstadoLabel(evento.estado)}
                 </Badge>
                 <Badge
                   className={getTipoBadgeColor(evento.tipo)}
                   variant="outline"
                 >
-                  {evento.tipo.replace('_', ' ')}
+                  {({ clase_grupal: 'Clase Grupal', clase_privada: 'Clase Privada', competencia: 'Competencia', salida: 'Salida', evento_social: 'Evento Social', otro: 'Otro' } as Record<string, string>)[evento.tipo] || evento.tipo}
                 </Badge>
               </div>
 

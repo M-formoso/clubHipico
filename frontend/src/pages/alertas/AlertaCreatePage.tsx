@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Bell, Users, Calendar, Clock, Repeat } from 'lucide-react';
 import { useCreateAlerta } from '@/hooks/useAlertas';

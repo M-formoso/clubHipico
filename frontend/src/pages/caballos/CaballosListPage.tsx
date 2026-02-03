@@ -14,7 +14,6 @@ import {
   Eye,
   Edit,
   Trash2,
-  Filter,
 } from 'lucide-react';
 
 const estadoColors = {
@@ -40,7 +39,7 @@ export function CaballosListPage() {
 
   const { data: caballos, isLoading, error } = useQuery({
     queryKey: ['caballos'],
-    queryFn: caballoService.getAll,
+    queryFn: () => caballoService.getAll(),
   });
 
   const deleteMutation = useMutation({

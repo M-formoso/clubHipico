@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { UserPlus } from 'lucide-react';
+import { User } from '@/types';
 
 const registerSchema = z.object({
   email: z.string().email('Email inválido').min(1, 'El email es requerido'),
@@ -47,7 +48,7 @@ export function RegisterPage() {
         apellido: data.apellido,
       }),
     onSuccess: (response) => {
-      login(response.user, response.access_token, response.refresh_token);
+      login(response.user as User, response.access_token, response.refresh_token);
       toast({
         title: 'Registro exitoso',
         description: 'Tu cuenta ha sido creada correctamente',

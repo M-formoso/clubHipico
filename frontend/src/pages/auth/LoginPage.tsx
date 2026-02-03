@@ -11,7 +11,8 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { LogIn, Waves, Eye, EyeOff } from 'lucide-react';
+import { LogIn, Eye, EyeOff } from 'lucide-react';
+import { User } from '@/types';
 
 const loginSchema = z.object({
   dni: z.string().min(7, 'El DNI debe tener al menos 7 caracteres').max(20, 'DNI inválido'),
@@ -37,7 +38,7 @@ export function LoginPage() {
   const loginMutation = useMutation({
     mutationFn: (data: LoginFormData) => authService.login(data.dni, data.password),
     onSuccess: (response) => {
-      login(response.user, response.access_token, response.refresh_token);
+      login(response.user as User, response.access_token, response.refresh_token);
       toast({
         title: 'Inicio de sesión exitoso',
         description: `Bienvenido al sistema`,

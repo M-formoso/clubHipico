@@ -35,6 +35,12 @@ class UsuarioSchema(UsuarioBase):
     created_at: datetime
     updated_at: datetime
 
+    # Campos adicionales de empleado/cliente
+    nombre: Optional[str] = None
+    apellido: Optional[str] = None
+    dni: Optional[str] = None
+    funcion: Optional[str] = None
+
     class Config:
         from_attributes = True
 

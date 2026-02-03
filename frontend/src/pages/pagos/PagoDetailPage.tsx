@@ -12,7 +12,6 @@ import {
 } from '@/components/ui/card';
 import {
   ArrowLeft,
-  Edit,
   DollarSign,
   Calendar,
   Receipt,
@@ -153,10 +152,6 @@ export function PagoDetailPage() {
               Descargar Recibo
             </Button>
           )}
-          <Button onClick={() => navigate(`/pagos/${id}/editar`)}>
-            <Edit className="mr-2 h-4 w-4" />
-            Editar
-          </Button>
         </div>
       </div>
 

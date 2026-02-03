@@ -44,9 +44,9 @@ export function UsuariosListPage() {
 
   const filteredUsuarios = usuarios?.filter(
     (usuario) =>
-      usuario.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      usuario.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      usuario.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      usuario.nombre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      usuario.apellido?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      usuario.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       usuario.dni?.includes(searchTerm)
   );
 
@@ -98,7 +98,9 @@ export function UsuariosListPage() {
                 onClick={() => navigate(`/usuarios/${usuario.id}`)}
               >
                 <TableCell className="font-medium">
-                  {usuario.nombre} {usuario.apellido}
+                  {usuario.nombre && usuario.apellido
+                    ? `${usuario.nombre} ${usuario.apellido}`
+                    : usuario.email}
                 </TableCell>
                 <TableCell>{usuario.email}</TableCell>
                 <TableCell>{usuario.dni || '-'}</TableCell>

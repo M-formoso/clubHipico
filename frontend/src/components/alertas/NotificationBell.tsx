@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Bell, Check, CheckCheck, Eye, Trash2, Clock, X } from 'lucide-react';
+import { Bell, Check, CheckCheck, Eye, Trash2, Clock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAlertasNoLeidas, useMarcarLeida, useMarcarTodasLeidas, useDeleteAlerta } from '@/hooks/useAlertas';
 import { Button } from '@/components/ui/button';

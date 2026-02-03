@@ -9,7 +9,7 @@ export interface ReporteFiltros {
 export const reporteService = {
   // Dashboard general
   getDashboard: async () => {
-    const { data } = await api.get('/reportes/dashboard');
+    const { data } = await api.get('/dashboard/');
     return data;
   },
 

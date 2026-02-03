@@ -5,9 +5,9 @@ import {
   Users,
   Calendar,
   UserCog,
+  Briefcase,
   DollarSign,
   FileText,
-  Settings,
   Bell,
   X,
 } from 'lucide-react';
@@ -43,6 +43,12 @@ const navItems: NavItem[] = [
     icon: Calendar,
   },
   {
+    title: 'Empleados',
+    href: '/empleados',
+    icon: Briefcase,
+    roles: ['super_admin', 'admin'],
+  },
+  {
     title: 'Usuarios',
     href: '/usuarios',
     icon: UserCog,
@@ -64,12 +70,6 @@ const navItems: NavItem[] = [
     title: 'Alertas',
     href: '/alertas',
     icon: Bell,
-  },
-  {
-    title: 'Configuración',
-    href: '/configuracion',
-    icon: Settings,
-    roles: ['super_admin', 'admin'],
   },
 ];
 

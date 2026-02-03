@@ -27,19 +27,29 @@ export function PagosListPage() {
     queryFn: () => pagoService.getAll(),
   });
 
-  const getEstadoBadgeVariant = (estado: string) => {
+  const getEstadoBadgeColor = (estado: string) => {
     switch (estado) {
       case 'pagado':
-        return 'success';
+        return 'bg-green-100 text-green-800';
       case 'pendiente':
-        return 'warning';
+        return 'bg-yellow-100 text-yellow-800';
       case 'vencido':
-        return 'destructive';
+        return 'bg-red-100 text-red-800';
       case 'cancelado':
-        return 'outline';
+        return 'bg-gray-100 text-gray-800';
       default:
-        return 'default';
+        return 'bg-gray-100 text-gray-800';
     }
+  };
+
+  const getEstadoLabel = (estado: string) => {
+    const labels: Record<string, string> = {
+      pagado: 'Pagado',
+      pendiente: 'Pendiente',
+      vencido: 'Vencido',
+      cancelado: 'Cancelado',
+    };
+    return labels[estado] || estado;
   };
 
   const getTipoBadgeColor = (tipo: string) => {
@@ -196,8 +206,8 @@ export function PagosListPage() {
                   ${pago.monto.toLocaleString()}
                 </TableCell>
                 <TableCell>
-                  <Badge variant={getEstadoBadgeVariant(pago.estado)}>
-                    {pago.estado}
+                  <Badge className={getEstadoBadgeColor(pago.estado)} variant="outline">
+                    {getEstadoLabel(pago.estado)}
                   </Badge>
                 </TableCell>
                 <TableCell>

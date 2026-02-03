@@ -13,7 +13,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   ArrowLeft,
-  Edit,
   Calendar,
   MapPin,
   Users,
@@ -84,14 +83,10 @@ export function EventoDetailPage() {
     enabled: !!id,
   });
 
-  // Query para inscripciones (simulado por ahora)
   const { data: inscripciones = [] } = useQuery({
     queryKey: ['evento-inscripciones', id],
-    queryFn: async () => {
-      // TODO: Implementar endpoint de inscripciones
-      return [];
-    },
-    enabled: false, // Deshabilitado hasta implementar el endpoint
+    queryFn: () => eventoService.getInscripciones(id!),
+    enabled: !!id,
   });
 
   const marcarAsistenciaMutation = useMutation({
@@ -163,10 +158,6 @@ export function EventoDetailPage() {
             </p>
           </div>
         </div>
-        <Button onClick={() => navigate(`/eventos/${id}/editar`)}>
-          <Edit className="mr-2 h-4 w-4" />
-          Editar
-        </Button>
       </div>
 
       {/* Summary Cards */}
@@ -354,10 +345,10 @@ export function EventoDetailPage() {
                             {inscripcion.cliente?.nombre} {inscripcion.cliente?.apellido}
                           </p>
                           <Badge
-                            className={estadoInscripcionColors[inscripcion.estado]}
+                            className={estadoInscripcionColors[inscripcion.estado as keyof typeof estadoInscripcionColors]}
                             variant="outline"
                           >
-                            {estadoInscripcionLabels[inscripcion.estado]}
+                            {estadoInscripcionLabels[inscripcion.estado as keyof typeof estadoInscripcionLabels]}
                           </Badge>
                         </div>
                         {inscripcion.caballo && (
