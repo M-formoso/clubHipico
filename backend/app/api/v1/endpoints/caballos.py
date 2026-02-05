@@ -26,7 +26,12 @@ from app.schemas.caballo import (
     HerrajeRegistroUpdate,
     AntiparasitarioRegistroSchema,
     AntiparasitarioRegistroCreate,
-    AntiparasitarioRegistroUpdate
+    AntiparasitarioRegistroUpdate,
+    PlanSanitarioResponse,
+    MesPlanSanitario,
+    ActividadPlanSanitario,
+    EstadisticasPlanSanitario,
+    ActividadPendiente
 )
 from app.schemas.historial_medico import HistorialMedicoSchema, HistorialMedicoCreate, HistorialMedicoUpdate
 from app.schemas.plan_alimentacion import PlanAlimentacionSchema, PlanAlimentacionCreate, PlanAlimentacionUpdate
@@ -519,3 +524,33 @@ async def eliminar_estudio_medico(
     """Elimina un estudio médico."""
     caballo_service.eliminar_estudio_medico(db, estudio_id)
     return None
+
+
+# ========== PLAN SANITARIO ==========
+
+@router.get("/{caballo_id}/plan-sanitario", response_model=PlanSanitarioResponse)
+async def obtener_plan_sanitario(
+    caballo_id: UUID,
+    anio: Optional[int] = Query(None, description="Año del plan (por defecto año actual)"),
+    db: Session = Depends(get_db),
+    current_user: Usuario = Depends(get_current_active_user)
+):
+    """
+    Obtiene el plan sanitario del caballo según su categoría (A o B).
+    Muestra el calendario anual con las actividades programadas y realizadas.
+    """
+    return caballo_service.obtener_plan_sanitario(db, caballo_id, anio)
+
+
+@router.get("/{caballo_id}/plan-sanitario/estadisticas", response_model=EstadisticasPlanSanitario)
+async def obtener_estadisticas_plan_sanitario(
+    caballo_id: UUID,
+    anio: Optional[int] = Query(None, description="Año para calcular estadísticas (por defecto año actual)"),
+    db: Session = Depends(get_db),
+    current_user: Usuario = Depends(get_current_active_user)
+):
+    """
+    Obtiene estadísticas de cumplimiento del plan sanitario.
+    Incluye porcentaje de cumplimiento, actividades pendientes y vencidas.
+    """
+    return caballo_service.obtener_estadisticas_plan_sanitario(db, caballo_id, anio)

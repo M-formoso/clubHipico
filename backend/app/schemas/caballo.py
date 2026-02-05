@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field, UUID4
 from typing import Optional, Dict, Any, List
 from datetime import date, datetime
 from decimal import Decimal
-from app.models.caballo import SexoCaballoEnum, EstadoCaballoEnum, ManejoEnum, TipoTrabajoEnum
+from app.models.caballo import SexoCaballoEnum, EstadoCaballoEnum, ManejoEnum, TipoTrabajoEnum, CategoriaSanitariaEnum
 
 
 # ========== CABALLO ==========
@@ -55,6 +55,9 @@ class CaballoCreate(CaballoBase):
     otra_info_2: Optional[str] = None
     foto_principal: Optional[str] = None
 
+    # Plan sanitario
+    categoria_sanitaria: Optional[CategoriaSanitariaEnum] = None
+
 
 class CaballoUpdate(BaseModel):
     """Schema para actualizar Caballo"""
@@ -98,6 +101,9 @@ class CaballoUpdate(BaseModel):
     otra_info_2: Optional[str] = None
     foto_principal: Optional[str] = None
 
+    # Plan sanitario
+    categoria_sanitaria: Optional[CategoriaSanitariaEnum] = None
+
 
 class CaballoSchema(CaballoBase):
     """Schema de respuesta de Caballo"""
@@ -131,6 +137,10 @@ class CaballoSchema(CaballoBase):
     cuidados_especiales: Optional[str] = None
     otra_info_1: Optional[str] = None
     otra_info_2: Optional[str] = None
+
+    # Plan sanitario
+    categoria_sanitaria: Optional[CategoriaSanitariaEnum] = None
+    foto_principal: Optional[str] = None
 
     created_at: datetime
     updated_at: datetime
@@ -366,3 +376,58 @@ class CaballoCompleto(CaballoSchema):
 
     class Config:
         from_attributes = True
+
+
+# ========== PLAN SANITARIO ==========
+
+class ActividadPlanSanitario(BaseModel):
+    """Actividad del plan sanitario"""
+    tipo: str  # vacuna, desparasitacion, analisis
+    nombre: str
+    descripcion: str
+    realizada: bool  # Si ya fue realizada este año
+    fecha_realizada: Optional[date] = None  # Fecha en que se realizó
+    proxima_fecha: Optional[date] = None  # Próxima vez que debe hacerse
+
+
+class MesPlanSanitario(BaseModel):
+    """Mes del plan sanitario"""
+    mes: int
+    mes_nombre: str
+    actividades: List[ActividadPlanSanitario]
+
+
+class PlanSanitarioResponse(BaseModel):
+    """Respuesta con el plan sanitario del caballo"""
+    categoria: Optional[str] = None  # A, B, o None si no tiene categoría
+    nombre_categoria: Optional[str] = None
+    descripcion: Optional[str] = None
+    costo_mensual: Optional[int] = None  # Costo mensual del plan
+    dosis_anuales: Optional[Dict[str, int]] = None  # Dosis anuales por tipo
+    calendario: List[MesPlanSanitario] = []
+    anio: int  # Año del plan
+
+
+class ActividadPendiente(BaseModel):
+    """Actividad pendiente del plan sanitario"""
+    mes: int
+    mes_nombre: str
+    tipo: str
+    nombre: str
+    descripcion: str
+    dias_vencido: Optional[int] = None  # Días desde que venció (positivo = vencido)
+
+
+class EstadisticasPlanSanitario(BaseModel):
+    """Estadísticas de cumplimiento del plan sanitario"""
+    categoria: Optional[str] = None
+    tiene_plan: bool
+    costo_mensual: Optional[int] = None
+    costo_anual: Optional[int] = None
+    anio: int
+    total_actividades: int
+    actividades_realizadas: int
+    actividades_pendientes: int
+    porcentaje_cumplimiento: float
+    proximas_actividades: List[ActividadPendiente]
+    actividades_vencidas: List[ActividadPendiente]

@@ -3,10 +3,11 @@ from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException, status
 from uuid import UUID
 from typing import List, Optional
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 import qrcode
 from io import BytesIO
 import base64
+import copy
 
 from app.models.caballo import (
     Caballo,
@@ -730,3 +731,284 @@ def eliminar_estudio_medico(db: Session, estudio_id: UUID) -> None:
 
     db.delete(estudio)
     db.commit()
+
+
+# ========== PLAN SANITARIO ==========
+
+def obtener_plan_sanitario(db: Session, caballo_id: UUID, anio: Optional[int] = None):
+    """
+    Obtiene el plan sanitario del caballo según su categoría.
+    Cruza el calendario planificado con los registros reales para mostrar cumplimiento.
+    """
+    from app.constants import PLAN_SANITARIO_2026
+    from app.schemas.caballo import PlanSanitarioResponse, MesPlanSanitario, ActividadPlanSanitario
+
+    # Obtener el caballo
+    caballo = db.query(Caballo).filter(Caballo.id == caballo_id).first()
+    if not caballo:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Caballo no encontrado"
+        )
+
+    # Si no tiene categoría sanitaria, devolver respuesta vacía
+    if not caballo.categoria_sanitaria:
+        return PlanSanitarioResponse(
+            categoria=None,
+            nombre_categoria=None,
+            descripcion="Este caballo aún no tiene una categoría sanitaria asignada. Edite el caballo para asignarle una categoría (A o B).",
+            calendario=[],
+            anio=anio or datetime.now().year
+        )
+
+    # Obtener plan de la categoría
+    plan = PLAN_SANITARIO_2026.get(caballo.categoria_sanitaria)
+    if not plan:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Categoría sanitaria inválida: {caballo.categoria_sanitaria}"
+        )
+
+    # Año del plan (por defecto año actual)
+    if anio is None:
+        anio = datetime.now().year
+
+    # Obtener registros del año
+    inicio_anio = date(anio, 1, 1)
+    fin_anio = date(anio, 12, 31)
+
+    # Vacunas y AIE (análisis)
+    vacunas = db.query(VacunaRegistro).filter(
+        VacunaRegistro.caballo_id == caballo_id,
+        VacunaRegistro.fecha >= inicio_anio,
+        VacunaRegistro.fecha <= fin_anio
+    ).all()
+
+    # Antiparasitarios (desparasitación)
+    antiparasitarios = db.query(AntiparasitarioRegistro).filter(
+        AntiparasitarioRegistro.caballo_id == caballo_id,
+        AntiparasitarioRegistro.fecha >= inicio_anio,
+        AntiparasitarioRegistro.fecha <= fin_anio
+    ).all()
+
+    # Construir calendario con estado de cumplimiento
+    calendario_response = []
+
+    for mes_data in plan["calendario"]:
+        actividades_response = []
+
+        for actividad in mes_data["actividades"]:
+            # Buscar si la actividad fue realizada este año en este mes
+            realizada = False
+            fecha_realizada = None
+            proxima_fecha = None
+
+            mes_inicio = date(anio, mes_data["mes"], 1)
+            # Último día del mes
+            if mes_data["mes"] == 12:
+                mes_fin = date(anio, 12, 31)
+            else:
+                mes_fin = date(anio, mes_data["mes"] + 1, 1) - timedelta(days=1)
+
+            # Verificar según el tipo de actividad
+            if actividad["tipo"] in ["vacuna", "analisis"]:
+                # Buscar en vacunas
+                for vacuna in vacunas:
+                    if vacuna.fecha >= mes_inicio and vacuna.fecha <= mes_fin:
+                        # Coincide si el nombre de la actividad está en el tipo de vacuna (case-insensitive)
+                        nombre_act = actividad["nombre"].lower()
+                        tipo_vac = vacuna.tipo.lower()
+
+                        # Mapeo simplificado
+                        if ("aie" in nombre_act and "aie" in tipo_vac) or \
+                           ("influenza" in nombre_act and "influenza" in tipo_vac) or \
+                           ("rabia" in nombre_act or "rabica" in nombre_act) and ("rabia" in tipo_vac or "rabica" in tipo_vac) or \
+                           ("adenitis" in nombre_act and "adenitis" in tipo_vac) or \
+                           ("quintuple" in nombre_act or "quíntuple" in nombre_act) and ("quintuple" in tipo_vac or "quíntuple" in tipo_vac):
+                            realizada = True
+                            fecha_realizada = vacuna.fecha
+                            proxima_fecha = vacuna.proxima_fecha
+                            break
+
+            elif actividad["tipo"] == "desparasitacion":
+                # Buscar en antiparasitarios
+                for antipar in antiparasitarios:
+                    if antipar.fecha >= mes_inicio and antipar.fecha <= mes_fin:
+                        realizada = True
+                        fecha_realizada = antipar.fecha
+                        proxima_fecha = antipar.proxima_aplicacion
+                        break
+
+            actividades_response.append(
+                ActividadPlanSanitario(
+                    tipo=actividad["tipo"],
+                    nombre=actividad["nombre"],
+                    descripcion=actividad["descripcion"],
+                    realizada=realizada,
+                    fecha_realizada=fecha_realizada,
+                    proxima_fecha=proxima_fecha
+                )
+            )
+
+        calendario_response.append(
+            MesPlanSanitario(
+                mes=mes_data["mes"],
+                mes_nombre=mes_data["mes_nombre"],
+                actividades=actividades_response
+            )
+        )
+
+    return PlanSanitarioResponse(
+        categoria=caballo.categoria_sanitaria,
+        nombre_categoria=plan["nombre"],
+        descripcion=plan["descripcion"],
+        costo_mensual=plan.get("costo_mensual"),
+        dosis_anuales=plan.get("dosis_anuales"),
+        calendario=calendario_response,
+        anio=anio
+    )
+
+
+def obtener_estadisticas_plan_sanitario(db: Session, caballo_id: UUID, anio: Optional[int] = None):
+    """
+    Obtiene estadísticas de cumplimiento del plan sanitario del caballo.
+    Calcula actividades pendientes, vencidas y porcentaje de cumplimiento.
+    """
+    from app.constants import PLAN_SANITARIO_2026
+    from app.schemas.caballo import EstadisticasPlanSanitario, ActividadPendiente
+
+    # Obtener el caballo
+    caballo = db.query(Caballo).filter(Caballo.id == caballo_id).first()
+    if not caballo:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Caballo no encontrado"
+        )
+
+    # Si no tiene categoría sanitaria
+    if not caballo.categoria_sanitaria:
+        return EstadisticasPlanSanitario(
+            categoria=None,
+            tiene_plan=False,
+            costo_mensual=None,
+            costo_anual=None,
+            anio=anio or datetime.now().year,
+            total_actividades=0,
+            actividades_realizadas=0,
+            actividades_pendientes=0,
+            porcentaje_cumplimiento=0.0,
+            proximas_actividades=[],
+            actividades_vencidas=[]
+        )
+
+    # Obtener plan
+    plan = PLAN_SANITARIO_2026.get(caballo.categoria_sanitaria)
+    if not plan:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Categoría sanitaria inválida: {caballo.categoria_sanitaria}"
+        )
+
+    if anio is None:
+        anio = datetime.now().year
+
+    # Obtener plan sanitario completo para analizar
+    plan_completo = obtener_plan_sanitario(db, caballo_id, anio)
+
+    # Calcular totales
+    total_actividades = 0
+    actividades_realizadas = 0
+    proximas_actividades = []
+    actividades_vencidas = []
+
+    mes_actual = datetime.now().month if anio == datetime.now().year else 1
+    dia_actual = datetime.now().day if anio == datetime.now().year else 1
+
+    for mes_data in plan_completo.calendario:
+        for actividad in mes_data.actividades:
+            total_actividades += 1
+
+            if actividad.realizada:
+                actividades_realizadas += 1
+            else:
+                # Calcular si está vencida o pendiente
+                if anio == datetime.now().year:
+                    if mes_data.mes < mes_actual:
+                        # Mes pasado, actividad vencida
+                        # Calcular días vencidos aproximadamente
+                        fecha_estimada = date(anio, mes_data.mes, 15)  # Medio del mes
+                        dias_vencido = (date.today() - fecha_estimada).days
+
+                        actividades_vencidas.append(
+                            ActividadPendiente(
+                                mes=mes_data.mes,
+                                mes_nombre=mes_data.mes_nombre,
+                                tipo=actividad.tipo,
+                                nombre=actividad.nombre,
+                                descripcion=actividad.descripcion,
+                                dias_vencido=dias_vencido
+                            )
+                        )
+                    elif mes_data.mes == mes_actual:
+                        # Mes actual, puede estar vencida o pendiente dependiendo del día
+                        # La consideramos pendiente si aún no pasó el mes
+                        proximas_actividades.append(
+                            ActividadPendiente(
+                                mes=mes_data.mes,
+                                mes_nombre=mes_data.mes_nombre,
+                                tipo=actividad.tipo,
+                                nombre=actividad.nombre,
+                                descripcion=actividad.descripcion,
+                                dias_vencido=None
+                            )
+                        )
+                    else:
+                        # Mes futuro, pendiente
+                        proximas_actividades.append(
+                            ActividadPendiente(
+                                mes=mes_data.mes,
+                                mes_nombre=mes_data.mes_nombre,
+                                tipo=actividad.tipo,
+                                nombre=actividad.nombre,
+                                descripcion=actividad.descripcion,
+                                dias_vencido=None
+                            )
+                        )
+                else:
+                    # Año distinto al actual, todas son pendientes
+                    proximas_actividades.append(
+                        ActividadPendiente(
+                            mes=mes_data.mes,
+                            mes_nombre=mes_data.mes_nombre,
+                            tipo=actividad.tipo,
+                            nombre=actividad.nombre,
+                            descripcion=actividad.descripcion,
+                            dias_vencido=None
+                        )
+                    )
+
+    actividades_pendientes = total_actividades - actividades_realizadas
+    porcentaje_cumplimiento = (actividades_realizadas / total_actividades * 100) if total_actividades > 0 else 0.0
+
+    costo_mensual = plan.get("costo_mensual")
+    costo_anual = costo_mensual * 12 if costo_mensual else None
+
+    # Ordenar próximas actividades por mes
+    proximas_actividades.sort(key=lambda x: x.mes)
+
+    # Limitar a las próximas 5 actividades
+    proximas_actividades = proximas_actividades[:5]
+
+    return EstadisticasPlanSanitario(
+        categoria=caballo.categoria_sanitaria,
+        tiene_plan=True,
+        costo_mensual=costo_mensual,
+        costo_anual=costo_anual,
+        anio=anio,
+        total_actividades=total_actividades,
+        actividades_realizadas=actividades_realizadas,
+        actividades_pendientes=actividades_pendientes,
+        porcentaje_cumplimiento=round(porcentaje_cumplimiento, 1),
+        proximas_actividades=proximas_actividades,
+        actividades_vencidas=actividades_vencidas
+    )

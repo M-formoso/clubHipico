@@ -40,6 +40,12 @@ class TipoTrabajoEnum(str, enum.Enum):
     MONTADO = "montado"
 
 
+class CategoriaSanitariaEnum(str, enum.Enum):
+    """Categoría del plan sanitario según Haras Club 2026"""
+    A = "A"
+    B = "B"
+
+
 class Caballo(Base):
     """Modelo de Caballo"""
     __tablename__ = "caballos"
@@ -69,6 +75,9 @@ class Caballo(Base):
     # Ubicación y estado
     box_asignado = Column(String(50), nullable=True)
     estado = Column(SQLEnum(EstadoCaballoEnum), default=EstadoCaballoEnum.ACTIVO, nullable=False)
+
+    # Plan sanitario
+    categoria_sanitaria = Column(SQLEnum(CategoriaSanitariaEnum), nullable=True)  # A o B según plan Haras Club 2026
 
     # ========== QR CODE ==========
     qr_code = Column(Text, nullable=True)  # QR code en base64 o URL
