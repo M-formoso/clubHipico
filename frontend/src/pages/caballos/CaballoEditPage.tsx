@@ -45,6 +45,9 @@ const caballoSchema = z.object({
   pedigree: z.string().optional(),
   caracteristicas: z.string().optional(),
 
+  // Plan sanitario
+  categoria_sanitaria: z.enum(['A', 'B', '']).optional(),
+
   // Alimentación
   grano_balanceado: z.string().optional(),
   suplementos: z.string().optional(),
@@ -123,6 +126,8 @@ export function CaballoEditPage() {
         estado: caballo.estado,
         pedigree: caballo.pedigree || '',
         caracteristicas: caballo.caracteristicas || '',
+        // Plan sanitario
+        categoria_sanitaria: (caballo.categoria_sanitaria as any) || '',
         // Alimentación
         grano_balanceado: caballo.grano_balanceado || '',
         suplementos: caballo.suplementos || '',
@@ -187,6 +192,9 @@ export function CaballoEditPage() {
     if (data.box_asignado !== undefined) payload.box_asignado = data.box_asignado || null;
     if (data.pedigree !== undefined) payload.pedigree = data.pedigree || null;
     if (data.caracteristicas !== undefined) payload.caracteristicas = data.caracteristicas || null;
+
+    // Plan sanitario
+    if (data.categoria_sanitaria !== undefined) payload.categoria_sanitaria = data.categoria_sanitaria || null;
 
     // Alimentación
     if (data.grano_balanceado !== undefined) payload.grano_balanceado = data.grano_balanceado || null;
@@ -359,6 +367,22 @@ export function CaballoEditPage() {
                   <option value="retirado">Retirado</option>
                   <option value="fallecido">Fallecido</option>
                 </select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="categoria_sanitaria">Categoría Sanitaria (Plan 2026)</Label>
+                <select
+                  id="categoria_sanitaria"
+                  {...register('categoria_sanitaria')}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-beige-500 focus:outline-none focus:ring-1 focus:ring-beige-500"
+                >
+                  <option value="">Sin categoría</option>
+                  <option value="A">Categoría A - $45,000/mes</option>
+                  <option value="B">Categoría B - $35,000/mes</option>
+                </select>
+                <p className="text-xs text-gray-500">
+                  Plan sanitario según Resolución 1942 Haras Club 2026
+                </p>
               </div>
             </div>
           </CardContent>

@@ -3,6 +3,7 @@
 export type SexoCaballo = 'macho' | 'hembra' | 'castrado';
 export type EstadoCaballo = 'activo' | 'retirado' | 'en_tratamiento' | 'fallecido';
 export type ManejoTipo = 'box' | 'box_piquete' | 'piquete' | 'palenque' | 'cross_tie';
+export type CategoriaSanitaria = 'A' | 'B';
 
 export interface TrabajoConfig {
   caminador?: boolean;
@@ -69,6 +70,9 @@ export interface Caballo {
   otra_info_2?: string;
   foto_principal?: string;
 
+  // Plan sanitario
+  categoria_sanitaria?: CategoriaSanitaria;
+
   // Timestamps
   created_at: string;
   updated_at: string;
@@ -116,6 +120,9 @@ export interface CaballoCreate {
   otra_info_1?: string;
   otra_info_2?: string;
   foto_principal?: string;
+
+  // Plan sanitario
+  categoria_sanitaria?: CategoriaSanitaria;
 }
 
 export interface CaballoUpdate {
@@ -158,6 +165,9 @@ export interface CaballoUpdate {
   otra_info_1?: string;
   otra_info_2?: string;
   foto_principal?: string;
+
+  // Plan sanitario
+  categoria_sanitaria?: CategoriaSanitaria;
 }
 
 // ========== FOTOS ==========
@@ -387,4 +397,54 @@ export interface PlanAlimentacion {
   updated_by?: string;
   created_at: string;
   updated_at: string;
+}
+
+// ========== PLAN SANITARIO 2026 ==========
+
+export interface ActividadPlanSanitario {
+  tipo: string; // vacuna, desparasitacion, analisis
+  nombre: string;
+  descripcion: string;
+  realizada: boolean;
+  fecha_realizada?: string;
+  proxima_fecha?: string;
+}
+
+export interface MesPlanSanitario {
+  mes: number;
+  mes_nombre: string;
+  actividades: ActividadPlanSanitario[];
+}
+
+export interface PlanSanitarioResponse {
+  categoria?: string | null; // 'A', 'B', o null
+  nombre_categoria?: string | null;
+  descripcion?: string | null;
+  costo_mensual?: number | null;
+  dosis_anuales?: Record<string, number> | null;
+  calendario: MesPlanSanitario[];
+  anio: number;
+}
+
+export interface ActividadPendiente {
+  mes: number;
+  mes_nombre: string;
+  tipo: string;
+  nombre: string;
+  descripcion: string;
+  dias_vencido?: number | null;
+}
+
+export interface EstadisticasPlanSanitario {
+  categoria?: string | null;
+  tiene_plan: boolean;
+  costo_mensual?: number | null;
+  costo_anual?: number | null;
+  anio: number;
+  total_actividades: number;
+  actividades_realizadas: number;
+  actividades_pendientes: number;
+  porcentaje_cumplimiento: number;
+  proximas_actividades: ActividadPendiente[];
+  actividades_vencidas: ActividadPendiente[];
 }

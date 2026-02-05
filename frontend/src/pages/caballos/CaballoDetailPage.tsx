@@ -9,6 +9,7 @@ import {
   useRevisionesDentales,
   useEstudiosMedicos,
 } from '@/hooks/useCaballos';
+import { PlanSanitarioTab } from '@/components/caballos/PlanSanitarioTab';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -42,6 +43,7 @@ import {
   Image as ImageIcon,
   Activity,
   Plus,
+  ClipboardList,
   Trash2,
 } from 'lucide-react';
 import { format } from 'date-fns';
@@ -396,7 +398,7 @@ export function CaballoDetailPage() {
 
       {/* Tabs */}
       <Tabs defaultValue="info" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-7">
+        <TabsList className="grid w-full grid-cols-8">
           <TabsTrigger value="info">Info</TabsTrigger>
           <TabsTrigger value="historial">
             <Activity className="h-4 w-4 mr-1" />
@@ -421,6 +423,10 @@ export function CaballoDetailPage() {
           <TabsTrigger value="qr">
             <QrCode className="h-4 w-4 mr-1" />
             QR
+          </TabsTrigger>
+          <TabsTrigger value="plan-sanitario">
+            <ClipboardList className="h-4 w-4 mr-1" />
+            Plan
           </TabsTrigger>
         </TabsList>
 
@@ -863,6 +869,13 @@ export function CaballoDetailPage() {
               )}
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* ════════════════════════════════════════════════════
+            TAB: Plan Sanitario
+            ════════════════════════════════════════════════════ */}
+        <TabsContent value="plan-sanitario">
+          <PlanSanitarioTab caballoId={id!} />
         </TabsContent>
       </Tabs>
 
