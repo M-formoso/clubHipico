@@ -60,9 +60,6 @@ frontend/.vite/
 *.log
 logs/
 
-# Docker
-.dockerignore
-
 # Testing
 .coverage
 htmlcov/
