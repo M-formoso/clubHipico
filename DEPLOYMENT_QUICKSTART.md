@@ -7,7 +7,7 @@ Guía rápida para desplegar en Railway. Para la guía completa, ver `RAILWAY_DE
 ```bash
 # Generar SECRET_KEY para producción
 python3 -c "import secrets; print(secrets.token_urlsafe(32))"
-# Guarda este valor
+# Guarda este valor.    Zau50LxBb_lfbL3aoYBJK6DeEIFW6h8ttLQKGR2mq4s
 ```
 
 ## 2. Railway - Crear Proyecto (2 min)

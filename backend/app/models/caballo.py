@@ -66,7 +66,7 @@ class Caballo(Base):
     color = Column(String(50), nullable=True)
 
     # Medidas
-    altura = Column(Numeric(4, 2), nullable=True)  # en metros
+    altura = Column(Numeric(5, 2), nullable=True)  # en metros (hasta 999.99)
     peso = Column(Numeric(6, 2), nullable=True)    # en kg
 
     # Propietario

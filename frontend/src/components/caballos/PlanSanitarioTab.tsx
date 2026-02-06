@@ -231,24 +231,86 @@ export function PlanSanitarioTab({ caballoId }: PlanSanitarioTabProps) {
         </Card>
       )}
 
-      {/* Dosis anuales requeridas */}
-      {plan.dosis_anuales && (
+      {/* Resumen de cumplimiento por tratamiento */}
+      {plan.dosis_anuales && plan.calendario && (
         <Card>
           <CardHeader>
-            <CardTitle>Dosis Anuales Requeridas</CardTitle>
-            <CardDescription>Cantidad de aplicaciones por tipo de actividad</CardDescription>
+            <CardTitle>Resumen de Cumplimiento por Tratamiento</CardTitle>
+            <CardDescription>Dosis aplicadas vs requeridas según plan sanitario {plan.categoria}</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {Object.entries(plan.dosis_anuales).map(([tipo, cantidad]) => (
-                <div key={tipo} className="flex items-center gap-2">
-                  <span className="text-2xl">{getTipoIcon(tipo.includes('desparasit') ? 'desparasitacion' : 'vacuna')}</span>
-                  <div>
-                    <p className="text-sm font-medium capitalize">{tipo.replace('_', ' ')}</p>
-                    <p className="text-xs text-gray-500">{cantidad}x por año</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {Object.entries(plan.dosis_anuales).map(([tipoKey, cantidadRequerida]) => {
+                // Contar cuántas actividades de este tipo se han realizado
+                const tipoNormalizado = tipoKey.includes('desparasit') ? 'desparasitacion' :
+                                        tipoKey.includes('aie') ? 'analisis' : 'vacuna';
+
+                const actividadesRealizadas = plan.calendario
+                  .flatMap(mes => mes.actividades)
+                  .filter(act => {
+                    const nombreLower = act.nombre.toLowerCase();
+                    const tipoKeyLower = tipoKey.toLowerCase();
+
+                    // Mapeo de tipos
+                    if (tipoKeyLower.includes('desparasit')) {
+                      return act.tipo === 'desparasitacion' && act.realizada;
+                    } else if (tipoKeyLower.includes('aie')) {
+                      return nombreLower.includes('aie') && act.realizada;
+                    } else if (tipoKeyLower.includes('influenza')) {
+                      return nombreLower.includes('influenza') && act.realizada;
+                    } else if (tipoKeyLower.includes('quintuple') || tipoKeyLower.includes('quíntuple')) {
+                      return (nombreLower.includes('quintuple') || nombreLower.includes('quíntuple')) && act.realizada;
+                    } else if (tipoKeyLower.includes('adenitis')) {
+                      return nombreLower.includes('adenitis') && act.realizada;
+                    } else if (tipoKeyLower.includes('rabia')) {
+                      return (nombreLower.includes('rabia') || nombreLower.includes('rabica')) && act.realizada;
+                    }
+                    return false;
+                  }).length;
+
+                const porcentaje = cantidadRequerida > 0 ? Math.round((actividadesRealizadas / cantidadRequerida) * 100) : 0;
+                const estaCompleto = actividadesRealizadas >= cantidadRequerida;
+                const tieneRetraso = actividadesRealizadas < cantidadRequerida;
+
+                return (
+                  <div key={tipoKey} className={`p-4 rounded-lg border-2 ${
+                    estaCompleto ? 'bg-green-50 border-green-200' :
+                    tieneRetraso ? 'bg-yellow-50 border-yellow-200' :
+                    'bg-gray-50 border-gray-200'
+                  }`}>
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-2xl">{getTipoIcon(tipoNormalizado)}</span>
+                        <div>
+                          <p className="text-sm font-semibold capitalize text-gray-900">
+                            {tipoKey.replace('_', ' ')}
+                          </p>
+                          <p className="text-xs text-gray-600">
+                            {actividadesRealizadas}/{cantidadRequerida} aplicadas
+                          </p>
+                        </div>
+                      </div>
+                      {estaCompleto && (
+                        <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
+                      )}
+                      {tieneRetraso && !estaCompleto && (
+                        <AlertTriangle className="h-5 w-5 text-yellow-600 flex-shrink-0" />
+                      )}
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2 mb-1">
+                      <div
+                        className={`h-2 rounded-full ${
+                          estaCompleto ? 'bg-green-600' :
+                          porcentaje >= 50 ? 'bg-yellow-500' :
+                          'bg-red-500'
+                        }`}
+                        style={{ width: `${Math.min(porcentaje, 100)}%` }}
+                      />
+                    </div>
+                    <p className="text-xs font-medium text-gray-700">{porcentaje}% completado</p>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </CardContent>
         </Card>
