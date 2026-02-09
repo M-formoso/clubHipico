@@ -20,31 +20,30 @@ ENV VITE_API_URL=$VITE_API_URL
 RUN npm run build
 
 # Stage 2: Serve con nginx
-FROM nginx:alpine-slim
-
-ENV PORT=3000
+FROM nginx:alpine
 
 # Copy build output
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Script de inicio que genera la config de nginx con el PORT dinámico
-RUN cat > /start.sh << 'SCRIPT'
-#!/bin/sh
-PORT=${PORT:-3000}
-cat > /etc/nginx/conf.d/default.conf << NGINX
-server {
-    listen $PORT;
-    server_name localhost;
-    root /usr/share/nginx/html;
+# Create nginx config template
+RUN echo 'server { \n\
+    listen $PORT; \n\
+    server_name _; \n\
+    root /usr/share/nginx/html; \n\
+    index index.html; \n\
+    \n\
+    location / { \n\
+        try_files $uri $uri/ /index.html; \n\
+    } \n\
+}' > /etc/nginx/conf.d/default.conf.template
 
-    location / {
-        try_files $uri $uri/ /index.html;
-    }
-}
-NGINX
-exec nginx -g "daemon off;"
-SCRIPT
-RUN chmod +x /start.sh
+# Script to replace PORT and start nginx
+RUN echo '#!/bin/sh\n\
+export PORT=${PORT:-3000}\n\
+envsubst "\$PORT" < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf\n\
+cat /etc/nginx/conf.d/default.conf\n\
+exec nginx -g "daemon off;"' > /start.sh && \
+    chmod +x /start.sh
 
 EXPOSE 3000
 
