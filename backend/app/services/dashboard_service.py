@@ -3,7 +3,7 @@ from sqlalchemy import func, and_, or_
 from datetime import date, datetime, timedelta
 from typing import Dict, Any, List
 
-from app.models.caballo import Caballo
+from app.models.caballo import Caballo, EstadoCaballoEnum
 from app.models.cliente import Cliente, EstadoCuentaEnum
 from app.models.empleado import Empleado
 from app.models.evento import Evento, InscripcionEvento, EstadoEventoEnum
@@ -19,7 +19,7 @@ def obtener_estadisticas_generales(db: Session) -> Dict[str, Any]:
         Dict con contadores generales
     """
     return {
-        "total_caballos": db.query(Caballo).filter(Caballo.activo == True).count(),
+        "total_caballos": db.query(Caballo).filter(Caballo.estado == EstadoCaballoEnum.ACTIVO).count(),
         "total_clientes": db.query(Cliente).filter(Cliente.activo == True).count(),
         "total_empleados": db.query(Empleado).filter(Empleado.activo == True).count(),
         "total_eventos_mes": db.query(Evento).filter(
