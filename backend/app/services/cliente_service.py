@@ -3,6 +3,7 @@ from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException, status
 from uuid import UUID
 from typing import List, Optional
+from decimal import Decimal
 
 from app.models.cliente import Cliente, EstadoCuentaEnum
 from app.schemas.cliente import ClienteCreate, ClienteUpdate
@@ -108,7 +109,7 @@ def actualizar_saldo(db: Session, cliente_id: UUID, monto: float) -> Cliente:
             detail="Cliente no encontrado"
         )
 
-    db_cliente.saldo += monto
+    db_cliente.saldo += Decimal(str(monto))
 
     # Actualizar estado de cuenta según el saldo
     if db_cliente.saldo < 0:

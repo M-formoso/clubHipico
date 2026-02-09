@@ -11,6 +11,7 @@ class Settings(BaseSettings):
         env_file=".env",
         env_file_encoding="utf-8",
         case_sensitive=True,
+        extra="ignore",  # Ignora variables extras que Railway pueda agregar
     )
 
     # Database
@@ -36,8 +37,8 @@ class Settings(BaseSettings):
             return v
         raise ValueError(v)
 
-    # Redis
-    REDIS_URL: str = "redis://localhost:6379/0"
+    # Redis (opcional - si no está configurado, no se usará)
+    REDIS_URL: str = ""
 
     # Cloudinary
     CLOUDINARY_CLOUD_NAME: str = ""

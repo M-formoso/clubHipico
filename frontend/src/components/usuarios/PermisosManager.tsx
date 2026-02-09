@@ -77,6 +77,17 @@ export function PermisosManager({ permisos, rol, onChange, readonly = false }: P
     if (readonly) return;
 
     const nuevosPermisos = { ...permisosState };
+    // Asegurar que el módulo existe
+    if (!nuevosPermisos[modulo]) {
+      nuevosPermisos[modulo] = {
+        modulo,
+        ver: false,
+        crear: false,
+        editar: false,
+        eliminar: false,
+      };
+    }
+
     nuevosPermisos[modulo] = {
       ...nuevosPermisos[modulo],
       [accion]: !nuevosPermisos[modulo][accion],
@@ -166,7 +177,13 @@ export function PermisosManager({ permisos, rol, onChange, readonly = false }: P
                 {modulos.map((modulo) => {
                   const info = MODULOS_INFO[modulo];
                   const Icon = info.icon;
-                  const permisoModulo = permisosState[modulo];
+                  const permisoModulo = permisosState[modulo] || {
+                    modulo,
+                    ver: false,
+                    crear: false,
+                    editar: false,
+                    eliminar: false,
+                  };
                   const todosMarcados =
                     permisoModulo.ver &&
                     permisoModulo.crear &&
