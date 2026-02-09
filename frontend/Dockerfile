@@ -27,20 +27,18 @@ ENV PORT=3000
 # Copy build output
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Script de inicio que genera la config de nginx con el PORT dinámico.
-# El heredoc externo usa 'SCRIPT' (comillas) → nada se expande en build time.
-# El heredoc interno usa NGINX (sin comillas) → ${PORT} se expande en runtime,
-# y \$uri se convierte en literal $uri para nginx.
+# Script de inicio que genera la config de nginx con el PORT dinámico
 RUN cat > /start.sh << 'SCRIPT'
 #!/bin/sh
+PORT=${PORT:-3000}
 cat > /etc/nginx/conf.d/default.conf << NGINX
 server {
-    listen ${PORT:-3000};
+    listen $PORT;
     server_name localhost;
     root /usr/share/nginx/html;
 
     location / {
-        try_files \$uri \$uri/ /index.html;
+        try_files $uri $uri/ /index.html;
     }
 }
 NGINX
