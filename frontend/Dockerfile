@@ -1,4 +1,4 @@
-# Stage 1: Build
+# Build stage
 FROM node:20-alpine AS builder
 
 WORKDIR /app
@@ -6,38 +6,32 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies (ci = reproducible, no devDependencies cached)
+# Install dependencies
 RUN npm ci
 
-# Copy source
+# Copy source code
 COPY . .
 
-# Railway pasa env vars como build args automáticamente
+# Build arguments for environment variables
 ARG VITE_API_URL
 ENV VITE_API_URL=$VITE_API_URL
 
-# Build de producción
+# Build production bundle
 RUN npm run build
 
-# Stage 2: Serve con nginx
-FROM nginx:alpine
+# Production stage - use Node.js to serve static files
+FROM node:20-alpine
 
-# Copy build output
-COPY --from=builder /app/dist /usr/share/nginx/html
+WORKDIR /app
 
-# Create nginx config template
-RUN printf 'server {\n\
-    listen $PORT;\n\
-    server_name _;\n\
-    root /usr/share/nginx/html;\n\
-    index index.html;\n\
-\n\
-    location / {\n\
-        try_files $uri $uri/ /index.html;\n\
-    }\n\
-}\n' > /etc/nginx/conf.d/default.conf.template
+# Install serve globally
+RUN npm install -g serve
 
+# Copy built files from builder
+COPY --from=builder /app/dist ./dist
+
+# Expose port (Railway will override with $PORT)
 EXPOSE 3000
 
-# Use shell form to allow variable substitution
-CMD /bin/sh -c "export PORT=\${PORT:-3000} && envsubst '\$PORT' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && cat /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
+# Start serve - it will automatically use $PORT if available
+CMD ["serve", "-s", "dist", "-l", "tcp://0.0.0.0:${PORT:-3000}"]
