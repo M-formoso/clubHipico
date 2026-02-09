@@ -24,5 +24,9 @@ echo "🚀 Ejecutando migraciones de base de datos..."
 alembic upgrade head
 
 echo ""
+echo "📊 Creando datos iniciales (usuarios de prueba)..."
+python -m app.scripts.create_initial_data || echo "⚠️  Advertencia: No se pudieron crear datos iniciales (puede que ya existan)"
+
+echo ""
 echo "🌐 Iniciando servidor FastAPI..."
 exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}
