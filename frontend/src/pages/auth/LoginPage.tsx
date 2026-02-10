@@ -61,7 +61,7 @@ export function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-beige-50 to-gray-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Logo y Título */}
+        {/* Logo */}
         <div className="text-center mb-2">
           <div className="inline-flex items-center justify-center">
             <img
@@ -70,7 +70,6 @@ export function LoginPage() {
               className="w-28 h-28 object-contain rounded-lg"
             />
           </div>
-          <h1 className="text-xl font-semibold text-gray-700 mt-2">Sistema de Gestión Integral</h1>
         </div>
 
         <Card className="w-full shadow-lg">
