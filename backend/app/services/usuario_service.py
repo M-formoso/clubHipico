@@ -3,8 +3,11 @@ from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException, status
 from uuid import UUID
 from typing import List, Optional, Dict, Any
+from datetime import date
 
 from app.models.usuario import Usuario, RolEnum
+from app.models.empleado import Empleado, FuncionEmpleadoEnum
+from app.models.cliente import Cliente
 from app.schemas.usuario import UsuarioCreate, UsuarioUpdate
 from app.core.security import get_password_hash
 
@@ -62,7 +65,7 @@ def obtener_por_email(db: Session, email: str) -> Optional[Usuario]:
 
 
 def crear(db: Session, usuario_data: UsuarioCreate) -> Usuario:
-    """Crea un nuevo usuario."""
+    """Crea un nuevo usuario con sus datos de empleado/cliente."""
     # Verificar si el email ya existe
     if obtener_por_email(db, usuario_data.email):
         raise HTTPException(
@@ -74,8 +77,10 @@ def crear(db: Session, usuario_data: UsuarioCreate) -> Usuario:
         # Hashear la contraseña
         password_hash = get_password_hash(usuario_data.password)
 
-        # Crear el usuario sin el campo password
-        usuario_dict = usuario_data.model_dump(exclude={'password'})
+        # Separar los campos de usuario de los campos de empleado/cliente
+        usuario_fields = ['email', 'rol', 'permisos']
+        usuario_dict = {k: v for k, v in usuario_data.model_dump(exclude={'password'}).items() if k in usuario_fields}
+
         db_usuario = Usuario(
             **usuario_dict,
             password_hash=password_hash
@@ -86,14 +91,81 @@ def crear(db: Session, usuario_data: UsuarioCreate) -> Usuario:
             db_usuario.permisos = _obtener_permisos_por_defecto(usuario_data.rol)
 
         db.add(db_usuario)
+        db.flush()  # Obtener el ID sin hacer commit
+
+        # Crear empleado o cliente según el rol
+        if usuario_data.rol in [RolEnum.SUPER_ADMIN, RolEnum.ADMIN, RolEnum.EMPLEADO]:
+            # Crear registro de empleado
+            if usuario_data.nombre and usuario_data.apellido:
+                empleado_data = {
+                    'usuario_id': db_usuario.id,
+                    'nombre': usuario_data.nombre,
+                    'apellido': usuario_data.apellido,
+                }
+
+                if usuario_data.dni:
+                    empleado_data['dni'] = usuario_data.dni
+                if usuario_data.fecha_nacimiento:
+                    empleado_data['fecha_nacimiento'] = date.fromisoformat(usuario_data.fecha_nacimiento)
+                if usuario_data.telefono:
+                    empleado_data['telefono'] = usuario_data.telefono
+                if usuario_data.direccion:
+                    empleado_data['direccion'] = usuario_data.direccion
+                if usuario_data.funcion:
+                    empleado_data['funcion'] = FuncionEmpleadoEnum(usuario_data.funcion)
+                else:
+                    empleado_data['funcion'] = FuncionEmpleadoEnum.ADMINISTRATIVO  # Default
+                if usuario_data.fecha_ingreso:
+                    empleado_data['fecha_ingreso'] = date.fromisoformat(usuario_data.fecha_ingreso)
+                if usuario_data.salario:
+                    empleado_data['salario'] = usuario_data.salario
+                if usuario_data.contacto_emergencia:
+                    empleado_data['contacto_emergencia'] = usuario_data.contacto_emergencia
+
+                db_empleado = Empleado(**empleado_data)
+                db.add(db_empleado)
+
+        elif usuario_data.rol == RolEnum.CLIENTE:
+            # Crear registro de cliente
+            if usuario_data.nombre and usuario_data.apellido:
+                cliente_data = {
+                    'usuario_id': db_usuario.id,
+                    'nombre': usuario_data.nombre,
+                    'apellido': usuario_data.apellido,
+                }
+
+                if usuario_data.dni:
+                    cliente_data['dni'] = usuario_data.dni
+                if usuario_data.fecha_nacimiento:
+                    cliente_data['fecha_nacimiento'] = date.fromisoformat(usuario_data.fecha_nacimiento)
+                if usuario_data.telefono:
+                    cliente_data['telefono'] = usuario_data.telefono
+                if usuario_data.direccion:
+                    cliente_data['direccion'] = usuario_data.direccion
+                if usuario_data.contacto_emergencia:
+                    cliente_data['contacto_emergencia'] = usuario_data.contacto_emergencia
+
+                db_cliente = Cliente(**cliente_data)
+                db.add(db_cliente)
+
         db.commit()
         db.refresh(db_usuario)
+
+        # Enriquecer con datos relacionados
+        _enriquecer_usuarios_con_info_relacionada([db_usuario])
+
         return db_usuario
     except IntegrityError as e:
         db.rollback()
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Error de integridad de datos. Verifique que el email no esté duplicado."
+            detail="Error de integridad de datos. Verifique que el email o DNI no estén duplicados."
+        )
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Error al crear usuario: {str(e)}"
         )
 
 
@@ -102,7 +174,7 @@ def actualizar(
     usuario_id: UUID,
     usuario_update: UsuarioUpdate
 ) -> Optional[Usuario]:
-    """Actualiza un usuario existente."""
+    """Actualiza un usuario existente y sus datos de empleado/cliente."""
     db_usuario = obtener_por_id(db, usuario_id)
     if not db_usuario:
         return None
@@ -123,11 +195,83 @@ def actualizar(
                 detail="El email ya está registrado"
             )
 
+    # Separar campos de usuario de campos de empleado/cliente
+    usuario_fields = ['email', 'rol', 'permisos', 'activo', 'password_hash']
+    empleado_cliente_fields = ['nombre', 'apellido', 'dni', 'fecha_nacimiento',
+                                'telefono', 'direccion', 'funcion', 'fecha_ingreso',
+                                'salario', 'contacto_emergencia']
+
+    # Actualizar campos del usuario
     for field, value in update_data.items():
-        setattr(db_usuario, field, value)
+        if field in usuario_fields:
+            setattr(db_usuario, field, value)
+
+    # Actualizar empleado o cliente según corresponda
+    if db_usuario.rol in [RolEnum.SUPER_ADMIN, RolEnum.ADMIN, RolEnum.EMPLEADO]:
+        if db_usuario.empleado:
+            # Actualizar empleado existente
+            for field, value in update_data.items():
+                if field in empleado_cliente_fields and hasattr(db_usuario.empleado, field):
+                    if field == 'fecha_nacimiento' and isinstance(value, str):
+                        value = date.fromisoformat(value)
+                    elif field == 'fecha_ingreso' and isinstance(value, str):
+                        value = date.fromisoformat(value)
+                    elif field == 'funcion' and isinstance(value, str):
+                        value = FuncionEmpleadoEnum(value)
+                    setattr(db_usuario.empleado, field, value)
+        else:
+            # Crear empleado si no existe
+            if 'nombre' in update_data and 'apellido' in update_data:
+                empleado_data = {
+                    'usuario_id': db_usuario.id,
+                    'nombre': update_data.get('nombre'),
+                    'apellido': update_data.get('apellido'),
+                    'funcion': FuncionEmpleadoEnum(update_data.get('funcion', 'admin'))
+                }
+                for field in ['dni', 'telefono', 'direccion', 'contacto_emergencia']:
+                    if field in update_data:
+                        empleado_data[field] = update_data[field]
+                if 'fecha_nacimiento' in update_data:
+                    empleado_data['fecha_nacimiento'] = date.fromisoformat(update_data['fecha_nacimiento'])
+                if 'fecha_ingreso' in update_data:
+                    empleado_data['fecha_ingreso'] = date.fromisoformat(update_data['fecha_ingreso'])
+                if 'salario' in update_data:
+                    empleado_data['salario'] = update_data['salario']
+
+                db_empleado = Empleado(**empleado_data)
+                db.add(db_empleado)
+
+    elif db_usuario.rol == RolEnum.CLIENTE:
+        if db_usuario.cliente:
+            # Actualizar cliente existente
+            for field, value in update_data.items():
+                if field in empleado_cliente_fields and hasattr(db_usuario.cliente, field):
+                    if field == 'fecha_nacimiento' and isinstance(value, str):
+                        value = date.fromisoformat(value)
+                    setattr(db_usuario.cliente, field, value)
+        else:
+            # Crear cliente si no existe
+            if 'nombre' in update_data and 'apellido' in update_data:
+                cliente_data = {
+                    'usuario_id': db_usuario.id,
+                    'nombre': update_data.get('nombre'),
+                    'apellido': update_data.get('apellido'),
+                }
+                for field in ['dni', 'telefono', 'direccion', 'contacto_emergencia']:
+                    if field in update_data:
+                        cliente_data[field] = update_data[field]
+                if 'fecha_nacimiento' in update_data:
+                    cliente_data['fecha_nacimiento'] = date.fromisoformat(update_data['fecha_nacimiento'])
+
+                db_cliente = Cliente(**cliente_data)
+                db.add(db_cliente)
 
     db.commit()
     db.refresh(db_usuario)
+
+    # Enriquecer con datos relacionados
+    _enriquecer_usuarios_con_info_relacionada([db_usuario])
+
     return db_usuario
 
 

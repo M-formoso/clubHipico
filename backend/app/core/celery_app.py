@@ -11,6 +11,7 @@ celery_app = Celery(
         "app.tasks.alertas",
         "app.tasks.emails",
         "app.tasks.reportes",
+        "app.tasks.pagos",
     ]
 )
 
@@ -47,5 +48,10 @@ celery_app.conf.beat_schedule = {
     "recordatorios-eventos-diario": {
         "task": "app.tasks.alertas.enviar_recordatorios_eventos",
         "schedule": crontab(hour=10, minute=0),
+    },
+    # Actualizar pagos vencidos - Todos los días a las 1 AM
+    "actualizar-pagos-vencidos-diario": {
+        "task": "app.tasks.pagos.actualizar_pagos_vencidos",
+        "schedule": crontab(hour=1, minute=0),
     },
 }

@@ -2,10 +2,14 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from uuid import UUID
 from typing import List, Optional
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 from app.models.evento import Evento, InscripcionEvento, EstadoEventoEnum, EstadoInscripcionEnum
+from app.models.cliente import Cliente
+from app.models.alerta import TipoAlertaEnum, PrioridadAlertaEnum
 from app.schemas.evento import EventoCreate, EventoUpdate, InscripcionEventoCreate, InscripcionEventoUpdate
+from app.schemas.alerta import AlertaCreate
+from app.services import alerta_service
 
 
 def obtener_todos(
@@ -109,6 +113,101 @@ def inscribir_cliente(db: Session, inscripcion_data: InscripcionEventoCreate) ->
     db.add(db_inscripcion)
     db.commit()
     db.refresh(db_inscripcion)
+
+    # Crear alertas automáticas
+    try:
+        cliente = db.query(Cliente).filter(Cliente.id == inscripcion_data.cliente_id).first()
+        cliente_nombre = f"{cliente.nombre} {cliente.apellido}" if cliente else "Un cliente"
+
+        # 1. Alerta INMEDIATA para el cliente confirmando su inscripción
+        if cliente and cliente.usuario_id:
+            alerta_confirmacion = AlertaCreate(
+                tipo=TipoAlertaEnum.EVENTO,
+                prioridad=PrioridadAlertaEnum.MEDIA,
+                titulo=f"¡Inscripción confirmada!",
+                mensaje=f"Te has inscrito exitosamente al evento '{evento.titulo}' programado para el {evento.fecha_inicio.strftime('%d/%m/%Y a las %H:%M')}. Te enviaremos un recordatorio antes del evento.",
+                usuario_id=cliente.usuario_id,
+                fecha_evento=evento.fecha_inicio,
+                entidad_relacionada_tipo="evento",
+                entidad_relacionada_id=evento.id,
+                acciones_disponibles=[
+                    {
+                        "tipo": "ver_detalle",
+                        "etiqueta": "Ver Evento",
+                        "url": f"/eventos/{evento.id}"
+                    }
+                ],
+                datos_adicionales={
+                    "evento_titulo": evento.titulo,
+                    "evento_fecha": evento.fecha_inicio.isoformat(),
+                    "inscripcion_id": str(db_inscripcion.id),
+                    "tipo_alerta": "confirmacion_inscripcion"
+                }
+            )
+            alerta_service.crear(db, alerta_confirmacion)
+
+            # 2. Alerta de RECORDATORIO para el cliente (1 día antes del evento)
+            alerta_recordatorio = AlertaCreate(
+                tipo=TipoAlertaEnum.EVENTO,
+                prioridad=PrioridadAlertaEnum.ALTA,
+                titulo=f"Recordatorio: {evento.titulo} es mañana",
+                mensaje=f"Tu evento '{evento.titulo}' es mañana {evento.fecha_inicio.strftime('%d/%m/%Y a las %H:%M')}. No olvides asistir.",
+                usuario_id=cliente.usuario_id,
+                fecha_evento=evento.fecha_inicio,
+                entidad_relacionada_tipo="evento",
+                entidad_relacionada_id=evento.id,
+                acciones_disponibles=[
+                    {
+                        "tipo": "ver_detalle",
+                        "etiqueta": "Ver Evento",
+                        "url": f"/eventos/{evento.id}"
+                    }
+                ],
+                datos_adicionales={
+                    "evento_titulo": evento.titulo,
+                    "evento_fecha": evento.fecha_inicio.isoformat(),
+                    "inscripcion_id": str(db_inscripcion.id),
+                    "tipo_alerta": "recordatorio_evento"
+                }
+            )
+            alerta_service.crear(db, alerta_recordatorio)
+
+        # 3. Alerta INMEDIATA para los administradores sobre la nueva inscripción
+        alerta_admin_data = AlertaCreate(
+            tipo=TipoAlertaEnum.EVENTO,
+            prioridad=PrioridadAlertaEnum.MEDIA,
+            titulo=f"Nueva inscripción en {evento.titulo}",
+            mensaje=f"¡Nueva inscripción! {cliente_nombre} se ha inscrito al evento '{evento.titulo}' programado para el {evento.fecha_inicio.strftime('%d/%m/%Y a las %H:%M')}. Revisa los detalles de la inscripción y la lista de participantes.",
+            entidad_relacionada_tipo="evento",
+            entidad_relacionada_id=evento.id,
+            acciones_disponibles=[
+                {
+                    "tipo": "ver_inscripciones",
+                    "etiqueta": "Ver Inscripciones",
+                    "url": f"/eventos/{evento.id}"
+                },
+                {
+                    "tipo": "ver_cliente",
+                    "etiqueta": "Ver Cliente",
+                    "url": f"/clientes/{cliente.id}" if cliente else None
+                }
+            ],
+            datos_adicionales={
+                "evento_titulo": evento.titulo,
+                "evento_fecha": evento.fecha_inicio.isoformat(),
+                "cliente_nombre": cliente_nombre,
+                "cliente_id": str(cliente.id) if cliente else None,
+                "inscripcion_id": str(db_inscripcion.id),
+                "tipo_alerta": "nueva_inscripcion_admin",
+                "estado_inscripcion": db_inscripcion.estado.value
+            }
+        )
+        alerta_service.crear_para_admins(db, alerta_admin_data)
+
+    except Exception as e:
+        # Si falla la creación de las alertas, no afectar la inscripción
+        print(f"Error al crear alertas automáticas: {e}")
+
     return db_inscripcion
 
 
@@ -156,6 +255,3 @@ def actualizar_asistencia(
         db.refresh(db_inscripcion)
 
     return db_inscripcion
-
-
-from datetime import timedelta

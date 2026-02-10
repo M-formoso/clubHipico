@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { clienteService } from '@/services/clienteService';
 import { Cliente } from '@/types/cliente';
+import { useAuthStore } from '@/stores/authStore';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -68,15 +69,33 @@ export function ClientesListPage() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useAuthStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [tipoFilter, setTipoFilter] = useState<string>('todos');
   const [estadoFilter, setEstadoFilter] = useState<string>('todos');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [clienteToDelete, setClienteToDelete] = useState<Cliente | null>(null);
 
+  // Si el usuario es cliente, redirigir a su propio perfil
+  useEffect(() => {
+    if (user?.rol === 'cliente') {
+      clienteService.getMe().then((cliente) => {
+        navigate(`/clientes/${cliente.id}`);
+      }).catch((error) => {
+        console.error('Error al obtener perfil de cliente:', error);
+        toast({
+          title: 'Error',
+          description: 'No se pudo cargar tu perfil',
+          variant: 'destructive',
+        });
+      });
+    }
+  }, [user, navigate, toast]);
+
   const { data: clientes, isLoading } = useQuery({
     queryKey: ['clientes'],
     queryFn: () => clienteService.getAll(),
+    enabled: user?.rol !== 'cliente', // Solo cargar si no es cliente
   });
 
   const deleteMutation = useMutation({

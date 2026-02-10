@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bell, Check, Trash2, Filter, Settings, Plus } from 'lucide-react';
 import { useAlertas, useMarcarLeida, useDeleteAlerta, useMarcarTodasLeidas, useEstadisticasAlertas } from '@/hooks/useAlertas';
+import { usePermisos } from '@/hooks/usePermisos';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -39,6 +40,7 @@ const TIPO_LABELS: Record<TipoAlerta, string> = {
 
 export function AlertasListPage() {
   const navigate = useNavigate();
+  const { puedeCrear } = usePermisos();
   const [filtroTipo, setFiltroTipo] = useState<TipoAlerta | 'todos'>('todos');
   const [filtroPrioridad, setFiltroPrioridad] = useState<Prioridad | 'todos'>('todos');
   const [filtroLeida, setFiltroLeida] = useState<'todos' | 'leidas' | 'no_leidas'>('todos');
@@ -100,19 +102,21 @@ export function AlertasListPage() {
             Gestiona todas las alertas y notificaciones del sistema
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            onClick={() => navigate('/alertas/tipos')}
-          >
-            <Settings className="mr-2 h-4 w-4" />
-            Gestionar Tipos
-          </Button>
-          <Button onClick={() => navigate('/alertas/nueva')}>
-            <Plus className="mr-2 h-4 w-4" />
-            Nueva Alerta
-          </Button>
-        </div>
+        {puedeCrear('alertas') && (
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => navigate('/alertas/tipos')}
+            >
+              <Settings className="mr-2 h-4 w-4" />
+              Gestionar Tipos
+            </Button>
+            <Button onClick={() => navigate('/alertas/nueva')}>
+              <Plus className="mr-2 h-4 w-4" />
+              Nueva Alerta
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Estadísticas */}

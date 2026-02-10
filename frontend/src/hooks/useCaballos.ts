@@ -125,7 +125,8 @@ export function useFotos(caballoId: string) {
   });
 
   const addFotoMutation = useMutation({
-    mutationFn: (foto: FotoCaballoCreate) => caballoService.addFoto(caballoId, foto),
+    mutationFn: ({ file, descripcion, es_principal }: { file: File; descripcion?: string; es_principal?: boolean }) =>
+      caballoService.addFoto(caballoId, file, descripcion, es_principal),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['caballos', caballoId, 'fotos'] });
       queryClient.invalidateQueries({ queryKey: ['caballos', caballoId] });

@@ -20,6 +20,7 @@ from app.models.historial_medico import HistorialMedico
 from app.models.plan_alimentacion import PlanAlimentacion
 from app.models.evento import Evento, InscripcionEvento
 from app.models.pago import Pago
+from app.models.egreso import Egreso
 from app.models.alerta import Alerta
 from app.models.configuracion import Box, Configuracion
 

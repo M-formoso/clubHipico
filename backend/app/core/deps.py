@@ -349,3 +349,23 @@ def require_eventos_editar(current_user: Usuario = Depends(get_current_active_us
             detail="No tienes permiso para editar eventos"
         )
     return current_user
+
+
+def require_alertas_ver(current_user: Usuario = Depends(get_current_active_user)) -> Usuario:
+    """Requiere permiso para ver alertas"""
+    if not verificar_permiso(current_user, "alertas", "ver"):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="No tienes permiso para ver alertas"
+        )
+    return current_user
+
+
+def require_alertas_crear(current_user: Usuario = Depends(get_current_active_user)) -> Usuario:
+    """Requiere permiso para crear alertas"""
+    if not verificar_permiso(current_user, "alertas", "crear"):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="No tienes permiso para crear alertas"
+        )
+    return current_user

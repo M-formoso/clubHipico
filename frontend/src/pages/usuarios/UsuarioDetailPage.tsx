@@ -181,7 +181,7 @@ export function UsuarioDetailPage() {
                       <div>
                         <p className="text-sm font-medium text-gray-500">Salario</p>
                         <p className="text-sm text-gray-900">
-                          ${usuario.salario.toLocaleString()}
+                          ${Number(usuario.salario).toFixed(2)}
                         </p>
                       </div>
                     </div>

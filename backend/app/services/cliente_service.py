@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException, status
 from uuid import UUID
@@ -16,7 +16,7 @@ def obtener_todos(
     activo_solo: bool = False
 ) -> List[Cliente]:
     """Obtiene lista de clientes con paginación."""
-    query = db.query(Cliente)
+    query = db.query(Cliente).options(joinedload(Cliente.usuario))
 
     if activo_solo:
         query = query.filter(Cliente.activo == True)
@@ -25,8 +25,10 @@ def obtener_todos(
 
 
 def obtener_por_id(db: Session, cliente_id: UUID) -> Optional[Cliente]:
-    """Obtiene un cliente por ID."""
-    return db.query(Cliente).filter(Cliente.id == cliente_id).first()
+    """Obtiene un cliente por ID con información del usuario asociado."""
+    return db.query(Cliente).options(
+        joinedload(Cliente.usuario)
+    ).filter(Cliente.id == cliente_id).first()
 
 
 def crear(db: Session, cliente_data: ClienteCreate) -> Cliente:

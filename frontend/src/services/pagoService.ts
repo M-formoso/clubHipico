@@ -72,4 +72,26 @@ export const pagoService = {
     link.click();
     link.remove();
   },
+
+  // Cambiar estado
+  cambiarEstado: async (pagoId: string, estado: string): Promise<Pago> => {
+    const { data } = await api.patch(`/pagos/${pagoId}/estado`, null, {
+      params: { estado },
+    });
+    return data;
+  },
+
+  // Obtener balance
+  getBalance: async (fecha_inicio: string, fecha_fin: string): Promise<{
+    ingresos: number;
+    egresos: number;
+    balance: number;
+    fecha_inicio: string;
+    fecha_fin: string;
+  }> => {
+    const { data } = await api.get('/pagos/balance/periodo', {
+      params: { fecha_inicio, fecha_fin },
+    });
+    return data;
+  },
 };

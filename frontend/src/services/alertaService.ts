@@ -66,8 +66,16 @@ export const alertaService = {
 
   // Estadísticas de alertas
   getEstadisticas: async (): Promise<EstadisticasAlertas> => {
-    const { data } = await api.get('/alertas/estadisticas');
-    return data;
+    // TODO: Implementar endpoint en backend
+    // const { data } = await api.get('/alertas/estadisticas');
+    // return data;
+    return {
+      total: 0,
+      leidas: 0,
+      no_leidas: 0,
+      por_prioridad: {},
+      por_tipo: {}
+    } as EstadisticasAlertas;
   },
 
   // ============ TIPOS DE ALERTA (Configuración) ============

@@ -30,12 +30,13 @@ export function useCreateUsuario() {
 
   return useMutation({
     mutationFn: (data: UsuarioCreate) => usuarioService.create(data),
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['usuarios'] });
       toast({
         title: 'Usuario creado',
         description: 'El usuario ha sido creado exitosamente',
       });
+      return data;
     },
     onError: (error: any) => {
       toast({

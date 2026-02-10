@@ -10,19 +10,47 @@ class UsuarioBase(BaseModel):
 
 
 class UsuarioCreate(UsuarioBase):
-    """Schema para crear Usuario"""
+    """Schema para crear Usuario con datos de empleado/cliente"""
     password: str = Field(..., min_length=6, max_length=100)
     rol: RolEnum = RolEnum.CLIENTE
     permisos: Optional[Dict[str, Any]] = None
 
+    # Datos personales (para empleado/cliente)
+    nombre: Optional[str] = None
+    apellido: Optional[str] = None
+    dni: Optional[str] = None
+    fecha_nacimiento: Optional[str] = None
+    telefono: Optional[str] = None
+    direccion: Optional[str] = None
+
+    # Datos laborales (solo para empleado)
+    funcion: Optional[str] = None
+    fecha_ingreso: Optional[str] = None
+    salario: Optional[float] = None
+    contacto_emergencia: Optional[Dict[str, str]] = None
+
 
 class UsuarioUpdate(BaseModel):
-    """Schema para actualizar Usuario"""
+    """Schema para actualizar Usuario con datos de empleado/cliente"""
     email: Optional[EmailStr] = None
     password: Optional[str] = Field(None, min_length=6, max_length=100)
     rol: Optional[RolEnum] = None
     activo: Optional[bool] = None
     permisos: Optional[Dict[str, Any]] = None
+
+    # Datos personales (para empleado/cliente)
+    nombre: Optional[str] = None
+    apellido: Optional[str] = None
+    dni: Optional[str] = None
+    fecha_nacimiento: Optional[str] = None
+    telefono: Optional[str] = None
+    direccion: Optional[str] = None
+
+    # Datos laborales (solo para empleado)
+    funcion: Optional[str] = None
+    fecha_ingreso: Optional[str] = None
+    salario: Optional[float] = None
+    contacto_emergencia: Optional[Dict[str, str]] = None
 
 
 class UsuarioSchema(UsuarioBase):

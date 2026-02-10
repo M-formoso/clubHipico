@@ -7,9 +7,15 @@ export interface ReporteFiltros {
 }
 
 export const reporteService = {
-  // Dashboard general
+  // Dashboard general (estadísticas completas con estructura anidada)
   getDashboard: async () => {
     const { data } = await api.get('/dashboard/');
+    return data;
+  },
+
+  // Dashboard de reportes (estadísticas simplificadas para página de reportes)
+  getReportesDashboard: async () => {
+    const { data } = await api.get('/reportes/dashboard');
     return data;
   },
 

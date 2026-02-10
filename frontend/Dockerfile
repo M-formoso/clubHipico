@@ -33,5 +33,5 @@ COPY --from=builder /app/dist ./dist
 # Expose port (Railway will override with $PORT)
 EXPOSE 3000
 
-# Start serve - it will automatically use $PORT if available
-CMD ["serve", "-s", "dist", "-l", "tcp://0.0.0.0:${PORT:-3000}"]
+# Start serve - use shell form for variable expansion
+CMD serve -s dist -l tcp://0.0.0.0:${PORT:-3000}

@@ -10,6 +10,7 @@ import {
   useEstudiosMedicos,
 } from '@/hooks/useCaballos';
 import { PlanSanitarioTab } from '@/components/caballos/PlanSanitarioTab';
+import { useAuthStore } from '@/stores/authStore';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -135,6 +136,9 @@ const historialLabels: Record<HistorialTipo, string> = {
 export function CaballoDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { user } = useAuthStore();
+
+  const isCliente = user?.rol === 'cliente';
 
   const { data: caballo, isLoading } = useCaballoCompleto(id!);
   const { vacunas, addVacuna, deleteVacuna } = useVacunas(id!);
@@ -153,7 +157,7 @@ export function CaballoDetailPage() {
   const [modalFoto, setModalFoto] = useState(false);
 
   // ── Form states ──
-  const [formFoto, setFormFoto] = useState({ url: '', descripcion: '' });
+  const [formFoto, setFormFoto] = useState<{ file: File | null; descripcion: string }>({ file: null, descripcion: '' });
   const [formVacuna, setFormVacuna] = useState({ tipo: 'anemia', fecha: '', veterinario: '', marca: '', frecuencia_dias: '', observaciones: '', aplicada: true });
   const [formHerraje, setFormHerraje] = useState({ fecha: '', herrador: '', observaciones: '', proximo_herraje: '', costo: '' });
   const [formAntiparasitario, setFormAntiparasitario] = useState({ fecha: '', marca: '', drogas: '', dosis: '', proxima_aplicacion: '', observaciones: '' });
@@ -280,15 +284,14 @@ export function CaballoDetailPage() {
   };
 
   const handleSubmitFoto = () => {
-    if (!formFoto.url) return;
+    if (!formFoto.file) return;
     addFoto({
-      caballo_id: id!,
-      url: formFoto.url,
+      file: formFoto.file,
       descripcion: formFoto.descripcion || undefined,
       es_principal: !fotos || fotos.length === 0,
     });
     setModalFoto(false);
-    setFormFoto({ url: '', descripcion: '' });
+    setFormFoto({ file: null, descripcion: '' });
   };
 
   const handleSubmitEstudioMedico = () => {
@@ -347,10 +350,12 @@ export function CaballoDetailPage() {
             <p className="text-xs text-gray-400 font-mono mt-1">Chip: {caballo.numero_chip}</p>
           </div>
         </div>
-        <Button onClick={() => navigate(`/caballos/${id}/editar`)}>
-          <Edit className="mr-2 h-4 w-4" />
-          Editar
-        </Button>
+        {!isCliente && (
+          <Button onClick={() => navigate(`/caballos/${id}/editar`)}>
+            <Edit className="mr-2 h-4 w-4" />
+            Editar
+          </Button>
+        )}
       </div>
 
       {/* Summary Cards */}
@@ -597,9 +602,11 @@ export function CaballoDetailPage() {
                 <CardTitle>Vacunas</CardTitle>
                 <CardDescription>Historial de vacunación</CardDescription>
               </div>
-              <Button size="sm" onClick={() => setModalVacuna(true)}>
-                <Plus className="h-4 w-4 mr-1" /> Agregar
-              </Button>
+              {!isCliente && (
+                <Button size="sm" onClick={() => setModalVacuna(true)}>
+                  <Plus className="h-4 w-4 mr-1" /> Agregar
+                </Button>
+              )}
             </CardHeader>
             <CardContent>
               {vacunas && vacunas.length > 0 ? (
@@ -620,9 +627,11 @@ export function CaballoDetailPage() {
                           </p>
                         )}
                       </div>
-                      <Button variant="ghost" size="icon" className="text-red-400 hover:text-red-600" onClick={() => deleteVacuna(vacuna.id)}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      {!isCliente && (
+                        <Button variant="ghost" size="icon" className="text-red-400 hover:text-red-600" onClick={() => deleteVacuna(vacuna.id)}>
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -639,9 +648,11 @@ export function CaballoDetailPage() {
                 <CardTitle>Revisión Dental</CardTitle>
                 <CardDescription>Historial de revisiones dentales</CardDescription>
               </div>
-              <Button size="sm" onClick={() => setModalRevisionDental(true)}>
-                <Plus className="h-4 w-4 mr-1" /> Agregar
-              </Button>
+              {!isCliente && (
+                <Button size="sm" onClick={() => setModalRevisionDental(true)}>
+                  <Plus className="h-4 w-4 mr-1" /> Agregar
+                </Button>
+              )}
             </CardHeader>
             <CardContent>
               {revisiones && revisiones.length > 0 ? (
@@ -658,9 +669,11 @@ export function CaballoDetailPage() {
                           </p>
                         )}
                       </div>
-                      <Button variant="ghost" size="icon" className="text-red-400 hover:text-red-600" onClick={() => deleteRevision(r.id)}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      {!isCliente && (
+                        <Button variant="ghost" size="icon" className="text-red-400 hover:text-red-600" onClick={() => deleteRevision(r.id)}>
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -677,9 +690,11 @@ export function CaballoDetailPage() {
                 <CardTitle>Otros Estudios</CardTitle>
                 <CardDescription>Radiografías, ecografías y otros estudios</CardDescription>
               </div>
-              <Button size="sm" onClick={() => setModalEstudioMedico(true)}>
-                <Plus className="h-4 w-4 mr-1" /> Agregar
-              </Button>
+              {!isCliente && (
+                <Button size="sm" onClick={() => setModalEstudioMedico(true)}>
+                  <Plus className="h-4 w-4 mr-1" /> Agregar
+                </Button>
+              )}
             </CardHeader>
             <CardContent>
               {estudios && estudios.length > 0 ? (
@@ -696,9 +711,11 @@ export function CaballoDetailPage() {
                         {e.diagnostico && <p className="text-sm text-gray-600 mt-1">Diagnóstico: {e.diagnostico}</p>}
                         {e.observaciones && <p className="text-sm text-gray-600">{e.observaciones}</p>}
                       </div>
-                      <Button variant="ghost" size="icon" className="text-red-400 hover:text-red-600" onClick={() => deleteEstudio(e.id)}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      {!isCliente && (
+                        <Button variant="ghost" size="icon" className="text-red-400 hover:text-red-600" onClick={() => deleteEstudio(e.id)}>
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -719,9 +736,11 @@ export function CaballoDetailPage() {
                 <CardTitle>Herrajes</CardTitle>
                 <CardDescription>Historial de herrajes y próximas fechas</CardDescription>
               </div>
-              <Button size="sm" onClick={() => setModalHerraje(true)}>
-                <Plus className="h-4 w-4 mr-1" /> Agregar
-              </Button>
+              {!isCliente && (
+                <Button size="sm" onClick={() => setModalHerraje(true)}>
+                  <Plus className="h-4 w-4 mr-1" /> Agregar
+                </Button>
+              )}
             </CardHeader>
             <CardContent>
               {herrajes && herrajes.length > 0 ? (
@@ -740,9 +759,11 @@ export function CaballoDetailPage() {
                       </div>
                       <div className="flex items-center gap-2">
                         {herraje.costo && <p className="font-bold text-sm">${herraje.costo}</p>}
-                        <Button variant="ghost" size="icon" className="text-red-400 hover:text-red-600" onClick={() => deleteHerraje(herraje.id)}>
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                        {!isCliente && (
+                          <Button variant="ghost" size="icon" className="text-red-400 hover:text-red-600" onClick={() => deleteHerraje(herraje.id)}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -764,9 +785,11 @@ export function CaballoDetailPage() {
                 <CardTitle>Antiparasitarios</CardTitle>
                 <CardDescription>Historial de aplicaciones antiparasitarias</CardDescription>
               </div>
-              <Button size="sm" onClick={() => setModalAntiparasitario(true)}>
-                <Plus className="h-4 w-4 mr-1" /> Agregar
-              </Button>
+              {!isCliente && (
+                <Button size="sm" onClick={() => setModalAntiparasitario(true)}>
+                  <Plus className="h-4 w-4 mr-1" /> Agregar
+                </Button>
+              )}
             </CardHeader>
             <CardContent>
               {antiparasitarios && antiparasitarios.length > 0 ? (
@@ -785,9 +808,11 @@ export function CaballoDetailPage() {
                           </p>
                         )}
                       </div>
-                      <Button variant="ghost" size="icon" className="text-red-400 hover:text-red-600" onClick={() => deleteAntiparasitario(ap.id)}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      {!isCliente && (
+                        <Button variant="ghost" size="icon" className="text-red-400 hover:text-red-600" onClick={() => deleteAntiparasitario(ap.id)}>
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -1055,27 +1080,35 @@ export function CaballoDetailPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Agregar Foto</DialogTitle>
-            <DialogDescription>Ingrese la URL de la foto del caballo</DialogDescription>
+            <DialogDescription>Seleccione una foto del caballo desde su dispositivo</DialogDescription>
           </DialogHeader>
           <div className="space-y-3">
             <div className="space-y-1">
-              <Label>URL de la foto <span className="text-red-500">*</span></Label>
-              <Input value={formFoto.url} onChange={(e) => setFormFoto({ ...formFoto, url: e.target.value })} placeholder="https://ejemplo.com/foto.jpg" />
+              <Label>Archivo de imagen <span className="text-red-500">*</span></Label>
+              <Input
+                type="file"
+                accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) setFormFoto({ ...formFoto, file });
+                }}
+              />
+              <p className="text-xs text-gray-500">Formatos permitidos: JPG, PNG, GIF, WEBP (máx. 10MB)</p>
             </div>
             <div className="space-y-1">
               <Label>Descripción</Label>
               <Input value={formFoto.descripcion} onChange={(e) => setFormFoto({ ...formFoto, descripcion: e.target.value })} placeholder="Ej: Foto de perfil" />
             </div>
-            {formFoto.url && (
+            {formFoto.file && (
               <div className="mt-2">
                 <p className="text-xs text-gray-500 mb-1">Vista previa:</p>
-                <img src={formFoto.url} alt="Preview" className="w-full h-32 object-cover rounded border" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                <img src={URL.createObjectURL(formFoto.file)} alt="Preview" className="w-full h-32 object-cover rounded border" />
               </div>
             )}
           </div>
           <div className="flex justify-end gap-2 pt-2">
             <Button variant="outline" onClick={() => setModalFoto(false)}>Cancelar</Button>
-            <Button onClick={handleSubmitFoto} disabled={!formFoto.url}>Guardar</Button>
+            <Button onClick={handleSubmitFoto} disabled={!formFoto.file}>Guardar</Button>
           </div>
         </DialogContent>
       </Dialog>

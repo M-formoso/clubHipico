@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { caballoService } from '@/services/caballoService';
 import { Caballo } from '@/types';
+import { useAuthStore } from '@/stores/authStore';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -34,12 +35,15 @@ export function CaballosListPage() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useAuthStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [estadoFilter, setEstadoFilter] = useState<string>('todos');
 
+  const isCliente = user?.rol === 'cliente';
+
   const { data: caballos, isLoading, error } = useQuery({
-    queryKey: ['caballos'],
-    queryFn: () => caballoService.getAll(),
+    queryKey: isCliente ? ['caballos', 'me'] : ['caballos'],
+    queryFn: () => isCliente ? caballoService.getMe() : caballoService.getAll(),
   });
 
   const deleteMutation = useMutation({
@@ -96,15 +100,21 @@ export function CaballosListPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Caballos</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            {isCliente ? 'Mis Caballos' : 'Caballos'}
+          </h1>
           <p className="text-gray-500 mt-1">
-            Gestiona la información de los caballos del club
+            {isCliente
+              ? 'Información de tus caballos'
+              : 'Gestiona la información de los caballos del club'}
           </p>
         </div>
-        <Button onClick={() => navigate('/caballos/nuevo')}>
-          <Plus className="mr-2 h-4 w-4" />
-          Nuevo Caballo
-        </Button>
+        {!isCliente && (
+          <Button onClick={() => navigate('/caballos/nuevo')}>
+            <Plus className="mr-2 h-4 w-4" />
+            Nuevo Caballo
+          </Button>
+        )}
       </div>
 
       {/* Filters */}
@@ -205,23 +215,27 @@ export function CaballosListPage() {
                     <Eye className="mr-1 h-3 w-3" />
                     Ver
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1"
-                    onClick={() => navigate(`/caballos/${caballo.id}/editar`)}
-                  >
-                    <Edit className="mr-1 h-3 w-3" />
-                    Editar
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleDelete(caballo.id, caballo.nombre)}
-                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                  >
-                    <Trash2 className="h-3 w-3" />
-                  </Button>
+                  {!isCliente && (
+                    <>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1"
+                        onClick={() => navigate(`/caballos/${caballo.id}/editar`)}
+                      >
+                        <Edit className="mr-1 h-3 w-3" />
+                        Editar
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDelete(caballo.id, caballo.nombre)}
+                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    </>
+                  )}
                 </div>
               </CardContent>
             </Card>

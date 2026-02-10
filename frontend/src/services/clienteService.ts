@@ -16,6 +16,12 @@ export const clienteService = {
     return data;
   },
 
+  // Obtener perfil del cliente actual
+  getMe: async (): Promise<Cliente> => {
+    const { data } = await api.get('/clientes/me');
+    return data;
+  },
+
   getById: async (id: string): Promise<Cliente> => {
     const { data } = await api.get(`/clientes/${id}`);
     return data;

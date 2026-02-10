@@ -1,4 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams, useNavigate } from 'react-router-dom';
 import { pagoService } from '@/services/pagoService';
 import { Button } from '@/components/ui/button';
@@ -10,6 +11,20 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import {
   ArrowLeft,
   DollarSign,
@@ -23,6 +38,7 @@ import {
   XCircle,
   AlertTriangle,
   Download,
+  Edit,
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -76,11 +92,34 @@ export function PagoDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const [showChangeStatusDialog, setShowChangeStatusDialog] = useState(false);
+  const [newStatus, setNewStatus] = useState<string>('');
 
   const { data: pago, isLoading } = useQuery({
     queryKey: ['pago', id],
     queryFn: () => pagoService.getById(id!),
     enabled: !!id,
+  });
+
+  const changeStatusMutation = useMutation({
+    mutationFn: (estado: string) => pagoService.cambiarEstado(id!, estado),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['pago', id] });
+      queryClient.invalidateQueries({ queryKey: ['pagos'] });
+      setShowChangeStatusDialog(false);
+      toast({
+        title: 'Estado actualizado',
+        description: 'El estado del pago ha sido actualizado exitosamente.',
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: 'Error',
+        description: error.response?.data?.detail || 'No se pudo actualizar el estado.',
+        variant: 'destructive',
+      });
+    },
   });
 
   const handleDescargarRecibo = async () => {
@@ -96,6 +135,12 @@ export function PagoDetailPage() {
         description: 'No se pudo descargar el recibo.',
         variant: 'destructive',
       });
+    }
+  };
+
+  const handleChangeStatus = () => {
+    if (newStatus) {
+      changeStatusMutation.mutate(newStatus);
     }
   };
 
@@ -146,6 +191,16 @@ export function PagoDetailPage() {
           </div>
         </div>
         <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={() => {
+              setNewStatus(pago.estado);
+              setShowChangeStatusDialog(true);
+            }}
+          >
+            <Edit className="mr-2 h-4 w-4" />
+            Cambiar Estado
+          </Button>
           {pago.recibo_url && (
             <Button variant="outline" onClick={handleDescargarRecibo}>
               <Download className="mr-2 h-4 w-4" />
@@ -154,6 +209,45 @@ export function PagoDetailPage() {
           )}
         </div>
       </div>
+
+      {/* Diálogo para cambiar estado */}
+      <Dialog open={showChangeStatusDialog} onOpenChange={setShowChangeStatusDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Cambiar Estado del Pago</DialogTitle>
+            <DialogDescription>
+              Selecciona el nuevo estado para este pago
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <Select value={newStatus} onValueChange={setNewStatus}>
+              <SelectTrigger>
+                <SelectValue placeholder="Seleccionar estado..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="pendiente">Pendiente</SelectItem>
+                <SelectItem value="pagado">Pagado</SelectItem>
+                <SelectItem value="vencido">Vencido</SelectItem>
+                <SelectItem value="cancelado">Cancelado</SelectItem>
+              </SelectContent>
+            </Select>
+            <div className="flex justify-end gap-2">
+              <Button
+                variant="outline"
+                onClick={() => setShowChangeStatusDialog(false)}
+              >
+                Cancelar
+              </Button>
+              <Button
+                onClick={handleChangeStatus}
+                disabled={changeStatusMutation.isPending || !newStatus}
+              >
+                {changeStatusMutation.isPending ? 'Actualizando...' : 'Actualizar'}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Bell, Check, CheckCheck, Eye, Trash2, Clock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useAlertasNoLeidas, useMarcarLeida, useMarcarTodasLeidas, useDeleteAlerta } from '@/hooks/useAlertas';
+import { useAlertas, useMarcarLeida, useMarcarTodasLeidas, useDeleteAlerta } from '@/hooks/useAlertas';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -27,10 +27,14 @@ export function NotificationBell() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
-  const { data: alertasNoLeidas = [], isLoading } = useAlertasNoLeidas();
+  // Obtener TODAS las alertas (leídas y no leídas) de los últimos 7 días
+  const { data: todasAlertas = [], isLoading } = useAlertas();
   const marcarLeidaMutation = useMarcarLeida();
   const marcarTodasLeidasMutation = useMarcarTodasLeidas();
   const deleteAlertaMutation = useDeleteAlerta();
+
+  // Filtrar solo las no leídas para el contador
+  const alertasNoLeidas = todasAlertas.filter((a: Alerta) => !a.leida);
 
   const handleMarcarLeida = async (e: React.MouseEvent, alertaId: string) => {
     e.stopPropagation();
@@ -83,10 +87,14 @@ export function NotificationBell() {
   };
 
   const cantidadNoLeidas = alertasNoLeidas.length;
-  const alertasOrdenadas = alertasNoLeidas
+  // Ordenar todas las alertas: no leídas primero, luego por prioridad y fecha
+  const alertasOrdenadas = todasAlertas
     .slice()
-    .sort((a, b) => {
-      // Ordenar por prioridad y luego por fecha
+    .sort((a: Alerta, b: Alerta) => {
+      // Primero no leídas
+      if (a.leida !== b.leida) return a.leida ? 1 : -1;
+
+      // Luego por prioridad
       const prioridadOrder: Record<Prioridad, number> = {
         critica: 0,
         alta: 1,
@@ -95,9 +103,11 @@ export function NotificationBell() {
       };
       const prioridadDiff = prioridadOrder[a.prioridad] - prioridadOrder[b.prioridad];
       if (prioridadDiff !== 0) return prioridadDiff;
+
+      // Finalmente por fecha (más recientes primero)
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     })
-    .slice(0, 5); // Mostrar solo las 5 más recientes
+    .slice(0, 10); // Mostrar las 10 más recientes (leídas y no leídas)
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -159,10 +169,19 @@ export function NotificationBell() {
                 {alertasOrdenadas.map((alerta) => (
                   <div
                     key={alerta.id}
-                    className="px-3 py-2 sm:px-4 sm:py-3 hover:bg-gray-50 cursor-pointer transition-colors group"
+                    className={`px-3 py-2 sm:px-4 sm:py-3 hover:bg-gray-50 cursor-pointer transition-colors group ${
+                      alerta.leida ? 'opacity-60 bg-gray-50/50' : 'bg-white'
+                    }`}
                     onClick={() => handleVerAlerta(alerta)}
                   >
                     <div className="flex items-start gap-2 sm:gap-3">
+                      {/* Indicador de no leída */}
+                      {!alerta.leida && (
+                        <div className="flex-shrink-0 mt-1.5 sm:mt-2">
+                          <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                        </div>
+                      )}
+
                       {/* Icono de prioridad */}
                       <div className="flex-shrink-0 mt-0.5 sm:mt-1">
                         <span className="text-base sm:text-lg">{PRIORIDAD_ICONS[alerta.prioridad]}</span>
@@ -171,7 +190,9 @@ export function NotificationBell() {
                       {/* Contenido */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-1.5 sm:gap-2 mb-0.5 sm:mb-1">
-                          <h4 className="text-xs sm:text-sm font-medium text-gray-900 line-clamp-1">
+                          <h4 className={`text-xs sm:text-sm font-medium line-clamp-1 ${
+                            alerta.leida ? 'text-gray-600' : 'text-gray-900'
+                          }`}>
                             {alerta.titulo}
                           </h4>
                           <Badge
@@ -194,15 +215,17 @@ export function NotificationBell() {
 
                           {/* Acciones */}
                           <div className="flex items-center gap-0.5 sm:gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-6 w-6 p-0"
-                              onClick={(e) => handleMarcarLeida(e, alerta.id)}
-                              title="Marcar como leída"
-                            >
-                              <Check className="h-3 w-3" />
-                            </Button>
+                            {!alerta.leida && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 w-6 p-0"
+                                onClick={(e) => handleMarcarLeida(e, alerta.id)}
+                                title="Marcar como leída"
+                              >
+                                <Check className="h-3 w-3" />
+                              </Button>
+                            )}
                             <Button
                               variant="ghost"
                               size="sm"

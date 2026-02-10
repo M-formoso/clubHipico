@@ -157,10 +157,10 @@ export function PlanSanitarioTab({ caballoId }: PlanSanitarioTabProps) {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-green-600">
-                ${stats.costo_mensual?.toLocaleString()}
+                ${Number(stats.costo_mensual || 0).toFixed(2)}
               </div>
               <p className="text-xs text-gray-500">
-                ${stats.costo_anual?.toLocaleString()} por año
+                ${Number(stats.costo_anual || 0).toFixed(2)} por año
               </p>
             </CardContent>
           </Card>

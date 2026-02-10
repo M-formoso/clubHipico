@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { clienteService } from '@/services/clienteService';
 import { caballoService } from '@/services/caballoService';
 import { pagoService } from '@/services/pagoService';
+import { useAuthStore } from '@/stores/authStore';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -51,6 +52,9 @@ const estadoCuentaColors = {
 export function ClienteDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { user } = useAuthStore();
+
+  const isCliente = user?.rol === 'cliente';
 
   const { data: cliente, isLoading } = useQuery({
     queryKey: ['cliente', id],
@@ -118,10 +122,12 @@ export function ClienteDetailPage() {
             </p>
           </div>
         </div>
-        <Button onClick={() => navigate(`/clientes/${id}/editar`)}>
-          <Edit className="mr-2 h-4 w-4" />
-          Editar
-        </Button>
+        {!isCliente && (
+          <Button onClick={() => navigate(`/clientes/${id}/editar`)}>
+            <Edit className="mr-2 h-4 w-4" />
+            Editar
+          </Button>
+        )}
       </div>
 
       {/* Summary Cards */}
@@ -340,7 +346,7 @@ export function ClienteDetailPage() {
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="font-bold">${pago.monto.toFixed(2)}</p>
+                        <p className="font-bold">${Number(pago.monto || 0).toFixed(2)}</p>
                         <Badge variant={pago.estado === 'pagado' ? 'default' : 'secondary'}>
                           {pago.estado}
                         </Badge>

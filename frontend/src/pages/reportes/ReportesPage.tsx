@@ -10,8 +10,8 @@ export function ReportesPage() {
   const [fechaFin, setFechaFin] = useState('');
 
   const { data: dashboard, isLoading } = useQuery({
-    queryKey: ['dashboard'],
-    queryFn: reporteService.getDashboard,
+    queryKey: ['reportes-dashboard'],
+    queryFn: reporteService.getReportesDashboard,
   });
 
   const handleExportar = async (tipo: string, formato: 'pdf' | 'excel') => {
@@ -83,19 +83,16 @@ export function ReportesPage() {
               <div>
                 <p className="text-sm font-medium text-gray-600">Ingresos del Mes</p>
                 <h3 className="text-2xl font-bold text-gray-900 mt-2">
-                  ${dashboard?.ingresos_mes?.toLocaleString() || 0}
+                  ${Number(dashboard?.ingresos_mes || 0).toFixed(2)}
                 </h3>
               </div>
               <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center">
                 <DollarSign className="h-6 w-6 text-green-600" />
               </div>
             </div>
-            <div className="mt-4 flex items-center text-sm">
+            <div className="mt-4 flex items-center text-sm text-gray-500">
               <TrendingUp className="h-4 w-4 text-green-600 mr-1" />
-              <span className="text-green-600">
-                +{dashboard?.variacion_ingresos || 0}%
-              </span>
-              <span className="text-gray-500 ml-2">vs mes anterior</span>
+              Ingresos del mes actual
             </div>
           </CardContent>
         </Card>
@@ -114,7 +111,7 @@ export function ReportesPage() {
               </div>
             </div>
             <div className="mt-4 text-sm text-gray-500">
-              {dashboard?.clientes_nuevos || 0} nuevos este mes
+              {dashboard?.pagos_pendientes || 0} pagos pendientes
             </div>
           </CardContent>
         </Card>
@@ -133,7 +130,7 @@ export function ReportesPage() {
               </div>
             </div>
             <div className="mt-4 text-sm text-gray-500">
-              {dashboard?.ocupacion_boxes || 0}% ocupación de boxes
+              Caballos en estado activo
             </div>
           </CardContent>
         </Card>
@@ -152,7 +149,7 @@ export function ReportesPage() {
               </div>
             </div>
             <div className="mt-4 text-sm text-gray-500">
-              {dashboard?.tasa_asistencia || 0}% tasa de asistencia
+              Eventos programados este mes
             </div>
           </CardContent>
         </Card>

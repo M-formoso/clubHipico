@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
 import { useAuthStore } from '@/stores/authStore';
+import { Modulo, AccionPermiso } from '@/types/usuario';
 
 // Layouts (loaded eagerly — always needed)
 import { MainLayout } from '@/components/layout/MainLayout';
@@ -33,10 +34,6 @@ const UsuarioCreatePage = lazy(() => import('@/pages/usuarios/UsuarioCreatePage'
 const UsuarioDetailPage = lazy(() => import('@/pages/usuarios/UsuarioDetailPage').then(m => ({ default: m.UsuarioDetailPage })));
 const UsuarioEditPage = lazy(() => import('@/pages/usuarios/UsuarioEditPage').then(m => ({ default: m.UsuarioEditPage })));
 
-const EmpleadosListPage = lazy(() => import('@/pages/empleados/EmpleadosListPage').then(m => ({ default: m.EmpleadosListPage })));
-const EmpleadoCreatePage = lazy(() => import('@/pages/empleados/EmpleadoCreatePage').then(m => ({ default: m.EmpleadoCreatePage })));
-const EmpleadoDetailPage = lazy(() => import('@/pages/empleados/EmpleadoDetailPage').then(m => ({ default: m.EmpleadoDetailPage })));
-const EmpleadoEditPage = lazy(() => import('@/pages/empleados/EmpleadoEditPage').then(m => ({ default: m.EmpleadoEditPage })));
 
 const PagosListPage = lazy(() => import('@/pages/pagos/PagosListPage').then(m => ({ default: m.PagosListPage })));
 const PagoCreatePage = lazy(() => import('@/pages/pagos/PagoCreatePage').then(m => ({ default: m.PagoCreatePage })));
@@ -68,6 +65,75 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+function RoleProtectedRoute({
+  children,
+  allowedRoles
+}: {
+  children: React.ReactNode;
+  allowedRoles: string[]
+}) {
+  const { isAuthenticated, user } = useAuthStore();
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (user && !allowedRoles.includes(user.rol)) {
+    // Si el usuario no tiene permiso, redirigir según su rol
+    if (user.rol === 'cliente') {
+      return <Navigate to="/eventos" replace />;
+    }
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <>{children}</>;
+}
+
+function RoleBasedRedirect() {
+  const { user } = useAuthStore();
+
+  if (user?.rol === 'cliente') {
+    return <Navigate to="/eventos" replace />;
+  }
+
+  return <Navigate to="/dashboard" replace />;
+}
+
+function PermissionProtectedRoute({
+  children,
+  modulo,
+  accion
+}: {
+  children: React.ReactNode;
+  modulo: Modulo;
+  accion: AccionPermiso;
+}) {
+  const { isAuthenticated, user } = useAuthStore();
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // Super admin siempre tiene permisos
+  if (user?.rol === 'super_admin') {
+    return <>{children}</>;
+  }
+
+  // Verificar permiso
+  const permisoModulo = user?.permisos?.[modulo];
+  const tienePermiso = permisoModulo?.[accion] || false;
+
+  if (!tienePermiso) {
+    // Redirigir según el rol
+    if (user?.rol === 'cliente') {
+      return <Navigate to="/eventos" replace />;
+    }
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <>{children}</>;
+}
+
 function App() {
   return (
     <BrowserRouter>
@@ -86,8 +152,15 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="/dashboard" element={<Suspense fallback={<PageLoader />}><DashboardPage /></Suspense>} />
+          <Route path="/" element={<RoleBasedRedirect />} />
+          <Route
+            path="/dashboard"
+            element={
+              <RoleProtectedRoute allowedRoles={['super_admin', 'admin', 'empleado']}>
+                <Suspense fallback={<PageLoader />}><DashboardPage /></Suspense>
+              </RoleProtectedRoute>
+            }
+          />
 
           {/* Caballos */}
           <Route path="/caballos" element={<Suspense fallback={<PageLoader />}><CaballosListPage /></Suspense>} />
@@ -101,35 +174,99 @@ function App() {
           <Route path="/clientes/:id" element={<Suspense fallback={<PageLoader />}><ClienteDetailPage /></Suspense>} />
           <Route path="/clientes/:id/editar" element={<Suspense fallback={<PageLoader />}><ClienteEditPage /></Suspense>} />
 
-          {/* Empleados */}
-          <Route path="/empleados" element={<Suspense fallback={<PageLoader />}><EmpleadosListPage /></Suspense>} />
-          <Route path="/empleados/nuevo" element={<Suspense fallback={<PageLoader />}><EmpleadoCreatePage /></Suspense>} />
-          <Route path="/empleados/:id" element={<Suspense fallback={<PageLoader />}><EmpleadoDetailPage /></Suspense>} />
-          <Route path="/empleados/:id/editar" element={<Suspense fallback={<PageLoader />}><EmpleadoEditPage /></Suspense>} />
-
           {/* Eventos */}
           <Route path="/eventos" element={<Suspense fallback={<PageLoader />}><EventosListPage /></Suspense>} />
           <Route path="/eventos/nuevo" element={<Suspense fallback={<PageLoader />}><EventoCreatePage /></Suspense>} />
           <Route path="/eventos/:id" element={<Suspense fallback={<PageLoader />}><EventoDetailPage /></Suspense>} />
 
           {/* Usuarios */}
-          <Route path="/usuarios" element={<Suspense fallback={<PageLoader />}><UsuariosListPage /></Suspense>} />
-          <Route path="/usuarios/nuevo" element={<Suspense fallback={<PageLoader />}><UsuarioCreatePage /></Suspense>} />
-          <Route path="/usuarios/:id" element={<Suspense fallback={<PageLoader />}><UsuarioDetailPage /></Suspense>} />
-          <Route path="/usuarios/:id/editar" element={<Suspense fallback={<PageLoader />}><UsuarioEditPage /></Suspense>} />
+          <Route
+            path="/usuarios"
+            element={
+              <RoleProtectedRoute allowedRoles={['super_admin', 'admin']}>
+                <Suspense fallback={<PageLoader />}><UsuariosListPage /></Suspense>
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/usuarios/nuevo"
+            element={
+              <RoleProtectedRoute allowedRoles={['super_admin', 'admin']}>
+                <Suspense fallback={<PageLoader />}><UsuarioCreatePage /></Suspense>
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/usuarios/:id"
+            element={
+              <RoleProtectedRoute allowedRoles={['super_admin', 'admin']}>
+                <Suspense fallback={<PageLoader />}><UsuarioDetailPage /></Suspense>
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/usuarios/:id/editar"
+            element={
+              <RoleProtectedRoute allowedRoles={['super_admin', 'admin']}>
+                <Suspense fallback={<PageLoader />}><UsuarioEditPage /></Suspense>
+              </RoleProtectedRoute>
+            }
+          />
 
           {/* Pagos */}
-          <Route path="/pagos" element={<Suspense fallback={<PageLoader />}><PagosListPage /></Suspense>} />
-          <Route path="/pagos/nuevo" element={<Suspense fallback={<PageLoader />}><PagoCreatePage /></Suspense>} />
-          <Route path="/pagos/:id" element={<Suspense fallback={<PageLoader />}><PagoDetailPage /></Suspense>} />
+          <Route
+            path="/pagos"
+            element={
+              <RoleProtectedRoute allowedRoles={['super_admin', 'admin', 'empleado']}>
+                <Suspense fallback={<PageLoader />}><PagosListPage /></Suspense>
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/pagos/nuevo"
+            element={
+              <RoleProtectedRoute allowedRoles={['super_admin', 'admin', 'empleado']}>
+                <Suspense fallback={<PageLoader />}><PagoCreatePage /></Suspense>
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/pagos/:id"
+            element={
+              <RoleProtectedRoute allowedRoles={['super_admin', 'admin', 'empleado']}>
+                <Suspense fallback={<PageLoader />}><PagoDetailPage /></Suspense>
+              </RoleProtectedRoute>
+            }
+          />
 
           {/* Reportes */}
-          <Route path="/reportes" element={<Suspense fallback={<PageLoader />}><ReportesPage /></Suspense>} />
+          <Route
+            path="/reportes"
+            element={
+              <RoleProtectedRoute allowedRoles={['super_admin', 'admin']}>
+                <Suspense fallback={<PageLoader />}><ReportesPage /></Suspense>
+              </RoleProtectedRoute>
+            }
+          />
 
           {/* Alertas */}
           <Route path="/alertas" element={<Suspense fallback={<PageLoader />}><AlertasListPage /></Suspense>} />
-          <Route path="/alertas/nueva" element={<Suspense fallback={<PageLoader />}><AlertaCreatePage /></Suspense>} />
-          <Route path="/alertas/tipos" element={<Suspense fallback={<PageLoader />}><TiposAlertaPage /></Suspense>} />
+          <Route
+            path="/alertas/nueva"
+            element={
+              <PermissionProtectedRoute modulo="alertas" accion="crear">
+                <Suspense fallback={<PageLoader />}><AlertaCreatePage /></Suspense>
+              </PermissionProtectedRoute>
+            }
+          />
+          <Route
+            path="/alertas/tipos"
+            element={
+              <PermissionProtectedRoute modulo="alertas" accion="crear">
+                <Suspense fallback={<PageLoader />}><TiposAlertaPage /></Suspense>
+              </PermissionProtectedRoute>
+            }
+          />
           <Route path="/alertas/:id" element={<Suspense fallback={<PageLoader />}><AlertaDetailPage /></Suspense>} />
         </Route>
 

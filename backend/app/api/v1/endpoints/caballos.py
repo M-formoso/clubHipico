@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, status, Query, UploadFile, File, Form
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from uuid import UUID
 
 from app.core.deps import get_db, get_current_active_user, require_admin
 from app.models.usuario import Usuario
+from app.services import file_service
 from app.schemas.caballo import (
     CaballoSchema,
     CaballoCreate,
@@ -56,6 +57,24 @@ async def listar_caballos(
         limit=limit,
         activo_solo=activo_solo,
         propietario_id=propietario_id
+    )
+
+
+@router.get("/me", response_model=List[CaballoSchema])
+async def obtener_mis_caballos(
+    db: Session = Depends(get_db),
+    current_user: Usuario = Depends(get_current_active_user)
+):
+    """Obtiene los caballos del cliente asociado al usuario actual."""
+    if not current_user.cliente:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No hay un cliente asociado a este usuario"
+        )
+    return caballo_service.obtener_todos(
+        db,
+        propietario_id=current_user.cliente.id,
+        activo_solo=False
     )
 
 
@@ -148,11 +167,13 @@ async def obtener_fotos_caballo(
 @router.post("/{caballo_id}/fotos", response_model=FotoCaballoSchema, status_code=status.HTTP_201_CREATED)
 async def agregar_foto_caballo(
     caballo_id: UUID,
-    foto: FotoCaballoCreate,
+    file: UploadFile = File(...),
+    descripcion: Optional[str] = Form(None),
+    es_principal: bool = Form(False),
     db: Session = Depends(get_db),
     current_user: Usuario = Depends(require_admin)
 ):
-    """Agrega una foto a un caballo."""
+    """Agrega una foto a un caballo mediante upload de archivo."""
     # Verificar que el caballo existe
     caballo = caballo_service.obtener_por_id(db, caballo_id)
     if not caballo:
@@ -161,8 +182,19 @@ async def agregar_foto_caballo(
             detail="Caballo no encontrado"
         )
 
-    foto.caballo_id = caballo_id
-    return caballo_service.agregar_foto(db, foto)
+    # Guardar archivo
+    relative_path = file_service.save_caballo_photo(file, str(caballo_id))
+    url = file_service.get_file_url(relative_path)
+
+    # Crear registro de foto
+    foto_data = FotoCaballoCreate(
+        caballo_id=caballo_id,
+        url=url,
+        descripcion=descripcion,
+        es_principal=es_principal
+    )
+
+    return caballo_service.agregar_foto(db, foto_data)
 
 
 # Historial Médico

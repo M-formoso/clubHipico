@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from app.core.config import settings
 from app.api.v1.api import api_router
+from app.services import file_service
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -11,6 +13,9 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
+# Initialize upload directories
+file_service.init_upload_directories()
+
 # CORS Configuration
 app.add_middleware(
     CORSMiddleware,
@@ -19,6 +24,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Mount static files for uploads
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 # Include API router
 app.include_router(api_router, prefix=settings.API_V1_STR)

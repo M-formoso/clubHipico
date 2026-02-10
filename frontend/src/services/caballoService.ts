@@ -36,6 +36,12 @@ export const caballoService = {
     return data;
   },
 
+  // Obtener caballos del cliente actual
+  getMe: async (): Promise<Caballo[]> => {
+    const { data } = await api.get('/caballos/me');
+    return data;
+  },
+
   getById: async (id: string): Promise<Caballo> => {
     const { data } = await api.get(`/caballos/${id}`);
     return data;
@@ -74,8 +80,17 @@ export const caballoService = {
     return data;
   },
 
-  addFoto: async (caballoId: string, foto: FotoCaballoCreate): Promise<FotoCaballo> => {
-    const { data } = await api.post(`/caballos/${caballoId}/fotos`, foto);
+  addFoto: async (caballoId: string, file: File, descripcion?: string, es_principal?: boolean): Promise<FotoCaballo> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    if (descripcion) formData.append('descripcion', descripcion);
+    formData.append('es_principal', String(es_principal || false));
+
+    const { data } = await api.post(`/caballos/${caballoId}/fotos`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return data;
   },
 
@@ -86,18 +101,6 @@ export const caballoService = {
 
   deleteFoto: async (fotoId: string): Promise<void> => {
     await api.delete(`/caballos/fotos/${fotoId}`);
-  },
-
-  // Para subir archivo (opcional, puede usar addFoto con URL de Cloudinary)
-  uploadFoto: async (caballoId: string, file: File): Promise<FotoCaballo> => {
-    const formData = new FormData();
-    formData.append('file', file);
-    const { data } = await api.post(`/caballos/${caballoId}/fotos/upload`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    return data;
   },
 
   // ========== VACUNAS ==========

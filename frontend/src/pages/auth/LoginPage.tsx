@@ -61,19 +61,20 @@ export function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-beige-50 to-gray-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="text-center mb-8">
+        {/* Logo y Título */}
+        <div className="text-center mb-2">
           <div className="inline-flex items-center justify-center">
             <img
               src="/logo.jpeg"
-              alt="Club Ecuestre Logo"
-              className="w-32 h-32 object-contain rounded-lg"
+              alt="Logo"
+              className="w-28 h-28 object-contain rounded-lg"
             />
           </div>
+          <h1 className="text-xl font-semibold text-gray-700 mt-2">Sistema de Gestión Integral</h1>
         </div>
 
         <Card className="w-full shadow-lg">
-          <CardHeader className="space-y-1">
+          <CardHeader className="space-y-1 pt-4">
             <CardTitle className="text-2xl font-bold text-center">Iniciar Sesión</CardTitle>
             <CardDescription className="text-center">
               Ingresa tus credenciales para acceder al sistema

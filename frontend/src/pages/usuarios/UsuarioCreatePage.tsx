@@ -83,6 +83,9 @@ export function UsuarioCreatePage() {
   const [permisos, setPermisos] = useState<Permisos>(PERMISOS_POR_ROL['empleado']);
 
   const onSubmit = (data: UsuarioFormData) => {
+    console.log('Form submitted with data:', data);
+    console.log('Form errors:', errors);
+
     const payload: any = {
       email: data.email,
       password: data.password,
@@ -112,11 +115,21 @@ export function UsuarioCreatePage() {
       };
     }
 
+    console.log('Sending payload:', payload);
+
     createMutation.mutate(payload, {
       onSuccess: (data) => {
+        console.log('User created successfully:', data);
         navigate(`/usuarios/${data.id}`);
       },
+      onError: (error) => {
+        console.error('Error creating user:', error);
+      }
     });
+  };
+
+  const onError = (errors: any) => {
+    console.error('Form validation errors:', errors);
   };
 
   const handleRolChange = (newRol: string) => {
@@ -137,7 +150,7 @@ export function UsuarioCreatePage() {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-6">
         <Tabs defaultValue="personal" className="w-full">
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="personal">Personal</TabsTrigger>

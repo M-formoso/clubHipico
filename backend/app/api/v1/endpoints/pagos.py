@@ -2,12 +2,15 @@ from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from uuid import UUID
+from datetime import date
 
 from app.core.deps import get_db, get_current_active_user, require_admin
 from app.models.usuario import Usuario
 from app.models.pago import EstadoPagoEnum
 from app.schemas.pago import PagoSchema, PagoCreate, PagoUpdate, RegistrarPagoRequest
-from app.services import pago_service
+from app.services import pago_service, egreso_service
+from pydantic import BaseModel
+from decimal import Decimal
 
 router = APIRouter()
 
@@ -107,6 +110,23 @@ async def registrar_pago(
     return pago_service.registrar_pago(db, pago_id, pago_request)
 
 
+@router.patch("/{pago_id}/estado", response_model=PagoSchema)
+async def cambiar_estado_pago(
+    pago_id: UUID,
+    estado: EstadoPagoEnum,
+    db: Session = Depends(get_db),
+    current_user: Usuario = Depends(require_admin)
+):
+    """Cambia el estado de un pago."""
+    pago = pago_service.cambiar_estado(db, pago_id, estado)
+    if not pago:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Pago no encontrado"
+        )
+    return pago
+
+
 @router.delete("/{pago_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def eliminar_pago(
     pago_id: UUID,
@@ -121,3 +141,33 @@ async def eliminar_pago(
             detail="Pago no encontrado"
         )
     return None
+
+
+class BalanceResponse(BaseModel):
+    """Respuesta de balance financiero"""
+    ingresos: Decimal
+    egresos: Decimal
+    balance: Decimal
+    fecha_inicio: date
+    fecha_fin: date
+
+
+@router.get("/balance/periodo", response_model=BalanceResponse)
+async def obtener_balance(
+    fecha_inicio: date = Query(...),
+    fecha_fin: date = Query(...),
+    db: Session = Depends(get_db),
+    current_user: Usuario = Depends(require_admin)
+):
+    """Obtiene el balance financiero para un período."""
+    ingresos = pago_service.obtener_ingresos_periodo(db, fecha_inicio, fecha_fin)
+    egresos = egreso_service.obtener_total_periodo(db, fecha_inicio, fecha_fin)
+    balance = ingresos - egresos
+
+    return BalanceResponse(
+        ingresos=ingresos,
+        egresos=egresos,
+        balance=balance,
+        fecha_inicio=fecha_inicio,
+        fecha_fin=fecha_fin
+    )

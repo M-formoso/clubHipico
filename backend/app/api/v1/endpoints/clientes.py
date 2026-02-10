@@ -28,6 +28,20 @@ async def listar_clientes(
     )
 
 
+@router.get("/me", response_model=ClienteSchema)
+async def obtener_mi_perfil(
+    db: Session = Depends(get_db),
+    current_user: Usuario = Depends(get_current_active_user)
+):
+    """Obtiene el perfil del cliente asociado al usuario actual."""
+    if not current_user.cliente:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No hay un cliente asociado a este usuario"
+        )
+    return current_user.cliente
+
+
 @router.get("/buscar", response_model=List[ClienteSchema])
 async def buscar_clientes(
     q: str = Query(..., min_length=1),

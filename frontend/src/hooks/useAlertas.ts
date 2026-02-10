@@ -81,9 +81,21 @@ export function useCreateAlerta() {
       });
     },
     onError: (error: any) => {
+      let errorMessage = 'No se pudo crear la alerta';
+
+      if (error.response?.data?.detail) {
+        const detail = error.response.data.detail;
+        // Si es un array de errores de validación, extraer los mensajes
+        if (Array.isArray(detail)) {
+          errorMessage = detail.map((err: any) => err.msg || err.message || 'Error de validación').join(', ');
+        } else if (typeof detail === 'string') {
+          errorMessage = detail;
+        }
+      }
+
       toast({
         title: 'Error',
-        description: error.response?.data?.detail || 'No se pudo crear la alerta',
+        description: errorMessage,
         variant: 'destructive',
       });
     },

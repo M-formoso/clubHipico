@@ -26,6 +26,7 @@ const navItems: NavItem[] = [
     title: 'Dashboard',
     href: '/dashboard',
     icon: LayoutDashboard,
+    roles: ['super_admin', 'admin', 'empleado'],
   },
   {
     title: 'Caballos',
@@ -41,12 +42,6 @@ const navItems: NavItem[] = [
     title: 'Eventos',
     href: '/eventos',
     icon: Calendar,
-  },
-  {
-    title: 'Empleados',
-    href: '/empleados',
-    icon: Briefcase,
-    roles: ['super_admin', 'admin'],
   },
   {
     title: 'Usuarios',
