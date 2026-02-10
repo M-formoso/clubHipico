@@ -198,22 +198,22 @@ export function PagosListPage() {
     .reduce((sum, p) => sum + p.monto, 0) || 0;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Pagos y Gastos</h1>
-          <p className="text-gray-500 mt-1">
-            Gestiona los pagos de pensión, clases, servicios y gastos del club
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Pagos y Gastos</h1>
+          <p className="text-gray-500 mt-1 text-sm md:text-base">
+            Gestiona pagos y gastos del club
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => setShowEgresoDialog(true)}>
-            <Minus className="mr-2 h-4 w-4" />
-            Registrar Egreso
+          <Button variant="outline" size="sm" className="flex-1 sm:flex-none" onClick={() => setShowEgresoDialog(true)}>
+            <Minus className="mr-1 md:mr-2 h-4 w-4" />
+            <span className="hidden sm:inline">Registrar </span>Egreso
           </Button>
-          <Button onClick={() => navigate('/pagos/nuevo')}>
-            <Plus className="mr-2 h-4 w-4" />
-            Registrar Pago
+          <Button size="sm" className="flex-1 sm:flex-none" onClick={() => navigate('/pagos/nuevo')}>
+            <Plus className="mr-1 md:mr-2 h-4 w-4" />
+            <span className="hidden sm:inline">Registrar </span>Pago
           </Button>
         </div>
       </div>
@@ -340,23 +340,23 @@ export function PagosListPage() {
       </Dialog>
 
       {/* Resumen de pagos */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <div className="text-sm text-yellow-800 font-medium">Pendientes</div>
-          <div className="text-2xl font-bold text-yellow-900 mt-1">
-            ${Number(totalPendiente).toFixed(2)}
+      <div className="grid grid-cols-3 gap-2 md:gap-4">
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-2 md:p-4">
+          <div className="text-xs md:text-sm text-yellow-800 font-medium">Pendientes</div>
+          <div className="text-lg md:text-2xl font-bold text-yellow-900 mt-1 truncate">
+            ${Number(totalPendiente).toFixed(0)}
           </div>
         </div>
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-          <div className="text-sm text-green-800 font-medium">Pagados</div>
-          <div className="text-2xl font-bold text-green-900 mt-1">
-            ${Number(totalPagado).toFixed(2)}
+        <div className="bg-green-50 border border-green-200 rounded-lg p-2 md:p-4">
+          <div className="text-xs md:text-sm text-green-800 font-medium">Pagados</div>
+          <div className="text-lg md:text-2xl font-bold text-green-900 mt-1 truncate">
+            ${Number(totalPagado).toFixed(0)}
           </div>
         </div>
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <div className="text-sm text-red-800 font-medium">Vencidos</div>
-          <div className="text-2xl font-bold text-red-900 mt-1">
-            ${Number(totalVencido).toFixed(2)}
+        <div className="bg-red-50 border border-red-200 rounded-lg p-2 md:p-4">
+          <div className="text-xs md:text-sm text-red-800 font-medium">Vencidos</div>
+          <div className="text-lg md:text-2xl font-bold text-red-900 mt-1 truncate">
+            ${Number(totalVencido).toFixed(0)}
           </div>
         </div>
       </div>
@@ -364,70 +364,68 @@ export function PagosListPage() {
       {/* Balance Financiero del Mes */}
       {balance && (
         <Card className="bg-gradient-to-br from-beige-50 to-white border-beige-200">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <DollarSign className="h-5 w-5 text-beige-600" />
-              Balance Financiero del Mes
+          <CardHeader className="pb-2 md:pb-6">
+            <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+              <DollarSign className="h-4 w-4 md:h-5 md:w-5 text-beige-600" />
+              Balance del Mes
             </CardTitle>
-            <CardDescription>
-              Resumen de ingresos y egresos del {format(new Date(balance.fecha_inicio), "d 'de' MMMM", { locale: es })} al {format(new Date(balance.fecha_fin), "d 'de' MMMM 'de' yyyy", { locale: es })}
+            <CardDescription className="text-xs md:text-sm">
+              {format(new Date(balance.fecha_inicio), "d MMM", { locale: es })} - {format(new Date(balance.fecha_fin), "d MMM yyyy", { locale: es })}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <TrendingUp className="h-4 w-4 text-green-600" />
-                  Ingresos
+            <div className="grid grid-cols-3 gap-3 md:gap-6">
+              <div className="space-y-1 md:space-y-2">
+                <div className="flex items-center gap-1 md:gap-2 text-xs md:text-sm text-gray-600">
+                  <TrendingUp className="h-3 w-3 md:h-4 md:w-4 text-green-600" />
+                  <span className="hidden sm:inline">Ingresos</span>
+                  <span className="sm:hidden">Ing.</span>
                 </div>
-                <div className="text-3xl font-bold text-green-600">
-                  ${Number(balance.ingresos).toFixed(2)}
+                <div className="text-lg md:text-3xl font-bold text-green-600 truncate">
+                  ${Number(balance.ingresos).toFixed(0)}
                 </div>
-                <p className="text-xs text-gray-500">Pagos recibidos</p>
               </div>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <TrendingDown className="h-4 w-4 text-red-600" />
-                  Egresos
+              <div className="space-y-1 md:space-y-2">
+                <div className="flex items-center gap-1 md:gap-2 text-xs md:text-sm text-gray-600">
+                  <TrendingDown className="h-3 w-3 md:h-4 md:w-4 text-red-600" />
+                  <span className="hidden sm:inline">Egresos</span>
+                  <span className="sm:hidden">Egr.</span>
                 </div>
-                <div className="text-3xl font-bold text-red-600">
-                  ${Number(balance.egresos).toFixed(2)}
+                <div className="text-lg md:text-3xl font-bold text-red-600 truncate">
+                  ${Number(balance.egresos).toFixed(0)}
                 </div>
-                <p className="text-xs text-gray-500">Gastos realizados</p>
               </div>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <DollarSign className="h-4 w-4 text-beige-600" />
-                  Balance Neto
+              <div className="space-y-1 md:space-y-2">
+                <div className="flex items-center gap-1 md:gap-2 text-xs md:text-sm text-gray-600">
+                  <DollarSign className="h-3 w-3 md:h-4 md:w-4 text-beige-600" />
+                  <span className="hidden sm:inline">Balance</span>
+                  <span className="sm:hidden">Bal.</span>
                 </div>
-                <div className={`text-3xl font-bold ${Number(balance.balance) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  ${Number(balance.balance).toFixed(2)}
+                <div className={`text-lg md:text-3xl font-bold truncate ${Number(balance.balance) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  ${Number(balance.balance).toFixed(0)}
                 </div>
-                <p className="text-xs text-gray-500">
-                  {Number(balance.balance) >= 0 ? 'Superávit' : 'Déficit'}
-                </p>
               </div>
             </div>
           </CardContent>
         </Card>
       )}
 
-      <div className="flex items-center space-x-4">
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
           <Input
-            placeholder="Buscar por concepto o cliente..."
+            placeholder="Buscar..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
+            className="pl-10 text-sm"
           />
         </div>
         <select
           value={filterEstado}
           onChange={(e) => setFilterEstado(e.target.value)}
-          className="border border-gray-300 rounded-md p-2 focus:border-beige-500 focus:ring-beige-500"
+          className="border border-gray-300 rounded-md p-2 text-sm focus:border-beige-500 focus:ring-beige-500"
         >
-          <option value="todos">Todos los estados</option>
+          <option value="todos">Todos</option>
           <option value="pendiente">Pendientes</option>
           <option value="pagado">Pagados</option>
           <option value="vencido">Vencidos</option>
@@ -435,7 +433,44 @@ export function PagosListPage() {
         </select>
       </div>
 
-      <div className="bg-white rounded-lg border border-gray-200">
+      {/* Vista móvil - Cards */}
+      <div className="md:hidden space-y-3">
+        {filteredPagos?.map((pago) => (
+          <div
+            key={pago.id}
+            className="bg-white rounded-lg border border-gray-200 p-4 cursor-pointer active:bg-gray-50"
+            onClick={() => navigate(`/pagos/${pago.id}`)}
+          >
+            <div className="flex justify-between items-start mb-2">
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-gray-900 truncate">
+                  {pago.cliente ? `${pago.cliente.nombre} ${pago.cliente.apellido}` : 'Sin cliente'}
+                </p>
+                <p className="text-sm text-gray-500 truncate">{pago.concepto}</p>
+              </div>
+              <div className="text-right ml-2">
+                <p className="font-bold text-gray-900">${Number(pago.monto).toFixed(0)}</p>
+                <Badge className={`${getEstadoBadgeColor(pago.estado)} text-xs`} variant="outline">
+                  {getEstadoLabel(pago.estado)}
+                </Badge>
+              </div>
+            </div>
+            <div className="flex justify-between items-center text-xs text-gray-500">
+              <Badge className={`${getTipoBadgeColor(pago.tipo)} text-xs`} variant="outline">
+                {pago.tipo}
+              </Badge>
+              <span>
+                {pago.fecha_vencimiento
+                  ? format(new Date(pago.fecha_vencimiento), 'dd/MM/yy', { locale: es })
+                  : '-'}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Vista desktop - Tabla */}
+      <div className="hidden md:block bg-white rounded-lg border border-gray-200">
         <Table>
           <TableHeader>
             <TableRow>
@@ -497,8 +532,8 @@ export function PagosListPage() {
       </div>
 
       {filteredPagos?.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-gray-500">No se encontraron pagos</p>
+        <div className="text-center py-8 md:py-12">
+          <p className="text-gray-500 text-sm md:text-base">No se encontraron pagos</p>
         </div>
       )}
     </div>

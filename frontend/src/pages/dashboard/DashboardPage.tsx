@@ -30,55 +30,52 @@ export function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-500 mt-1">
-          Bienvenido de vuelta, {user?.email || 'Usuario'}
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Dashboard</h1>
+        <p className="text-gray-500 mt-1 text-sm md:text-base">
+          Bienvenido, {user?.email || 'Usuario'}
         </p>
       </div>
 
       {/* KPIs Principales */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
         {/* Ingresos del Mes */}
         <Card>
-          <CardContent className="p-6">
+          <CardContent className="p-3 md:p-6">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Ingresos del Mes</p>
-                <h3 className="text-2xl font-bold text-gray-900 mt-2">
-                  ${Number(dashboard?.estadisticas_pagos?.total_cobrado_mes || 0).toFixed(2)}
+              <div className="min-w-0 flex-1">
+                <p className="text-xs md:text-sm font-medium text-gray-600 truncate">Ingresos</p>
+                <h3 className="text-lg md:text-2xl font-bold text-gray-900 mt-1 md:mt-2 truncate">
+                  ${Number(dashboard?.estadisticas_pagos?.total_cobrado_mes || 0).toFixed(0)}
                 </h3>
               </div>
-              <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center">
-                <DollarSign className="h-6 w-6 text-green-600" />
+              <div className="h-8 w-8 md:h-12 md:w-12 rounded-full bg-green-100 flex items-center justify-center shrink-0 ml-2">
+                <DollarSign className="h-4 w-4 md:h-6 md:w-6 text-green-600" />
               </div>
             </div>
-            <div className="mt-4 flex items-center text-sm text-gray-500">
-              <span className="font-medium">
-                {dashboard?.estadisticas_pagos?.cantidad_pagos_mes || 0} pagos
-              </span>
+            <div className="mt-2 md:mt-4 text-xs md:text-sm text-gray-500">
+              {dashboard?.estadisticas_pagos?.cantidad_pagos_mes || 0} pagos
             </div>
           </CardContent>
         </Card>
 
         {/* Clientes Activos */}
         <Card>
-          <CardContent className="p-6">
+          <CardContent className="p-3 md:p-6">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Clientes Activos</p>
-                <h3 className="text-2xl font-bold text-gray-900 mt-2">
+              <div className="min-w-0 flex-1">
+                <p className="text-xs md:text-sm font-medium text-gray-600 truncate">Clientes</p>
+                <h3 className="text-lg md:text-2xl font-bold text-gray-900 mt-1 md:mt-2">
                   {dashboard?.estadisticas_generales?.total_clientes || 0}
                 </h3>
               </div>
-              <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
-                <Users className="h-6 w-6 text-blue-600" />
+              <div className="h-8 w-8 md:h-12 md:w-12 rounded-full bg-blue-100 flex items-center justify-center shrink-0 ml-2">
+                <Users className="h-4 w-4 md:h-6 md:w-6 text-blue-600" />
               </div>
             </div>
-            <div className="mt-4 text-sm text-gray-500">
-              <CheckCircle className="h-4 w-4 inline mr-1" />
+            <div className="mt-2 md:mt-4 text-xs md:text-sm text-gray-500">
               {dashboard?.estadisticas_clientes?.clientes_al_dia || 0} al día
             </div>
           </CardContent>
@@ -86,39 +83,39 @@ export function DashboardPage() {
 
         {/* Caballos Activos */}
         <Card>
-          <CardContent className="p-6">
+          <CardContent className="p-3 md:p-6">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Caballos Activos</p>
-                <h3 className="text-2xl font-bold text-gray-900 mt-2">
+              <div className="min-w-0 flex-1">
+                <p className="text-xs md:text-sm font-medium text-gray-600 truncate">Caballos</p>
+                <h3 className="text-lg md:text-2xl font-bold text-gray-900 mt-1 md:mt-2">
                   {dashboard?.estadisticas_generales?.total_caballos || 0}
                 </h3>
               </div>
-              <div className="h-12 w-12 rounded-full bg-beige-100 flex items-center justify-center">
-                <Waves className="h-6 w-6 text-beige-600" />
+              <div className="h-8 w-8 md:h-12 md:w-12 rounded-full bg-beige-100 flex items-center justify-center shrink-0 ml-2">
+                <Waves className="h-4 w-4 md:h-6 md:w-6 text-beige-600" />
               </div>
             </div>
-            <div className="mt-4 text-sm text-gray-500">
-              {dashboard?.estadisticas_generales?.total_empleados || 0} empleados
+            <div className="mt-2 md:mt-4 text-xs md:text-sm text-gray-500">
+              activos
             </div>
           </CardContent>
         </Card>
 
         {/* Eventos del Mes */}
         <Card>
-          <CardContent className="p-6">
+          <CardContent className="p-3 md:p-6">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Eventos del Mes</p>
-                <h3 className="text-2xl font-bold text-gray-900 mt-2">
+              <div className="min-w-0 flex-1">
+                <p className="text-xs md:text-sm font-medium text-gray-600 truncate">Eventos</p>
+                <h3 className="text-lg md:text-2xl font-bold text-gray-900 mt-1 md:mt-2">
                   {dashboard?.estadisticas_generales?.total_eventos_mes || 0}
                 </h3>
               </div>
-              <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center">
-                <Calendar className="h-6 w-6 text-purple-600" />
+              <div className="h-8 w-8 md:h-12 md:w-12 rounded-full bg-purple-100 flex items-center justify-center shrink-0 ml-2">
+                <Calendar className="h-4 w-4 md:h-6 md:w-6 text-purple-600" />
               </div>
             </div>
-            <div className="mt-4 text-sm text-gray-500">
+            <div className="mt-2 md:mt-4 text-xs md:text-sm text-gray-500">
               {dashboard?.estadisticas_eventos?.eventos_hoy || 0} hoy
             </div>
           </CardContent>
@@ -126,7 +123,7 @@ export function DashboardPage() {
       </div>
 
       {/* Alertas y Actividad Reciente */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* Alertas Pendientes */}
         <Card>
           <CardHeader>
@@ -203,36 +200,27 @@ export function DashboardPage() {
 
       {/* Resumen Financiero */}
       <Card>
-        <CardHeader>
-          <CardTitle>Resumen Financiero</CardTitle>
+        <CardHeader className="pb-2 md:pb-6">
+          <CardTitle className="text-base md:text-lg">Resumen Financiero</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="space-y-2">
-              <p className="text-sm text-gray-600">Pagos Pendientes</p>
-              <p className="text-2xl font-bold text-orange-600">
-                ${Number(dashboard?.estadisticas_pagos?.total_pendiente_mes || 0).toFixed(2)}
-              </p>
-              <p className="text-xs text-gray-500">
-                Este mes
+          <div className="grid grid-cols-3 gap-3 md:gap-6">
+            <div className="space-y-1 md:space-y-2">
+              <p className="text-xs md:text-sm text-gray-600">Pendientes</p>
+              <p className="text-lg md:text-2xl font-bold text-orange-600 truncate">
+                ${Number(dashboard?.estadisticas_pagos?.total_pendiente_mes || 0).toFixed(0)}
               </p>
             </div>
-            <div className="space-y-2">
-              <p className="text-sm text-gray-600">Pagos Vencidos</p>
-              <p className="text-2xl font-bold text-red-600">
+            <div className="space-y-1 md:space-y-2">
+              <p className="text-xs md:text-sm text-gray-600">Vencidos</p>
+              <p className="text-lg md:text-2xl font-bold text-red-600">
                 {dashboard?.estadisticas_pagos?.cantidad_pagos_vencidos || 0}
               </p>
-              <p className="text-xs text-gray-500">
-                pagos vencidos
-              </p>
             </div>
-            <div className="space-y-2">
-              <p className="text-sm text-gray-600">Pagados Este Mes</p>
-              <p className="text-2xl font-bold text-green-600">
-                ${Number(dashboard?.estadisticas_pagos?.total_cobrado_mes || 0).toFixed(2)}
-              </p>
-              <p className="text-xs text-gray-500">
-                {dashboard?.estadisticas_pagos?.cantidad_pagos_mes || 0} pagos
+            <div className="space-y-1 md:space-y-2">
+              <p className="text-xs md:text-sm text-gray-600">Cobrado</p>
+              <p className="text-lg md:text-2xl font-bold text-green-600 truncate">
+                ${Number(dashboard?.estadisticas_pagos?.total_cobrado_mes || 0).toFixed(0)}
               </p>
             </div>
           </div>

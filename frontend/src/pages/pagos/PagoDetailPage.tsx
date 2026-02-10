@@ -170,41 +170,43 @@ export function PagoDetailPage() {
   const EstadoIcon = estadoPagoIcons[pago.estado];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/pagos')}>
+      <div className="flex flex-col gap-4">
+        <div className="flex items-start gap-3">
+          <Button variant="ghost" size="icon" className="shrink-0 mt-1" onClick={() => navigate('/pagos')}>
             <ArrowLeft className="h-4 w-4" />
           </Button>
-          <div>
-            <div className="flex items-center gap-3">
-              <h1 className="text-3xl font-bold text-gray-900">{pago.concepto}</h1>
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <h1 className="text-xl md:text-3xl font-bold text-gray-900 truncate">{pago.concepto}</h1>
               <Badge className={estadoPagoColors[pago.estado]} variant="outline">
                 <EstadoIcon className="h-3 w-3 mr-1" />
                 {estadoPagoLabels[pago.estado]}
               </Badge>
             </div>
-            <p className="text-gray-500 mt-1">
+            <p className="text-gray-500 mt-1 text-sm">
               Pago #{pago.id.slice(0, 8)}
             </p>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 ml-0 md:ml-11">
           <Button
             variant="outline"
+            size="sm"
+            className="flex-1 sm:flex-none"
             onClick={() => {
               setNewStatus(pago.estado);
               setShowChangeStatusDialog(true);
             }}
           >
-            <Edit className="mr-2 h-4 w-4" />
-            Cambiar Estado
+            <Edit className="mr-1 md:mr-2 h-4 w-4" />
+            <span className="hidden sm:inline">Cambiar </span>Estado
           </Button>
           {pago.recibo_url && (
-            <Button variant="outline" onClick={handleDescargarRecibo}>
-              <Download className="mr-2 h-4 w-4" />
-              Descargar Recibo
+            <Button variant="outline" size="sm" className="flex-1 sm:flex-none" onClick={handleDescargarRecibo}>
+              <Download className="mr-1 md:mr-2 h-4 w-4" />
+              <span className="hidden sm:inline">Descargar </span>Recibo
             </Button>
           )}
         </div>
@@ -250,68 +252,64 @@ export function PagoDetailPage() {
       </Dialog>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Monto</CardTitle>
-            <DollarSign className="h-4 w-4 text-gray-500" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2 p-3 md:p-6">
+            <CardTitle className="text-xs md:text-sm font-medium">Monto</CardTitle>
+            <DollarSign className="h-3 w-3 md:h-4 md:w-4 text-gray-500" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">
-              ${Number(pago.monto).toFixed(2)}
+          <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+            <div className="text-lg md:text-2xl font-bold text-green-600">
+              ${Number(pago.monto).toFixed(0)}
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Tipo</CardTitle>
-            <Receipt className="h-4 w-4 text-gray-500" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2 p-3 md:p-6">
+            <CardTitle className="text-xs md:text-sm font-medium">Tipo</CardTitle>
+            <Receipt className="h-3 w-3 md:h-4 md:w-4 text-gray-500" />
           </CardHeader>
-          <CardContent>
-            <Badge className={tipoPagoColors[pago.tipo]} variant="outline">
+          <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+            <Badge className={`${tipoPagoColors[pago.tipo]} text-xs`} variant="outline">
               {tipoPagoLabels[pago.tipo]}
             </Badge>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Método</CardTitle>
-            <CreditCard className="h-4 w-4 text-gray-500" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2 p-3 md:p-6">
+            <CardTitle className="text-xs md:text-sm font-medium">Método</CardTitle>
+            <CreditCard className="h-3 w-3 md:h-4 md:w-4 text-gray-500" />
           </CardHeader>
-          <CardContent>
-            <div className="text-sm font-medium">
-              {pago.metodo_pago ? metodoPagoLabels[pago.metodo_pago] : 'No especificado'}
+          <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+            <div className="text-xs md:text-sm font-medium truncate">
+              {pago.metodo_pago ? metodoPagoLabels[pago.metodo_pago] : 'N/A'}
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              {pago.fecha_pago ? 'Fecha de Pago' : 'Vencimiento'}
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2 p-3 md:p-6">
+            <CardTitle className="text-xs md:text-sm font-medium">
+              {pago.fecha_pago ? 'Pagado' : 'Vence'}
             </CardTitle>
-            <Calendar className="h-4 w-4 text-gray-500" />
+            <Calendar className="h-3 w-3 md:h-4 md:w-4 text-gray-500" />
           </CardHeader>
-          <CardContent>
-            <div className="text-sm">
+          <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+            <div className="text-xs md:text-sm">
               {pago.fecha_pago
-                ? format(new Date(pago.fecha_pago), "d 'de' MMMM 'de' yyyy", {
-                    locale: es,
-                  })
+                ? format(new Date(pago.fecha_pago), "d MMM yy", { locale: es })
                 : pago.fecha_vencimiento
-                ? format(new Date(pago.fecha_vencimiento), "d 'de' MMMM 'de' yyyy", {
-                    locale: es,
-                  })
-                : 'No especificada'}
+                ? format(new Date(pago.fecha_vencimiento), "d MMM yy", { locale: es })
+                : 'N/A'}
             </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Detalles */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
         {/* Información del Pago */}
         <div className="lg:col-span-2 space-y-6">
           <Card>

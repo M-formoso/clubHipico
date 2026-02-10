@@ -160,96 +160,149 @@ export function ClientesListPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Clientes</h1>
-          <p className="text-gray-500 mt-1">
-            Gestiona los clientes del club ecuestre
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Clientes</h1>
+          <p className="text-gray-500 mt-1 text-sm md:text-base">
+            Gestiona los clientes del club
           </p>
         </div>
-        <Button onClick={() => navigate('/clientes/nuevo')}>
+        <Button size="sm" className="w-full sm:w-auto" onClick={() => navigate('/clientes/nuevo')}>
           <Plus className="mr-2 h-4 w-4" />
           Nuevo Cliente
         </Button>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-4 gap-2 md:gap-4">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Clientes</CardTitle>
-            <UserCheck className="h-4 w-4 text-gray-500" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2 p-2 md:p-6">
+            <CardTitle className="text-xs md:text-sm font-medium">Total</CardTitle>
+            <UserCheck className="h-3 w-3 md:h-4 md:w-4 text-gray-500 hidden sm:block" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.total}</div>
+          <CardContent className="p-2 pt-0 md:p-6 md:pt-0">
+            <div className="text-lg md:text-2xl font-bold">{stats.total}</div>
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Activos</CardTitle>
-            <UserCheck className="h-4 w-4 text-green-500" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2 p-2 md:p-6">
+            <CardTitle className="text-xs md:text-sm font-medium">Activos</CardTitle>
+            <UserCheck className="h-3 w-3 md:h-4 md:w-4 text-green-500 hidden sm:block" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.activos}</div>
+          <CardContent className="p-2 pt-0 md:p-6 md:pt-0">
+            <div className="text-lg md:text-2xl font-bold">{stats.activos}</div>
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Al Día</CardTitle>
-            <DollarSign className="h-4 w-4 text-green-500" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2 p-2 md:p-6">
+            <CardTitle className="text-xs md:text-sm font-medium">Al Día</CardTitle>
+            <DollarSign className="h-3 w-3 md:h-4 md:w-4 text-green-500 hidden sm:block" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.alDia}</div>
+          <CardContent className="p-2 pt-0 md:p-6 md:pt-0">
+            <div className="text-lg md:text-2xl font-bold">{stats.alDia}</div>
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Morosos</CardTitle>
-            <AlertCircle className="h-4 w-4 text-red-500" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2 p-2 md:p-6">
+            <CardTitle className="text-xs md:text-sm font-medium">Morosos</CardTitle>
+            <AlertCircle className="h-3 w-3 md:h-4 md:w-4 text-red-500 hidden sm:block" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.morosos}</div>
+          <CardContent className="p-2 pt-0 md:p-6 md:pt-0">
+            <div className="text-lg md:text-2xl font-bold">{stats.morosos}</div>
           </CardContent>
         </Card>
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-        <div className="relative flex-1 w-full">
+      <div className="flex flex-col gap-2 sm:flex-row sm:gap-4">
+        <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
           <Input
-            placeholder="Buscar por nombre, DNI o email..."
+            placeholder="Buscar..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
+            className="pl-10 text-sm"
           />
         </div>
-        <select
-          value={tipoFilter}
-          onChange={(e) => setTipoFilter(e.target.value)}
-          className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="todos">Todos los tipos</option>
-          <option value="socio_pleno">Socio Pleno</option>
-          <option value="pensionista">Pensionista</option>
-          <option value="alumno">Alumno</option>
-        </select>
-        <select
-          value={estadoFilter}
-          onChange={(e) => setEstadoFilter(e.target.value)}
-          className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="todos">Todos los estados</option>
-          <option value="al_dia">Al Día</option>
-          <option value="debe">Debe</option>
-          <option value="moroso">Moroso</option>
-        </select>
+        <div className="flex gap-2">
+          <select
+            value={tipoFilter}
+            onChange={(e) => setTipoFilter(e.target.value)}
+            className="flex-1 sm:flex-none px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-beige-500"
+          >
+            <option value="todos">Tipo</option>
+            <option value="socio_pleno">Socio</option>
+            <option value="pensionista">Pensionista</option>
+            <option value="alumno">Alumno</option>
+          </select>
+          <select
+            value={estadoFilter}
+            onChange={(e) => setEstadoFilter(e.target.value)}
+            className="flex-1 sm:flex-none px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-beige-500"
+          >
+            <option value="todos">Estado</option>
+            <option value="al_dia">Al Día</option>
+            <option value="debe">Debe</option>
+            <option value="moroso">Moroso</option>
+          </select>
+        </div>
       </div>
 
-      {/* Table */}
-      <div className="bg-white rounded-lg border border-gray-200">
+      {/* Vista móvil - Cards */}
+      <div className="md:hidden space-y-3">
+        {filteredClientes?.map((cliente) => (
+          <div
+            key={cliente.id}
+            className="bg-white rounded-lg border border-gray-200 p-4 cursor-pointer active:bg-gray-50"
+            onClick={() => navigate(`/clientes/${cliente.id}`)}
+          >
+            <div className="flex justify-between items-start mb-2">
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-gray-900 truncate">
+                  {cliente.nombre} {cliente.apellido}
+                </p>
+                <p className="text-sm text-gray-500">{cliente.dni || 'Sin DNI'}</p>
+              </div>
+              <div className="text-right ml-2">
+                <p className={`font-bold ${Number(cliente.saldo) < 0 ? 'text-red-600' : 'text-gray-900'}`}>
+                  ${Number(cliente.saldo || 0).toFixed(0)}
+                </p>
+                <Badge className={`${estadoCuentaColors[cliente.estado_cuenta]} text-xs`} variant="outline">
+                  {estadoCuentaLabels[cliente.estado_cuenta]}
+                </Badge>
+              </div>
+            </div>
+            <div className="flex justify-between items-center">
+              <Badge className={`${tipoClienteColors[cliente.tipo_cliente]} text-xs`} variant="outline">
+                {tipoClienteLabels[cliente.tipo_cliente]}
+              </Badge>
+              <div className="flex gap-1">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 w-8 p-0"
+                  onClick={(e) => { e.stopPropagation(); navigate(`/clientes/${cliente.id}/editar`); }}
+                >
+                  <Edit className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 w-8 p-0"
+                  onClick={(e) => { e.stopPropagation(); handleDelete(cliente); }}
+                >
+                  <Trash2 className="h-4 w-4 text-red-500" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Vista desktop - Table */}
+      <div className="hidden md:block bg-white rounded-lg border border-gray-200">
         <Table>
           <TableHeader>
             <TableRow>

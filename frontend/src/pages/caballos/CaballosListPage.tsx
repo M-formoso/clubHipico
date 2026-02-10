@@ -96,21 +96,21 @@ export function CaballosListPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
             {isCliente ? 'Mis Caballos' : 'Caballos'}
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-gray-500 mt-1 text-sm md:text-base">
             {isCliente
               ? 'Información de tus caballos'
-              : 'Gestiona la información de los caballos del club'}
+              : 'Gestiona los caballos del club'}
           </p>
         </div>
         {!isCliente && (
-          <Button onClick={() => navigate('/caballos/nuevo')}>
+          <Button size="sm" className="w-full sm:w-auto" onClick={() => navigate('/caballos/nuevo')}>
             <Plus className="mr-2 h-4 w-4" />
             Nuevo Caballo
           </Button>
@@ -118,67 +118,56 @@ export function CaballosListPage() {
       </div>
 
       {/* Filters */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex flex-col md:flex-row gap-4">
-            {/* Search */}
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input
-                  placeholder="Buscar por nombre, raza o número de chip..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-            </div>
-
-            {/* Estado Filter */}
-            <div className="w-full md:w-48">
-              <select
-                value={estadoFilter}
-                onChange={(e) => setEstadoFilter(e.target.value)}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:border-beige-500 focus:ring-beige-500"
-              >
-                <option value="todos">Todos los estados</option>
-                <option value="activo">Activo</option>
-                <option value="en_tratamiento">En Tratamiento</option>
-                <option value="retirado">Retirado</option>
-                <option value="fallecido">Fallecido</option>
-              </select>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Input
+            placeholder="Buscar..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10 text-sm"
+          />
+        </div>
+        <select
+          value={estadoFilter}
+          onChange={(e) => setEstadoFilter(e.target.value)}
+          className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:border-beige-500 focus:ring-beige-500"
+        >
+          <option value="todos">Todos</option>
+          <option value="activo">Activo</option>
+          <option value="en_tratamiento">En Tratamiento</option>
+          <option value="retirado">Retirado</option>
+          <option value="fallecido">Fallecido</option>
+        </select>
+      </div>
 
       {/* Results Count */}
-      <div className="text-sm text-gray-600">
-        Mostrando {filteredCaballos?.length || 0} de {caballos?.length || 0} caballos
+      <div className="text-xs md:text-sm text-gray-600">
+        {filteredCaballos?.length || 0} de {caballos?.length || 0} caballos
       </div>
 
       {/* Caballos Grid */}
       {filteredCaballos && filteredCaballos.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
           {filteredCaballos.map((caballo: Caballo) => (
             <Card key={caballo.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <CardTitle className="text-lg">{caballo.nombre}</CardTitle>
-                    <p className="text-sm text-gray-500 mt-1">{caballo.raza}</p>
+              <CardHeader className="p-3 md:p-6 pb-2 md:pb-4">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex-1 min-w-0">
+                    <CardTitle className="text-base md:text-lg truncate">{caballo.nombre}</CardTitle>
+                    <p className="text-xs md:text-sm text-gray-500 mt-1">{caballo.raza}</p>
                   </div>
-                  <Badge className={estadoColors[caballo.estado]}>
+                  <Badge className={`${estadoColors[caballo.estado]} text-xs shrink-0`}>
                     {estadoLabels[caballo.estado]}
                   </Badge>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="p-3 md:p-6 pt-0 space-y-3 md:space-y-4">
                 {/* Info */}
-                <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="grid grid-cols-2 gap-2 text-xs md:text-sm">
                   <div className="col-span-2">
                     <p className="text-gray-500">Nº Chip</p>
-                    <p className="font-medium font-mono text-xs">{caballo.numero_chip}</p>
+                    <p className="font-medium font-mono text-xs truncate">{caballo.numero_chip || 'N/A'}</p>
                   </div>
                   <div>
                     <p className="text-gray-500">Edad</p>
@@ -188,16 +177,10 @@ export function CaballosListPage() {
                     <p className="text-gray-500">Sexo</p>
                     <p className="font-medium capitalize">{caballo.sexo || 'N/A'}</p>
                   </div>
-                  {caballo.box_asignado && (
-                    <div>
-                      <p className="text-gray-500">Box</p>
-                      <p className="font-medium">{caballo.box_asignado}</p>
-                    </div>
-                  )}
                   {caballo.propietario && (
-                    <div className={caballo.box_asignado ? '' : 'col-span-2'}>
+                    <div className="col-span-2">
                       <p className="text-gray-500">Propietario</p>
-                      <p className="font-medium">
+                      <p className="font-medium truncate">
                         {caballo.propietario.nombre} {caballo.propietario.apellido}
                       </p>
                     </div>
@@ -209,7 +192,7 @@ export function CaballosListPage() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="flex-1"
+                    className="flex-1 text-xs md:text-sm"
                     onClick={() => navigate(`/caballos/${caballo.id}`)}
                   >
                     <Eye className="mr-1 h-3 w-3" />
@@ -220,7 +203,7 @@ export function CaballosListPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        className="flex-1"
+                        className="flex-1 text-xs md:text-sm"
                         onClick={() => navigate(`/caballos/${caballo.id}/editar`)}
                       >
                         <Edit className="mr-1 h-3 w-3" />
@@ -230,7 +213,7 @@ export function CaballosListPage() {
                         variant="outline"
                         size="sm"
                         onClick={() => handleDelete(caballo.id, caballo.nombre)}
-                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                        className="text-red-600 hover:text-red-700 hover:bg-red-50 px-2"
                       >
                         <Trash2 className="h-3 w-3" />
                       </Button>
