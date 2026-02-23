@@ -333,6 +333,54 @@ def actualizar_permisos(
     return db_usuario
 
 
+def _obtener_secciones_caballo_full() -> Dict[str, Any]:
+    """Retorna permisos completos para todas las secciones de caballos."""
+    return {
+        "info_general": {"ver": True, "editar": True},
+        "alimentacion": {"ver": True, "editar": True},
+        "manejo_trabajo": {"ver": True, "editar": True},
+        "historial_clinico": {"ver": True, "editar": True},
+        "vacunas": {"ver": True, "editar": True},
+        "herrajes": {"ver": True, "editar": True},
+        "antiparasitarios": {"ver": True, "editar": True},
+        "fotos": {"ver": True, "editar": True},
+        "qr": {"ver": True, "editar": True},
+        "plan_sanitario": {"ver": True, "editar": True},
+    }
+
+
+def _obtener_secciones_caballo_empleado() -> Dict[str, Any]:
+    """Retorna permisos de secciones de caballos para empleados (sin QR ni plan sanitario)."""
+    return {
+        "info_general": {"ver": True, "editar": True},
+        "alimentacion": {"ver": True, "editar": True},
+        "manejo_trabajo": {"ver": True, "editar": True},
+        "historial_clinico": {"ver": True, "editar": True},
+        "vacunas": {"ver": True, "editar": True},
+        "herrajes": {"ver": True, "editar": True},
+        "antiparasitarios": {"ver": True, "editar": True},
+        "fotos": {"ver": True, "editar": True},
+        "qr": {"ver": False, "editar": False},
+        "plan_sanitario": {"ver": False, "editar": False},
+    }
+
+
+def _obtener_secciones_caballo_cliente() -> Dict[str, Any]:
+    """Retorna permisos de secciones de caballos para clientes (solo lectura, sin QR ni plan sanitario)."""
+    return {
+        "info_general": {"ver": True, "editar": False},
+        "alimentacion": {"ver": True, "editar": False},
+        "manejo_trabajo": {"ver": True, "editar": False},
+        "historial_clinico": {"ver": True, "editar": False},
+        "vacunas": {"ver": True, "editar": False},
+        "herrajes": {"ver": True, "editar": False},
+        "antiparasitarios": {"ver": True, "editar": False},
+        "fotos": {"ver": True, "editar": False},
+        "qr": {"ver": False, "editar": False},
+        "plan_sanitario": {"ver": False, "editar": False},
+    }
+
+
 def _obtener_permisos_por_defecto(rol: RolEnum) -> Dict[str, Any]:
     """Retorna los permisos por defecto según el rol."""
 
@@ -340,7 +388,10 @@ def _obtener_permisos_por_defecto(rol: RolEnum) -> Dict[str, Any]:
     if rol == RolEnum.SUPER_ADMIN:
         return {
             "dashboard": {"ver": True, "crear": True, "editar": True, "eliminar": True},
-            "caballos": {"ver": True, "crear": True, "editar": True, "eliminar": True},
+            "caballos": {
+                "ver": True, "crear": True, "editar": True, "eliminar": True,
+                "secciones": _obtener_secciones_caballo_full()
+            },
             "clientes": {"ver": True, "crear": True, "editar": True, "eliminar": True},
             "empleados": {"ver": True, "crear": True, "editar": True, "eliminar": True},
             "eventos": {"ver": True, "crear": True, "editar": True, "eliminar": True},
@@ -354,7 +405,10 @@ def _obtener_permisos_por_defecto(rol: RolEnum) -> Dict[str, Any]:
     elif rol == RolEnum.ADMIN:
         return {
             "dashboard": {"ver": True, "crear": True, "editar": True, "eliminar": True},
-            "caballos": {"ver": True, "crear": True, "editar": True, "eliminar": True},
+            "caballos": {
+                "ver": True, "crear": True, "editar": True, "eliminar": True,
+                "secciones": _obtener_secciones_caballo_full()
+            },
             "clientes": {"ver": True, "crear": True, "editar": True, "eliminar": True},
             "empleados": {"ver": True, "crear": True, "editar": True, "eliminar": False},
             "eventos": {"ver": True, "crear": True, "editar": True, "eliminar": True},
@@ -368,7 +422,10 @@ def _obtener_permisos_por_defecto(rol: RolEnum) -> Dict[str, Any]:
     elif rol == RolEnum.EMPLEADO:
         return {
             "dashboard": {"ver": True, "crear": False, "editar": False, "eliminar": False},
-            "caballos": {"ver": True, "crear": True, "editar": True, "eliminar": False},
+            "caballos": {
+                "ver": True, "crear": True, "editar": True, "eliminar": False,
+                "secciones": _obtener_secciones_caballo_empleado()
+            },
             "clientes": {"ver": True, "crear": True, "editar": True, "eliminar": False},
             "empleados": {"ver": True, "crear": False, "editar": False, "eliminar": False},
             "eventos": {"ver": True, "crear": True, "editar": True, "eliminar": False},
@@ -382,7 +439,10 @@ def _obtener_permisos_por_defecto(rol: RolEnum) -> Dict[str, Any]:
     else:  # RolEnum.CLIENTE
         return {
             "dashboard": {"ver": True, "crear": False, "editar": False, "eliminar": False},
-            "caballos": {"ver": True, "crear": False, "editar": False, "eliminar": False},
+            "caballos": {
+                "ver": True, "crear": False, "editar": False, "eliminar": False,
+                "secciones": _obtener_secciones_caballo_cliente()
+            },
             "clientes": {"ver": False, "crear": False, "editar": False, "eliminar": False},
             "empleados": {"ver": False, "crear": False, "editar": False, "eliminar": False},
             "eventos": {"ver": True, "crear": False, "editar": False, "eliminar": False},

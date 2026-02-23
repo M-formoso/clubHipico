@@ -11,6 +11,7 @@ import {
 } from '@/hooks/useCaballos';
 import { PlanSanitarioTab } from '@/components/caballos/PlanSanitarioTab';
 import { useAuthStore } from '@/stores/authStore';
+import { PermisosCaballoSecciones, SECCIONES_CABALLO_FULL, SeccionCaballo } from '@/types/usuario';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -139,6 +140,21 @@ export function CaballoDetailPage() {
   const { user } = useAuthStore();
 
   const isCliente = user?.rol === 'cliente';
+
+  // Obtener permisos de secciones del usuario
+  const seccionesPermisos: PermisosCaballoSecciones =
+    user?.permisos?.caballos?.secciones || SECCIONES_CABALLO_FULL;
+
+  // Helper para verificar si una sección es visible
+  const canViewSection = (seccion: SeccionCaballo): boolean => {
+    return seccionesPermisos[seccion]?.ver ?? true;
+  };
+
+  // Helper para verificar si se puede editar una sección
+  const canEditSection = (seccion: SeccionCaballo): boolean => {
+    if (isCliente) return false;
+    return seccionesPermisos[seccion]?.editar ?? true;
+  };
 
   const { data: caballo, isLoading } = useCaballoCompleto(id!);
   const { vacunas, addVacuna, deleteVacuna } = useVacunas(id!);
@@ -403,36 +419,52 @@ export function CaballoDetailPage() {
 
       {/* Tabs */}
       <Tabs defaultValue="info" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-8">
-          <TabsTrigger value="info">Info</TabsTrigger>
-          <TabsTrigger value="historial">
-            <Activity className="h-4 w-4 mr-1" />
-            Historial
-          </TabsTrigger>
-          <TabsTrigger value="vacunas">
-            <Syringe className="h-4 w-4 mr-1" />
-            Vacunas
-          </TabsTrigger>
-          <TabsTrigger value="herrajes">
-            <Hammer className="h-4 w-4 mr-1" />
-            Herrajes
-          </TabsTrigger>
-          <TabsTrigger value="antiparasitarios">
-            <Pill className="h-4 w-4 mr-1" />
-            Antipar.
-          </TabsTrigger>
-          <TabsTrigger value="fotos">
-            <ImageIcon className="h-4 w-4 mr-1" />
-            Fotos
-          </TabsTrigger>
-          <TabsTrigger value="qr">
-            <QrCode className="h-4 w-4 mr-1" />
-            QR
-          </TabsTrigger>
-          <TabsTrigger value="plan-sanitario">
-            <ClipboardList className="h-4 w-4 mr-1" />
-            Plan
-          </TabsTrigger>
+        <TabsList className="flex flex-wrap gap-1">
+          {canViewSection('info_general') && (
+            <TabsTrigger value="info">Info</TabsTrigger>
+          )}
+          {canViewSection('historial_clinico') && (
+            <TabsTrigger value="historial">
+              <Activity className="h-4 w-4 mr-1" />
+              Historial
+            </TabsTrigger>
+          )}
+          {canViewSection('vacunas') && (
+            <TabsTrigger value="vacunas">
+              <Syringe className="h-4 w-4 mr-1" />
+              Vacunas
+            </TabsTrigger>
+          )}
+          {canViewSection('herrajes') && (
+            <TabsTrigger value="herrajes">
+              <Hammer className="h-4 w-4 mr-1" />
+              Herrajes
+            </TabsTrigger>
+          )}
+          {canViewSection('antiparasitarios') && (
+            <TabsTrigger value="antiparasitarios">
+              <Pill className="h-4 w-4 mr-1" />
+              Antipar.
+            </TabsTrigger>
+          )}
+          {canViewSection('fotos') && (
+            <TabsTrigger value="fotos">
+              <ImageIcon className="h-4 w-4 mr-1" />
+              Fotos
+            </TabsTrigger>
+          )}
+          {canViewSection('qr') && (
+            <TabsTrigger value="qr">
+              <QrCode className="h-4 w-4 mr-1" />
+              QR
+            </TabsTrigger>
+          )}
+          {canViewSection('plan_sanitario') && (
+            <TabsTrigger value="plan-sanitario">
+              <ClipboardList className="h-4 w-4 mr-1" />
+              Plan
+            </TabsTrigger>
+          )}
         </TabsList>
 
         {/* ════════════════════════════════════════════════════
@@ -469,44 +501,48 @@ export function CaballoDetailPage() {
           </Card>
 
           {/* Alimentación */}
-          <Card>
-            <CardHeader><CardTitle>Alimentación</CardTitle></CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div><p className="text-sm font-medium text-gray-500">Grano / Balanceado</p><p className="text-gray-900">{caballo.grano_balanceado || '—'}</p></div>
-                <div><p className="text-sm font-medium text-gray-500">Suplementos</p><p className="text-gray-900">{caballo.suplementos || '—'}</p></div>
-                <div><p className="text-sm font-medium text-gray-500">Comidas al día</p><p className="text-gray-900">{caballo.cantidad_comidas_dia || '—'}</p></div>
-              </div>
-              {caballo.detalles_alimentacion && (
-                <div className="mt-3"><p className="text-sm font-medium text-gray-500">Detalles</p><p className="text-gray-900 whitespace-pre-wrap">{caballo.detalles_alimentacion}</p></div>
-              )}
-            </CardContent>
-          </Card>
+          {canViewSection('alimentacion') && (
+            <Card>
+              <CardHeader><CardTitle>Alimentación</CardTitle></CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div><p className="text-sm font-medium text-gray-500">Grano / Balanceado</p><p className="text-gray-900">{caballo.grano_balanceado || '—'}</p></div>
+                  <div><p className="text-sm font-medium text-gray-500">Suplementos</p><p className="text-gray-900">{caballo.suplementos || '—'}</p></div>
+                  <div><p className="text-sm font-medium text-gray-500">Comidas al día</p><p className="text-gray-900">{caballo.cantidad_comidas_dia || '—'}</p></div>
+                </div>
+                {caballo.detalles_alimentacion && (
+                  <div className="mt-3"><p className="text-sm font-medium text-gray-500">Detalles</p><p className="text-gray-900 whitespace-pre-wrap">{caballo.detalles_alimentacion}</p></div>
+                )}
+              </CardContent>
+            </Card>
+          )}
 
           {/* Manejo y Trabajo */}
-          <Card>
-            <CardHeader><CardTitle>Manejo y Trabajo</CardTitle></CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div><p className="text-sm font-medium text-gray-500">Tipo de Manejo</p><p className="text-gray-900">{caballo.tipo_manejo ? manejoLabels[caballo.tipo_manejo] : '—'}</p></div>
-                <div><p className="text-sm font-medium text-gray-500">Jinete Asignado</p><p className="text-gray-900">{caballo.jinete_asignado || '—'}</p></div>
-                <div><p className="text-sm font-medium text-gray-500">Días de Trabajo</p><p className="text-gray-900">{caballo.dias_trabajo || '—'}</p></div>
-                <div><p className="text-sm font-medium text-gray-500">Días de Descanso</p><p className="text-gray-900">{caballo.dias_descanso || '—'}</p></div>
-                <div><p className="text-sm font-medium text-gray-500">Tiempo de Trabajo Diario</p><p className="text-gray-900">{caballo.tiempo_trabajo_diario ? `${caballo.tiempo_trabajo_diario} min` : '—'}</p></div>
-              </div>
-              {caballo.trabajo_config && (
-                <div className="mt-3">
-                  <p className="text-sm font-medium text-gray-500 mb-2">Tipos de Trabajo</p>
-                  <div className="flex flex-wrap gap-2">
-                    {caballo.trabajo_config.caminador && <Badge variant="secondary">Caminador</Badge>}
-                    {caballo.trabajo_config.cuerda && <Badge variant="secondary">Cuerda</Badge>}
-                    {caballo.trabajo_config.manga && <Badge variant="secondary">Manga</Badge>}
-                    {caballo.trabajo_config.montado && <Badge variant="secondary">Montado</Badge>}
-                  </div>
+          {canViewSection('manejo_trabajo') && (
+            <Card>
+              <CardHeader><CardTitle>Manejo y Trabajo</CardTitle></CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div><p className="text-sm font-medium text-gray-500">Tipo de Manejo</p><p className="text-gray-900">{caballo.tipo_manejo ? manejoLabels[caballo.tipo_manejo] : '—'}</p></div>
+                  <div><p className="text-sm font-medium text-gray-500">Jinete Asignado</p><p className="text-gray-900">{caballo.jinete_asignado || '—'}</p></div>
+                  <div><p className="text-sm font-medium text-gray-500">Días de Trabajo</p><p className="text-gray-900">{caballo.dias_trabajo || '—'}</p></div>
+                  <div><p className="text-sm font-medium text-gray-500">Días de Descanso</p><p className="text-gray-900">{caballo.dias_descanso || '—'}</p></div>
+                  <div><p className="text-sm font-medium text-gray-500">Tiempo de Trabajo Diario</p><p className="text-gray-900">{caballo.tiempo_trabajo_diario ? `${caballo.tiempo_trabajo_diario} min` : '—'}</p></div>
                 </div>
-              )}
-            </CardContent>
-          </Card>
+                {caballo.trabajo_config && (
+                  <div className="mt-3">
+                    <p className="text-sm font-medium text-gray-500 mb-2">Tipos de Trabajo</p>
+                    <div className="flex flex-wrap gap-2">
+                      {caballo.trabajo_config.caminador && <Badge variant="secondary">Caminador</Badge>}
+                      {caballo.trabajo_config.cuerda && <Badge variant="secondary">Cuerda</Badge>}
+                      {caballo.trabajo_config.manga && <Badge variant="secondary">Manga</Badge>}
+                      {caballo.trabajo_config.montado && <Badge variant="secondary">Montado</Badge>}
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
 
           {/* Otros Detalles */}
           <Card>
@@ -602,7 +638,7 @@ export function CaballoDetailPage() {
                 <CardTitle>Vacunas</CardTitle>
                 <CardDescription>Historial de vacunación</CardDescription>
               </div>
-              {!isCliente && (
+              {canEditSection('vacunas') && (
                 <Button size="sm" onClick={() => setModalVacuna(true)}>
                   <Plus className="h-4 w-4 mr-1" /> Agregar
                 </Button>
@@ -627,7 +663,7 @@ export function CaballoDetailPage() {
                           </p>
                         )}
                       </div>
-                      {!isCliente && (
+                      {canEditSection('vacunas') && (
                         <Button variant="ghost" size="icon" className="text-red-400 hover:text-red-600" onClick={() => deleteVacuna(vacuna.id)}>
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -648,7 +684,7 @@ export function CaballoDetailPage() {
                 <CardTitle>Revisión Dental</CardTitle>
                 <CardDescription>Historial de revisiones dentales</CardDescription>
               </div>
-              {!isCliente && (
+              {canEditSection('vacunas') && (
                 <Button size="sm" onClick={() => setModalRevisionDental(true)}>
                   <Plus className="h-4 w-4 mr-1" /> Agregar
                 </Button>
@@ -669,7 +705,7 @@ export function CaballoDetailPage() {
                           </p>
                         )}
                       </div>
-                      {!isCliente && (
+                      {canEditSection('vacunas') && (
                         <Button variant="ghost" size="icon" className="text-red-400 hover:text-red-600" onClick={() => deleteRevision(r.id)}>
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -690,7 +726,7 @@ export function CaballoDetailPage() {
                 <CardTitle>Otros Estudios</CardTitle>
                 <CardDescription>Radiografías, ecografías y otros estudios</CardDescription>
               </div>
-              {!isCliente && (
+              {canEditSection('vacunas') && (
                 <Button size="sm" onClick={() => setModalEstudioMedico(true)}>
                   <Plus className="h-4 w-4 mr-1" /> Agregar
                 </Button>
@@ -711,7 +747,7 @@ export function CaballoDetailPage() {
                         {e.diagnostico && <p className="text-sm text-gray-600 mt-1">Diagnóstico: {e.diagnostico}</p>}
                         {e.observaciones && <p className="text-sm text-gray-600">{e.observaciones}</p>}
                       </div>
-                      {!isCliente && (
+                      {canEditSection('vacunas') && (
                         <Button variant="ghost" size="icon" className="text-red-400 hover:text-red-600" onClick={() => deleteEstudio(e.id)}>
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -736,7 +772,7 @@ export function CaballoDetailPage() {
                 <CardTitle>Herrajes</CardTitle>
                 <CardDescription>Historial de herrajes y próximas fechas</CardDescription>
               </div>
-              {!isCliente && (
+              {canEditSection('herrajes') && (
                 <Button size="sm" onClick={() => setModalHerraje(true)}>
                   <Plus className="h-4 w-4 mr-1" /> Agregar
                 </Button>
@@ -759,7 +795,7 @@ export function CaballoDetailPage() {
                       </div>
                       <div className="flex items-center gap-2">
                         {herraje.costo && <p className="font-bold text-sm">${herraje.costo}</p>}
-                        {!isCliente && (
+                        {canEditSection('herrajes') && (
                           <Button variant="ghost" size="icon" className="text-red-400 hover:text-red-600" onClick={() => deleteHerraje(herraje.id)}>
                             <Trash2 className="h-4 w-4" />
                           </Button>
@@ -785,7 +821,7 @@ export function CaballoDetailPage() {
                 <CardTitle>Antiparasitarios</CardTitle>
                 <CardDescription>Historial de aplicaciones antiparasitarias</CardDescription>
               </div>
-              {!isCliente && (
+              {canEditSection('antiparasitarios') && (
                 <Button size="sm" onClick={() => setModalAntiparasitario(true)}>
                   <Plus className="h-4 w-4 mr-1" /> Agregar
                 </Button>
@@ -808,7 +844,7 @@ export function CaballoDetailPage() {
                           </p>
                         )}
                       </div>
-                      {!isCliente && (
+                      {canEditSection('antiparasitarios') && (
                         <Button variant="ghost" size="icon" className="text-red-400 hover:text-red-600" onClick={() => deleteAntiparasitario(ap.id)}>
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -833,9 +869,11 @@ export function CaballoDetailPage() {
                 <CardTitle>Galería de Fotos</CardTitle>
                 <CardDescription>Fotos del caballo</CardDescription>
               </div>
-              <Button size="sm" onClick={() => setModalFoto(true)}>
-                <Plus className="h-4 w-4 mr-1" /> Agregar Foto
-              </Button>
+              {canEditSection('fotos') && (
+                <Button size="sm" onClick={() => setModalFoto(true)}>
+                  <Plus className="h-4 w-4 mr-1" /> Agregar Foto
+                </Button>
+              )}
             </CardHeader>
             <CardContent>
               {fotos && fotos.length > 0 ? (
@@ -846,16 +884,18 @@ export function CaballoDetailPage() {
                       {foto.es_principal && <Badge className="absolute top-2 left-2 bg-blue-600">Principal</Badge>}
                       <div className="p-2 bg-white border-t">
                         {foto.descripcion && <p className="text-sm text-gray-600 mb-2 truncate">{foto.descripcion}</p>}
-                        <div className="flex gap-1">
-                          {!foto.es_principal && (
-                            <Button variant="outline" size="sm" className="flex-1 text-xs h-7" onClick={() => marcarPrincipal(foto.id)}>
-                              Principal
+                        {canEditSection('fotos') && (
+                          <div className="flex gap-1">
+                            {!foto.es_principal && (
+                              <Button variant="outline" size="sm" className="flex-1 text-xs h-7" onClick={() => marcarPrincipal(foto.id)}>
+                                Principal
+                              </Button>
+                            )}
+                            <Button variant="ghost" size="sm" className="text-red-400 hover:text-red-600 text-xs h-7 px-2" onClick={() => deleteFoto(foto.id)}>
+                              <Trash2 className="h-3 w-3" />
                             </Button>
-                          )}
-                          <Button variant="ghost" size="sm" className="text-red-400 hover:text-red-600 text-xs h-7 px-2" onClick={() => deleteFoto(foto.id)}>
-                            <Trash2 className="h-3 w-3" />
-                          </Button>
-                        </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -864,9 +904,11 @@ export function CaballoDetailPage() {
                 <div className="text-center py-12">
                   <ImageIcon className="h-12 w-12 mx-auto mb-2 text-gray-300" />
                   <p className="text-gray-500">No hay fotos registradas</p>
-                  <Button variant="outline" className="mt-3" onClick={() => setModalFoto(true)}>
-                    <Plus className="h-4 w-4 mr-1" /> Agregar primera foto
-                  </Button>
+                  {canEditSection('fotos') && (
+                    <Button variant="outline" className="mt-3" onClick={() => setModalFoto(true)}>
+                      <Plus className="h-4 w-4 mr-1" /> Agregar primera foto
+                    </Button>
+                  )}
                 </div>
               )}
             </CardContent>

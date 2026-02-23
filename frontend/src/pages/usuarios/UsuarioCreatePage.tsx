@@ -23,7 +23,8 @@ import {
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PermisosManager } from '@/components/usuarios/PermisosManager';
-import { PERMISOS_POR_ROL, Permisos } from '@/types/usuario';
+import { PermisosCaballoManager } from '@/components/usuarios/PermisosCaballoManager';
+import { PERMISOS_POR_ROL, Permisos, PermisosCaballoSecciones } from '@/types/usuario';
 import { ArrowLeft, Save } from 'lucide-react';
 
 const usuarioSchema = z.object({
@@ -374,11 +375,26 @@ export function UsuarioCreatePage() {
           </TabsContent>
 
           {/* Permisos */}
-          <TabsContent value="permisos" className="space-y-4">
+          <TabsContent value="permisos" className="space-y-6">
             <PermisosManager
               permisos={permisos}
               rol={rolActual}
               onChange={setPermisos}
+            />
+
+            {/* Permisos de secciones de caballos */}
+            <PermisosCaballoManager
+              secciones={permisos.caballos?.secciones}
+              caballosVerEnabled={permisos.caballos?.ver ?? false}
+              onChange={(secciones: PermisosCaballoSecciones) => {
+                setPermisos({
+                  ...permisos,
+                  caballos: {
+                    ...permisos.caballos,
+                    secciones,
+                  },
+                });
+              }}
             />
           </TabsContent>
         </Tabs>
