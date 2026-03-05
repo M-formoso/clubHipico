@@ -153,3 +153,20 @@ async def marcar_asistencia(
             detail="Inscripción no encontrada"
         )
     return inscripcion
+
+
+@router.put("/{evento_id}/publicar", response_model=EventoSchema)
+async def toggle_publicar_evento(
+    evento_id: UUID,
+    es_publico: bool = Query(..., description="True para publicar, False para despublicar"),
+    db: Session = Depends(get_db),
+    current_user: Usuario = Depends(require_admin)
+):
+    """Publica o despublica un evento en la web pública."""
+    evento = evento_service.toggle_publicar(db, evento_id, es_publico)
+    if not evento:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Evento no encontrado"
+        )
+    return evento

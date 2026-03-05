@@ -17,6 +17,8 @@ export interface Evento {
   ubicacion?: string;
   es_recurrente: boolean;
   recurrencia_config?: any;
+  es_publico: boolean;
+  imagen_url?: string;
   created_by?: string;
   created_at: string;
   updated_at: string;
@@ -34,6 +36,8 @@ export interface EventoCreate {
   ubicacion?: string;
   es_recurrente?: boolean;
   recurrencia_config?: any;
+  es_publico?: boolean;
+  imagen_url?: string;
 }
 
 export interface EventoUpdate {
@@ -49,6 +53,8 @@ export interface EventoUpdate {
   ubicacion?: string;
   es_recurrente?: boolean;
   recurrencia_config?: any;
+  es_publico?: boolean;
+  imagen_url?: string;
 }
 
 export interface InscripcionEvento {

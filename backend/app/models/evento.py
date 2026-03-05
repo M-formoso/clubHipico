@@ -60,6 +60,10 @@ class Evento(Base):
     es_recurrente = Column(Boolean, default=False, nullable=False)
     recurrencia_config = Column(JSONB, nullable=True)  # {"dias": ["lunes", "miércoles"], "frecuencia": "semanal"}
 
+    # Publicación en web pública
+    es_publico = Column(Boolean, default=False, nullable=False)
+    imagen_url = Column(String(500), nullable=True)
+
     # Auditoría
     created_by = Column(UUID(as_uuid=True), ForeignKey("usuarios.id", ondelete="SET NULL"), nullable=True)
 

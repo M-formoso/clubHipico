@@ -255,3 +255,24 @@ def actualizar_asistencia(
         db.refresh(db_inscripcion)
 
     return db_inscripcion
+
+
+def obtener_eventos_publicos(db: Session) -> List[Evento]:
+    """Obtiene eventos marcados como públicos para la web."""
+    return db.query(Evento).filter(
+        Evento.es_publico == True,
+        Evento.estado == EstadoEventoEnum.PROGRAMADO,
+        Evento.fecha_inicio >= datetime.now()
+    ).order_by(Evento.fecha_inicio.asc()).all()
+
+
+def toggle_publicar(db: Session, evento_id: UUID, es_publico: bool) -> Optional[Evento]:
+    """Publica o despublica un evento en la web pública."""
+    db_evento = obtener_por_id(db, evento_id)
+    if not db_evento:
+        return None
+
+    db_evento.es_publico = es_publico
+    db.commit()
+    db.refresh(db_evento)
+    return db_evento

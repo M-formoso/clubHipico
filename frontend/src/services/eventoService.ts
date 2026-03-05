@@ -66,4 +66,10 @@ export const eventoService = {
     });
     return data;
   },
+
+  // Publicar/despublicar en web pública
+  togglePublicar: async (id: string, esPublico: boolean): Promise<Evento> => {
+    const { data } = await api.put(`/eventos/${id}/publicar?es_publico=${esPublico}`);
+    return data;
+  },
 };

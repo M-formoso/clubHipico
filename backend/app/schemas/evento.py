@@ -17,6 +17,8 @@ class EventoBase(BaseModel):
     ubicacion: Optional[str] = Field(None, max_length=255)
     es_recurrente: bool = False
     recurrencia_config: Optional[Dict[str, Any]] = None
+    es_publico: bool = False
+    imagen_url: Optional[str] = Field(None, max_length=500)
 
 
 class EventoCreate(EventoBase):
@@ -38,6 +40,8 @@ class EventoUpdate(BaseModel):
     ubicacion: Optional[str] = Field(None, max_length=255)
     es_recurrente: Optional[bool] = None
     recurrencia_config: Optional[Dict[str, Any]] = None
+    es_publico: Optional[bool] = None
+    imagen_url: Optional[str] = Field(None, max_length=500)
 
 
 class EventoSchema(EventoBase):
@@ -82,6 +86,22 @@ class InscripcionEventoSchema(InscripcionEventoBase):
     estado: EstadoInscripcionEnum
     asistio: Optional[bool] = None
     created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+# Schema para eventos públicos (web pública)
+class EventoPublicoSchema(BaseModel):
+    """Schema de evento para la web pública (sin info sensible)"""
+    id: UUID4
+    titulo: str
+    tipo: TipoEventoEnum
+    descripcion: Optional[str] = None
+    fecha_inicio: datetime
+    fecha_fin: datetime
+    ubicacion: Optional[str] = None
+    imagen_url: Optional[str] = None
 
     class Config:
         from_attributes = True

@@ -22,6 +22,8 @@ import {
   CheckCircle,
   XCircle,
   AlertCircle,
+  Globe,
+  EyeOff,
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -108,6 +110,26 @@ export function EventoDetailPage() {
     },
   });
 
+  const togglePublicarMutation = useMutation({
+    mutationFn: (esPublico: boolean) => eventoService.togglePublicar(id!, esPublico),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['evento', id] });
+      toast({
+        title: data.es_publico ? 'Evento publicado' : 'Evento despublicado',
+        description: data.es_publico
+          ? 'El evento ahora es visible en la web pública.'
+          : 'El evento ya no es visible en la web pública.',
+      });
+    },
+    onError: () => {
+      toast({
+        title: 'Error',
+        description: 'No se pudo cambiar el estado de publicación.',
+        variant: 'destructive',
+      });
+    },
+  });
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -152,11 +174,36 @@ export function EventoDetailPage() {
               <Badge className={estadoEventoColors[evento.estado]} variant="outline">
                 {estadoEventoLabels[evento.estado]}
               </Badge>
+              {evento.es_publico && (
+                <Badge className="bg-green-100 text-green-800" variant="outline">
+                  <Globe className="h-3 w-3 mr-1" />
+                  Publicado en Web
+                </Badge>
+              )}
             </div>
             <p className="text-gray-500 mt-1">
               {format(new Date(evento.fecha_inicio), "d 'de' MMMM 'de' yyyy", { locale: es })}
             </p>
           </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button
+            variant={evento.es_publico ? 'outline' : 'default'}
+            onClick={() => togglePublicarMutation.mutate(!evento.es_publico)}
+            disabled={togglePublicarMutation.isPending}
+          >
+            {evento.es_publico ? (
+              <>
+                <EyeOff className="h-4 w-4 mr-2" />
+                Despublicar de Web
+              </>
+            ) : (
+              <>
+                <Globe className="h-4 w-4 mr-2" />
+                Publicar en Web
+              </>
+            )}
+          </Button>
         </div>
       </div>
 
