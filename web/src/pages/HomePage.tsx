@@ -1,10 +1,19 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, Award, Calendar, Shield, Users, ChevronDown, Sparkles } from 'lucide-react'
+import { ArrowRight, Award, Calendar, Shield, Users, ChevronDown, Sparkles, Volume2, VolumeX } from 'lucide-react'
 import { EventosSection } from '@/components/EventosSection'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 export function HomePage() {
   const [videoError, setVideoError] = useState(false)
+  const [isMuted, setIsMuted] = useState(true)
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  const toggleSound = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted
+      setIsMuted(!isMuted)
+    }
+  }
 
   const scrollToContent = () => {
     document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })
@@ -17,8 +26,9 @@ export function HomePage() {
         {/* Background */}
         {!videoError ? (
           <video
+            ref={videoRef}
             autoPlay
-            muted
+            muted={isMuted}
             loop
             playsInline
             className="absolute inset-0 w-full h-full object-cover"
@@ -26,7 +36,6 @@ export function HomePage() {
             poster="https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=1920&q=80"
           >
             <source src="/videos/hero.mp4" type="video/mp4" />
-            <source src="/videos/hero.webm" type="video/webm" />
           </video>
         ) : (
           <div
@@ -35,6 +44,21 @@ export function HomePage() {
               backgroundImage: 'url(https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=1920&q=80)',
             }}
           />
+        )}
+
+        {/* Sound Toggle Button */}
+        {!videoError && (
+          <button
+            onClick={toggleSound}
+            className="absolute bottom-24 right-6 z-20 w-14 h-14 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center text-white border border-white/20 hover:bg-white/20 transition-all duration-300 group"
+            aria-label={isMuted ? 'Activar sonido' : 'Silenciar'}
+          >
+            {isMuted ? (
+              <VolumeX size={24} className="group-hover:scale-110 transition-transform" />
+            ) : (
+              <Volume2 size={24} className="group-hover:scale-110 transition-transform" />
+            )}
+          </button>
         )}
 
         {/* Overlay */}
