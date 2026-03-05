@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Menu, X, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const navItems = [
@@ -25,12 +24,10 @@ export function Header() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Close menu when route changes
   useEffect(() => {
     setIsMenuOpen(false)
   }, [location.pathname])
 
-  // Prevent body scroll when menu is open
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = 'hidden'
@@ -43,64 +40,68 @@ export function Header() {
   }, [isMenuOpen])
 
   const isHome = location.pathname === '/'
-  const headerBg = isScrolled || !isHome
-    ? 'bg-white shadow-lg'
-    : 'bg-transparent'
-  const textColor = isScrolled || !isHome
-    ? 'text-primary'
-    : 'text-white'
-  const logoColor = isScrolled || !isHome
-    ? 'bg-primary text-white'
-    : 'bg-white/20 backdrop-blur-sm text-white border border-white/30'
+  const isTransparent = !isScrolled && isHome
 
   return (
     <>
-      <header className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        headerBg
-      )}>
+      <header
+        className={cn(
+          'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
+          isTransparent
+            ? 'bg-transparent'
+            : 'bg-white/95 backdrop-blur-md shadow-lg'
+        )}
+      >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 sm:h-20">
+          <div className="flex items-center justify-between h-20 lg:h-24">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2 sm:gap-3 group">
-              <div className={cn(
-                'w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all duration-300',
-                logoColor
-              )}>
-                <span className="font-bold text-base sm:text-lg">CH</span>
+            <Link to="/" className="flex items-center gap-3 group">
+              <div
+                className={cn(
+                  'w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 font-bold text-lg',
+                  isTransparent
+                    ? 'bg-white/10 backdrop-blur-md text-white border border-white/30 group-hover:bg-white/20'
+                    : 'bg-primary text-secondary group-hover:scale-105'
+                )}
+              >
+                CH
               </div>
-              <div className="hidden xs:block">
-                <h1 className={cn(
-                  'text-lg sm:text-xl font-bold transition-colors duration-300',
-                  textColor
-                )} style={{ fontFamily: 'var(--font-serif)' }}>
+              <div className="hidden sm:block">
+                <h1
+                  className={cn(
+                    'text-xl font-bold transition-colors duration-300',
+                    isTransparent ? 'text-white' : 'text-primary'
+                  )}
+                  style={{ fontFamily: 'var(--font-serif)' }}
+                >
                   Club Hípico
                 </h1>
-                <p className={cn(
-                  'text-[10px] sm:text-xs transition-colors duration-300 -mt-0.5',
-                  isScrolled || !isHome ? 'text-gray-500' : 'text-gray-300'
-                )}>
+                <p
+                  className={cn(
+                    'text-xs transition-colors duration-300 -mt-0.5',
+                    isTransparent ? 'text-gray-300' : 'text-gray-500'
+                  )}
+                >
                   Desde 1942
                 </p>
               </div>
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-1">
+            <nav className="hidden lg:flex items-center gap-2">
               {navItems.map((item) => (
                 <Link
                   key={item.path}
                   to={item.path}
                   className={cn(
-                    'px-4 py-2 rounded-full text-sm font-medium transition-all duration-200',
-                    textColor,
-                    location.pathname === item.path
-                      ? isScrolled || !isHome
-                        ? 'bg-primary/10 text-primary'
-                        : 'bg-white/20 text-white'
-                      : isScrolled || !isHome
-                        ? 'hover:bg-gray-100'
-                        : 'hover:bg-white/10'
+                    'px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 relative',
+                    isTransparent
+                      ? location.pathname === item.path
+                        ? 'bg-white/20 text-white'
+                        : 'text-white/80 hover:text-white hover:bg-white/10'
+                      : location.pathname === item.path
+                        ? 'bg-primary text-white'
+                        : 'text-gray-700 hover:text-primary hover:bg-gray-100'
                   )}
                 >
                   {item.name}
@@ -110,85 +111,102 @@ export function Header() {
 
             {/* CTA Button - Desktop */}
             <div className="hidden lg:block">
-              <Button
-                asChild
+              <a
+                href="https://sistema.1942harasclub.com.ar"
+                target="_blank"
+                rel="noopener noreferrer"
                 className={cn(
-                  'btn-shine font-semibold transition-all duration-300',
-                  isScrolled || !isHome
-                    ? 'bg-secondary hover:bg-secondary-light text-primary-dark'
-                    : 'bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white border border-white/30'
+                  'inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-300',
+                  isTransparent
+                    ? 'bg-white/10 backdrop-blur-md text-white border border-white/30 hover:bg-white hover:text-primary'
+                    : 'bg-gradient-to-r from-secondary to-secondary-dark text-white shadow-lg hover:shadow-xl hover:-translate-y-0.5'
                 )}
               >
-                <a href="https://sistema.1942harasclub.com.ar" target="_blank" rel="noopener noreferrer">
-                  Acceder al Sistema
-                </a>
-              </Button>
+                Acceder al Sistema
+                <ArrowRight size={16} />
+              </a>
             </div>
 
             {/* Mobile Menu Button */}
             <button
               className={cn(
-                'lg:hidden p-2 rounded-lg transition-colors',
-                textColor,
-                isScrolled || !isHome ? 'hover:bg-gray-100' : 'hover:bg-white/10'
+                'lg:hidden p-2.5 rounded-full transition-all duration-300',
+                isTransparent
+                  ? 'text-white hover:bg-white/10'
+                  : 'text-gray-700 hover:bg-gray-100'
               )}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="Menú"
             >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMenuOpen ? <X size={26} /> : <Menu size={26} />}
             </button>
           </div>
         </div>
       </header>
 
       {/* Mobile Navigation Overlay */}
-      <div className={cn(
-        'fixed inset-0 z-40 lg:hidden transition-all duration-300',
-        isMenuOpen ? 'visible' : 'invisible'
-      )}>
+      <div
+        className={cn(
+          'fixed inset-0 z-40 lg:hidden transition-all duration-300',
+          isMenuOpen ? 'visible' : 'invisible'
+        )}
+      >
         {/* Backdrop */}
         <div
           className={cn(
-            'absolute inset-0 bg-black/50 transition-opacity duration-300',
+            'absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300',
             isMenuOpen ? 'opacity-100' : 'opacity-0'
           )}
           onClick={() => setIsMenuOpen(false)}
         />
 
         {/* Menu Panel */}
-        <div className={cn(
-          'absolute top-0 right-0 h-full w-full sm:w-80 bg-white shadow-2xl transition-transform duration-300',
-          isMenuOpen ? 'translate-x-0' : 'translate-x-full'
-        )}>
+        <div
+          className={cn(
+            'absolute top-0 right-0 h-full w-full sm:w-96 bg-white shadow-2xl transition-transform duration-300 ease-out',
+            isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          )}
+        >
           <div className="flex flex-col h-full">
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b">
-              <span className="font-bold text-primary text-lg" style={{ fontFamily: 'var(--font-serif)' }}>
-                Menú
-              </span>
+            <div className="flex items-center justify-between p-6 border-b border-gray-100">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                  <span className="text-secondary font-bold">CH</span>
+                </div>
+                <span
+                  className="font-bold text-primary text-lg"
+                  style={{ fontFamily: 'var(--font-serif)' }}
+                >
+                  Club Hípico
+                </span>
+              </div>
               <button
                 onClick={() => setIsMenuOpen(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
                 <X size={24} className="text-gray-600" />
               </button>
             </div>
 
             {/* Navigation Links */}
-            <nav className="flex-1 overflow-y-auto p-4">
+            <nav className="flex-1 overflow-y-auto py-6 px-4">
               <div className="space-y-2">
                 {navItems.map((item, index) => (
                   <Link
                     key={item.path}
                     to={item.path}
                     className={cn(
-                      'block px-4 py-3 rounded-xl text-base font-medium transition-all duration-200',
-                      'animate-slide-left',
+                      'block px-5 py-4 rounded-xl text-lg font-medium transition-all duration-300',
                       location.pathname === item.path
                         ? 'bg-primary text-white'
-                        : 'text-gray-700 hover:bg-gray-100'
+                        : 'text-gray-700 hover:bg-gray-50 hover:text-primary'
                     )}
-                    style={{ animationDelay: `${index * 0.05}s` }}
+                    style={{
+                      animationDelay: `${index * 0.05}s`,
+                      animation: isMenuOpen ? 'fadeInRight 0.3s ease forwards' : 'none',
+                      opacity: 0,
+                    }}
                   >
                     {item.name}
                   </Link>
@@ -197,16 +215,17 @@ export function Header() {
             </nav>
 
             {/* Footer */}
-            <div className="p-4 border-t space-y-4">
-              <Button
-                asChild
-                className="w-full bg-secondary hover:bg-secondary-light text-primary-dark font-semibold py-6"
+            <div className="p-6 border-t border-gray-100 space-y-4 bg-gray-50">
+              <a
+                href="https://sistema.1942harasclub.com.ar"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-secondary to-secondary-dark text-white font-semibold py-4 rounded-xl shadow-lg"
               >
-                <a href="https://sistema.1942harasclub.com.ar" target="_blank" rel="noopener noreferrer">
-                  Acceder al Sistema
-                </a>
-              </Button>
-              <p className="text-center text-xs text-gray-500">
+                Acceder al Sistema
+                <ArrowRight size={18} />
+              </a>
+              <p className="text-center text-sm text-gray-500">
                 Club Hípico - Desde 1942
               </p>
             </div>

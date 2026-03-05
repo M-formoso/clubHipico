@@ -1,82 +1,144 @@
-import { Award, Heart, Target, Users } from 'lucide-react'
+import { Award, Heart, Target, Users, ArrowRight, Sparkles } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 export function AboutPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative py-24 bg-primary">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+      <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: 'url(https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1920&q=80)',
+          }}
+        />
+        <div className="page-hero-overlay" />
+
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center py-32">
+          <span className="luxury-badge mb-6 inline-flex animate-fade-in-down">
+            <Sparkles size={16} />
+            Nuestra Historia
+          </span>
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 animate-fade-in-up">
             Sobre Nosotros
           </h1>
-          <p className="text-xl text-gray-200 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto animate-fade-in-up delay-200">
             Conoce nuestra historia, misión y el equipo que hace posible la experiencia del Club Hípico.
           </p>
         </div>
+
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#fafafa] to-transparent" />
       </section>
 
       {/* History Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <section className="py-24 lg:py-32 bg-[#fafafa]">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-3xl font-bold text-primary mb-6">Nuestra Historia</h2>
-              <p className="text-gray-600 mb-4">
-                El Club Hípico fue fundado en 1970 por un grupo de apasionados por la equitación que soñaban con crear un espacio donde los amantes de los caballos pudieran reunirse, aprender y competir.
-              </p>
-              <p className="text-gray-600 mb-4">
-                Lo que comenzó como un pequeño establecimiento con apenas unas pocas caballerizas, ha crecido hasta convertirse en uno de los centros ecuestres más reconocidos de la región, manteniendo siempre los valores de excelencia y respeto por los animales que nos caracterizaron desde el primer día.
-              </p>
-              <p className="text-gray-600">
-                Hoy, más de 50 años después, seguimos comprometidos con la misma pasión que nos vio nacer, adaptándonos a los nuevos tiempos pero sin perder nuestra esencia.
-              </p>
+              <span className="text-secondary font-semibold tracking-widest uppercase text-sm">Desde 1942</span>
+              <h2 className="text-4xl sm:text-5xl font-bold text-primary mt-4 mb-8">
+                Nuestra Historia
+              </h2>
+              <div className="w-20 h-1 bg-gradient-to-r from-secondary to-secondary-light mb-8" />
+
+              <div className="space-y-6 text-gray-600 text-lg leading-relaxed">
+                <p>
+                  El Club Hípico fue fundado en 1942 por un grupo de apasionados por la equitación
+                  que soñaban con crear un espacio donde los amantes de los caballos pudieran
+                  reunirse, aprender y competir.
+                </p>
+                <p>
+                  Lo que comenzó como un pequeño establecimiento con apenas unas pocas caballerizas,
+                  ha crecido hasta convertirse en uno de los centros ecuestres más reconocidos
+                  de la región, manteniendo siempre los valores de excelencia y respeto por los
+                  animales que nos caracterizaron desde el primer día.
+                </p>
+                <p>
+                  Hoy, más de 80 años después, seguimos comprometidos con la misma pasión que nos
+                  vio nacer, adaptándonos a los nuevos tiempos pero sin perder nuestra esencia.
+                </p>
+              </div>
             </div>
-            <div>
-              <img
-                src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=800&q=80"
-                alt="Historia del Club Hípico"
-                className="rounded-lg shadow-xl"
-              />
+
+            <div className="relative">
+              <div className="img-zoom shadow-2xl">
+                <img
+                  src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=800&q=80"
+                  alt="Historia del Club Hípico"
+                  className="w-full h-[500px] object-cover"
+                />
+              </div>
+              <div className="absolute -bottom-8 -right-8 w-48 h-48 border-4 border-secondary rounded-2xl -z-10 hidden lg:block" />
             </div>
           </div>
         </div>
       </section>
 
       {/* Mission, Vision, Values */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
+      <section className="py-24 lg:py-32 bg-white">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <span className="text-secondary font-semibold tracking-widest uppercase text-sm">Nuestros Pilares</span>
+            <h2 className="text-4xl sm:text-5xl font-bold text-primary mt-4 mb-6">
+              Misión, Visión y Valores
+            </h2>
+            <div className="section-divider" />
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-8 rounded-lg shadow-md">
-              <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mb-6">
-                <Target className="text-white" size={28} />
+            {/* Mission */}
+            <div className="elegant-card p-10 text-center group">
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-8 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                <Target className="text-white" size={36} />
               </div>
-              <h3 className="text-2xl font-bold text-primary mb-4">Misión</h3>
-              <p className="text-gray-600">
-                Promover la equitación como deporte y estilo de vida, brindando servicios de excelencia en el cuidado de caballos y la formación de jinetes, en un ambiente seguro y familiar.
+              <h3 className="text-2xl font-bold text-primary mb-6">Misión</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Promover la equitación como deporte y estilo de vida, brindando servicios
+                de excelencia en el cuidado de caballos y la formación de jinetes,
+                en un ambiente seguro y familiar.
               </p>
             </div>
 
-            <div className="bg-white p-8 rounded-lg shadow-md">
-              <div className="w-14 h-14 bg-secondary rounded-full flex items-center justify-center mb-6">
-                <Award className="text-primary" size={28} />
+            {/* Vision */}
+            <div className="elegant-card p-10 text-center group">
+              <div className="w-20 h-20 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-2xl flex items-center justify-center mx-auto mb-8 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                <Award className="text-white" size={36} />
               </div>
-              <h3 className="text-2xl font-bold text-primary mb-4">Visión</h3>
-              <p className="text-gray-600">
-                Ser el centro ecuestre de referencia en la región, reconocido por la calidad de nuestras instalaciones, la profesionalidad de nuestro equipo y el bienestar de nuestros caballos.
+              <h3 className="text-2xl font-bold text-primary mb-6">Visión</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Ser el centro ecuestre de referencia en la región, reconocido por la
+                calidad de nuestras instalaciones, la profesionalidad de nuestro
+                equipo y el bienestar de nuestros caballos.
               </p>
             </div>
 
-            <div className="bg-white p-8 rounded-lg shadow-md">
-              <div className="w-14 h-14 bg-accent rounded-full flex items-center justify-center mb-6">
-                <Heart className="text-white" size={28} />
+            {/* Values */}
+            <div className="elegant-card p-10 text-center group">
+              <div className="w-20 h-20 bg-gradient-to-br from-rose-500 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-8 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                <Heart className="text-white" size={36} />
               </div>
-              <h3 className="text-2xl font-bold text-primary mb-4">Valores</h3>
-              <ul className="text-gray-600 space-y-2">
-                <li>• Respeto por los animales</li>
-                <li>• Excelencia en el servicio</li>
-                <li>• Compromiso con la comunidad</li>
-                <li>• Tradición e innovación</li>
-                <li>• Trabajo en equipo</li>
+              <h3 className="text-2xl font-bold text-primary mb-6">Valores</h3>
+              <ul className="text-gray-600 space-y-3 text-left">
+                <li className="flex items-center gap-3">
+                  <span className="w-2 h-2 bg-secondary rounded-full" />
+                  Respeto por los animales
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="w-2 h-2 bg-secondary rounded-full" />
+                  Excelencia en el servicio
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="w-2 h-2 bg-secondary rounded-full" />
+                  Compromiso con la comunidad
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="w-2 h-2 bg-secondary rounded-full" />
+                  Tradición e innovación
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="w-2 h-2 bg-secondary rounded-full" />
+                  Trabajo en equipo
+                </li>
               </ul>
             </div>
           </div>
@@ -84,74 +146,76 @@ export function AboutPage() {
       </section>
 
       {/* Team Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
+      <section className="py-24 lg:py-32 bg-[#fafafa]">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
+            <span className="text-secondary font-semibold tracking-widest uppercase text-sm">Profesionales</span>
+            <h2 className="text-4xl sm:text-5xl font-bold text-primary mt-4 mb-6">
               Nuestro Equipo
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <div className="section-divider" />
+            <p className="text-gray-600 max-w-2xl mx-auto text-lg mt-8">
               Profesionales apasionados dedicados a brindarte la mejor experiencia ecuestre.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="w-32 h-32 bg-gray-300 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <Users className="text-gray-500" size={48} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { title: 'Director General', role: 'Gestión y Administración', gradient: 'from-blue-500 to-indigo-600' },
+              { title: 'Instructor Jefe', role: 'Clases y Entrenamiento', gradient: 'from-emerald-500 to-green-600' },
+              { title: 'Veterinario', role: 'Salud y Bienestar Animal', gradient: 'from-purple-500 to-violet-600' },
+              { title: 'Coordinador de Eventos', role: 'Competencias y Actividades', gradient: 'from-amber-500 to-yellow-600' },
+            ].map((member) => (
+              <div key={member.title} className="elegant-card p-8 text-center group">
+                <div className={`w-28 h-28 bg-gradient-to-br ${member.gradient} rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-105 transition-transform duration-300 shadow-lg`}>
+                  <Users className="text-white" size={48} />
+                </div>
+                <h4 className="font-bold text-xl text-primary mb-2">{member.title}</h4>
+                <p className="text-gray-500">{member.role}</p>
               </div>
-              <h4 className="font-semibold text-lg text-primary">Director General</h4>
-              <p className="text-gray-500">Gestión y Administración</p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-32 h-32 bg-gray-300 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <Users className="text-gray-500" size={48} />
-              </div>
-              <h4 className="font-semibold text-lg text-primary">Instructor Jefe</h4>
-              <p className="text-gray-500">Clases y Entrenamiento</p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-32 h-32 bg-gray-300 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <Users className="text-gray-500" size={48} />
-              </div>
-              <h4 className="font-semibold text-lg text-primary">Veterinario</h4>
-              <p className="text-gray-500">Salud y Bienestar Animal</p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-32 h-32 bg-gray-300 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <Users className="text-gray-500" size={48} />
-              </div>
-              <h4 className="font-semibold text-lg text-primary">Coordinador de Eventos</h4>
-              <p className="text-gray-500">Competencias y Actividades</p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-primary">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <p className="text-4xl md:text-5xl font-bold text-secondary mb-2">50+</p>
-              <p className="text-white">Años de Experiencia</p>
-            </div>
-            <div>
-              <p className="text-4xl md:text-5xl font-bold text-secondary mb-2">100+</p>
-              <p className="text-white">Caballos Alojados</p>
-            </div>
-            <div>
-              <p className="text-4xl md:text-5xl font-bold text-secondary mb-2">500+</p>
-              <p className="text-white">Socios Activos</p>
-            </div>
-            <div>
-              <p className="text-4xl md:text-5xl font-bold text-secondary mb-2">50+</p>
-              <p className="text-white">Eventos Anuales</p>
-            </div>
+      <section className="py-20 lg:py-28 bg-primary relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-secondary rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl" />
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-secondary rounded-full translate-x-1/2 translate-y-1/2 blur-3xl" />
+        </div>
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+            {[
+              { number: '80+', label: 'Años de Experiencia' },
+              { number: '100+', label: 'Caballos Alojados' },
+              { number: '500+', label: 'Socios Activos' },
+              { number: '50+', label: 'Eventos Anuales' },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <p className="stat-number">{stat.number}</p>
+                <p className="text-gray-300 text-lg mt-3">{stat.label}</p>
+              </div>
+            ))}
           </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-24 lg:py-32 bg-white">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl sm:text-5xl font-bold text-primary mb-6">
+            ¿Quieres ser parte de
+            <span className="block gradient-text mt-2">nuestra familia?</span>
+          </h2>
+          <p className="text-gray-600 text-lg mb-12 max-w-2xl mx-auto">
+            Únete a nuestra comunidad y vive la experiencia ecuestre que solo el Club Hípico puede ofrecer.
+          </p>
+          <Link to="/contacto" className="btn-primary inline-flex items-center justify-center gap-2 text-lg">
+            Contáctanos
+            <ArrowRight size={20} />
+          </Link>
         </div>
       </section>
     </>

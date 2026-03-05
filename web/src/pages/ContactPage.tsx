@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { Clock, Mail, MapPin, Phone, Send } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Clock, Mail, MapPin, Phone, Send, CheckCircle, Sparkles } from 'lucide-react'
 
 export function ContactPage() {
   const [formData, setFormData] = useState({
@@ -21,8 +20,6 @@ export function ContactPage() {
     e.preventDefault()
     setIsSubmitting(true)
 
-    // TODO: Integrar con backend
-    // Simulamos envío
     await new Promise(resolve => setTimeout(resolve, 1000))
 
     setIsSubmitting(false)
@@ -33,67 +30,85 @@ export function ContactPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative py-24 bg-primary">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+      <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: 'url(https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=1920&q=80)',
+          }}
+        />
+        <div className="page-hero-overlay" />
+
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center py-32">
+          <span className="luxury-badge mb-6 inline-flex animate-fade-in-down">
+            <Sparkles size={16} />
+            Contáctanos
+          </span>
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 animate-fade-in-up">
             Contacto
           </h1>
-          <p className="text-xl text-gray-200 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto animate-fade-in-up delay-200">
             Estamos aquí para responder tus preguntas. No dudes en contactarnos.
           </p>
         </div>
+
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#fafafa] to-transparent" />
       </section>
 
       {/* Contact Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <section className="py-24 lg:py-32 bg-[#fafafa]">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
             {/* Contact Info */}
             <div>
-              <h2 className="text-3xl font-bold text-primary mb-8">Información de Contacto</h2>
+              <span className="text-secondary font-semibold tracking-widest uppercase text-sm">Información</span>
+              <h2 className="text-4xl sm:text-5xl font-bold text-primary mt-4 mb-8">
+                Información de Contacto
+              </h2>
+              <div className="w-20 h-1 bg-gradient-to-r from-secondary to-secondary-light mb-10" />
 
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <MapPin className="text-primary" size={24} />
+              <div className="space-y-8">
+                <div className="flex items-start gap-5">
+                  <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <MapPin className="text-white" size={24} />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg text-primary">Dirección</h3>
-                    <p className="text-gray-600">Ruta 123, Km 45</p>
-                    <p className="text-gray-600">Uruguay</p>
+                    <h3 className="font-bold text-xl text-primary mb-1">Dirección</h3>
+                    <p className="text-gray-600 text-lg">Ruta 123, Km 45</p>
+                    <p className="text-gray-600 text-lg">Uruguay</p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Phone className="text-primary" size={24} />
+                <div className="flex items-start gap-5">
+                  <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-green-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <Phone className="text-white" size={24} />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg text-primary">Teléfono</h3>
-                    <a href="tel:+59899123456" className="text-gray-600 hover:text-primary transition-colors">
+                    <h3 className="font-bold text-xl text-primary mb-1">Teléfono</h3>
+                    <a href="tel:+59899123456" className="text-gray-600 text-lg hover:text-secondary transition-colors">
                       +598 99 123 456
                     </a>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Mail className="text-primary" size={24} />
+                <div className="flex items-start gap-5">
+                  <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <Mail className="text-white" size={24} />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg text-primary">Email</h3>
-                    <a href="mailto:info@clubhipico.com" className="text-gray-600 hover:text-primary transition-colors">
+                    <h3 className="font-bold text-xl text-primary mb-1">Email</h3>
+                    <a href="mailto:info@clubhipico.com" className="text-gray-600 text-lg hover:text-secondary transition-colors">
                       info@clubhipico.com
                     </a>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Clock className="text-primary" size={24} />
+                <div className="flex items-start gap-5">
+                  <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-violet-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <Clock className="text-white" size={24} />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg text-primary">Horarios</h3>
+                    <h3 className="font-bold text-xl text-primary mb-1">Horarios</h3>
                     <p className="text-gray-600">Lunes a Viernes: 7:00 - 20:00</p>
                     <p className="text-gray-600">Sábados: 8:00 - 18:00</p>
                     <p className="text-gray-600">Domingos: 9:00 - 14:00</p>
@@ -101,28 +116,37 @@ export function ContactPage() {
                 </div>
               </div>
 
-              {/* Map placeholder */}
-              <div className="mt-8 bg-gray-200 h-64 rounded-lg flex items-center justify-center">
-                <p className="text-gray-500">Mapa de ubicación</p>
+              {/* Map */}
+              <div className="mt-12">
+                <div className="img-zoom shadow-xl h-72 bg-gray-200 flex items-center justify-center">
+                  <div className="text-center">
+                    <MapPin className="text-gray-400 mx-auto mb-3" size={48} />
+                    <p className="text-gray-500 font-medium">Mapa de ubicación</p>
+                  </div>
+                </div>
               </div>
             </div>
 
             {/* Contact Form */}
             <div>
-              <h2 className="text-3xl font-bold text-primary mb-8">Envíanos un Mensaje</h2>
+              <span className="text-secondary font-semibold tracking-widest uppercase text-sm">Formulario</span>
+              <h2 className="text-4xl sm:text-5xl font-bold text-primary mt-4 mb-8">
+                Envíanos un Mensaje
+              </h2>
+              <div className="w-20 h-1 bg-gradient-to-r from-secondary to-secondary-light mb-10" />
 
               {submitted ? (
-                <div className="bg-green-50 border border-green-200 rounded-lg p-8 text-center">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Send className="text-green-600" size={32} />
+                <div className="elegant-card p-12 text-center">
+                  <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                    <CheckCircle className="text-white" size={40} />
                   </div>
-                  <h3 className="text-xl font-semibold text-green-800 mb-2">¡Mensaje Enviado!</h3>
-                  <p className="text-green-600">
+                  <h3 className="text-2xl font-bold text-primary mb-4">¡Mensaje Enviado!</h3>
+                  <p className="text-gray-600 text-lg mb-8">
                     Gracias por contactarnos. Te responderemos a la brevedad.
                   </p>
                   <button
                     onClick={() => setSubmitted(false)}
-                    className="mt-4 text-primary hover:underline"
+                    className="text-secondary font-semibold hover:underline"
                   >
                     Enviar otro mensaje
                   </button>
@@ -131,7 +155,7 @@ export function ContactPage() {
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 mb-2">
+                      <label htmlFor="nombre" className="block text-sm font-semibold text-gray-700 mb-3">
                         Nombre completo *
                       </label>
                       <input
@@ -141,12 +165,12 @@ export function ContactPage() {
                         required
                         value={formData.nombre}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                        className="elegant-input"
                         placeholder="Tu nombre"
                       />
                     </div>
                     <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                      <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-3">
                         Email *
                       </label>
                       <input
@@ -156,7 +180,7 @@ export function ContactPage() {
                         required
                         value={formData.email}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                        className="elegant-input"
                         placeholder="tu@email.com"
                       />
                     </div>
@@ -164,7 +188,7 @@ export function ContactPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label htmlFor="telefono" className="block text-sm font-medium text-gray-700 mb-2">
+                      <label htmlFor="telefono" className="block text-sm font-semibold text-gray-700 mb-3">
                         Teléfono
                       </label>
                       <input
@@ -173,12 +197,12 @@ export function ContactPage() {
                         name="telefono"
                         value={formData.telefono}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                        className="elegant-input"
                         placeholder="+598 99 123 456"
                       />
                     </div>
                     <div>
-                      <label htmlFor="asunto" className="block text-sm font-medium text-gray-700 mb-2">
+                      <label htmlFor="asunto" className="block text-sm font-semibold text-gray-700 mb-3">
                         Asunto *
                       </label>
                       <select
@@ -187,7 +211,7 @@ export function ContactPage() {
                         required
                         value={formData.asunto}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                        className="elegant-input"
                       >
                         <option value="">Selecciona un asunto</option>
                         <option value="informacion">Información general</option>
@@ -201,31 +225,38 @@ export function ContactPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="mensaje" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="mensaje" className="block text-sm font-semibold text-gray-700 mb-3">
                       Mensaje *
                     </label>
                     <textarea
                       id="mensaje"
                       name="mensaje"
                       required
-                      rows={5}
+                      rows={6}
                       value={formData.mensaje}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all resize-none"
+                      className="elegant-input resize-none"
                       placeholder="Escribe tu mensaje aquí..."
                     />
                   </div>
 
-                  <Button type="submit" size="lg" disabled={isSubmitting} className="w-full md:w-auto">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="btn-primary w-full md:w-auto inline-flex items-center justify-center gap-2 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
                     {isSubmitting ? (
-                      'Enviando...'
+                      <>
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        Enviando...
+                      </>
                     ) : (
                       <>
                         Enviar Mensaje
                         <Send size={18} />
                       </>
                     )}
-                  </Button>
+                  </button>
                 </form>
               )}
             </div>
