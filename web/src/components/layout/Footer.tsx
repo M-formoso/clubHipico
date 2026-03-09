@@ -25,7 +25,7 @@ export function Footer() {
               />
             </Link>
             <p className="text-gray-400 leading-relaxed mb-8">
-              Tradición y excelencia ecuestre. Un lugar donde la pasión por los caballos
+              Tradición y excelencia hípica. Un lugar donde la pasión por los caballos
               se convierte en realidad y las familias crean recuerdos inolvidables.
             </p>
             {/* Social Media */}

@@ -78,7 +78,7 @@ export function HomePage() {
             {/* Main Title */}
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6 animate-fade-in-up">
               Tradición y
-              <span className="block gradient-text mt-2">Excelencia Ecuestre</span>
+              <span className="block gradient-text mt-2">Excelencia Haras Club</span>
             </h1>
 
             {/* Subtitle */}
@@ -124,7 +124,7 @@ export function HomePage() {
             </h2>
             <div className="section-divider" />
             <p className="text-gray-600 max-w-2xl mx-auto text-lg mt-8">
-              Ofrecemos una experiencia ecuestre completa con las mejores instalaciones y profesionales del país.
+              Ofrecemos una experiencia única con las mejores instalaciones y profesionales del país.
             </p>
           </div>
 
@@ -134,7 +134,7 @@ export function HomePage() {
               {
                 icon: Award,
                 title: 'Excelencia',
-                desc: 'Más de 80 años de trayectoria nos respaldan como líderes en el ámbito ecuestre nacional.',
+                desc: 'Más de 80 años de trayectoria nos respaldan como líderes en el ámbito hípico nacional.',
               },
               {
                 icon: Users,
@@ -263,7 +263,7 @@ export function HomePage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-primary mb-6">
             ¿Listo para comenzar tu
-            <span className="block gradient-text mt-2">experiencia ecuestre?</span>
+            <span className="block gradient-text mt-2">aventura hípica?</span>
           </h2>
           <p className="text-gray-600 text-lg mb-12 max-w-2xl mx-auto">
             Contáctanos hoy mismo y descubre todo lo que el Club Hípico tiene para ofrecerte a ti y a tu familia.

@@ -49,7 +49,7 @@ export function AboutPage() {
                 </p>
                 <p>
                   Lo que comenzó como un pequeño establecimiento con apenas unas pocas caballerizas,
-                  ha crecido hasta convertirse en uno de los centros ecuestres más reconocidos
+                  ha crecido hasta convertirse en uno de los centros hípicos más reconocidos
                   de la región, manteniendo siempre los valores de excelencia y respeto por los
                   animales que nos caracterizaron desde el primer día.
                 </p>
@@ -106,7 +106,7 @@ export function AboutPage() {
               </div>
               <h3 className="text-2xl font-bold text-primary mb-6">Visión</h3>
               <p className="text-gray-600 leading-relaxed">
-                Ser el centro ecuestre de referencia en la región, reconocido por la
+                Ser el centro hípico de referencia en la región, reconocido por la
                 calidad de nuestras instalaciones, la profesionalidad de nuestro
                 equipo y el bienestar de nuestros caballos.
               </p>
@@ -155,7 +155,7 @@ export function AboutPage() {
             </h2>
             <div className="section-divider" />
             <p className="text-gray-600 max-w-2xl mx-auto text-lg mt-8">
-              Profesionales apasionados dedicados a brindarte la mejor experiencia ecuestre.
+              Profesionales apasionados dedicados a brindarte la mejor experiencia hípica.
             </p>
           </div>
 
@@ -210,7 +210,7 @@ export function AboutPage() {
             <span className="block gradient-text mt-2">nuestra familia?</span>
           </h2>
           <p className="text-gray-600 text-lg mb-12 max-w-2xl mx-auto">
-            Únete a nuestra comunidad y vive la experiencia ecuestre que solo el Club Hípico puede ofrecer.
+            Únete a nuestra comunidad y vive la experiencia que solo 1942 Haras Club puede ofrecer.
           </p>
           <Link to="/contacto" className="btn-primary inline-flex items-center justify-center gap-2 text-lg">
             Contáctanos
