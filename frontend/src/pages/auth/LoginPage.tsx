@@ -65,9 +65,9 @@ export function LoginPage() {
         <div className="text-center mb-2">
           <div className="inline-flex items-center justify-center">
             <img
-              src="/logo.jpeg"
-              alt="Logo"
-              className="w-28 h-28 object-contain rounded-lg"
+              src="/logo.png"
+              alt="1942 Haras Club"
+              className="w-48 h-auto object-contain"
             />
           </div>
         </div>

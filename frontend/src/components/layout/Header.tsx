@@ -33,10 +33,13 @@ export function Header({ onMenuClick }: HeaderProps) {
           </Button>
 
           {/* Logo y título - Responsive */}
-          <h1 className="text-base font-bold text-beige-600 sm:text-lg lg:text-2xl">
-            <span className="hidden sm:inline">Club Ecuestre</span>
-            <span className="sm:hidden">Club</span>
-          </h1>
+          <div className="flex items-center gap-2">
+            <img src="/logo-192.png" alt="1942 Haras Club" className="h-8 w-8 sm:h-10 sm:w-10" />
+            <h1 className="text-base font-bold text-primary sm:text-lg lg:text-xl">
+              <span className="hidden sm:inline">1942 Haras Club</span>
+              <span className="sm:hidden">1942</span>
+            </h1>
+          </div>
         </div>
 
         {/* Acciones del usuario */}

@@ -23,12 +23,12 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#C4A57B", // Beige
+          DEFAULT: "#163928", // Verde oscuro corporativo
           foreground: "#FFFFFF",
         },
         secondary: {
-          DEFAULT: "#7A7A7A", // Gris
-          foreground: "#FFFFFF",
+          DEFAULT: "#d2b16b", // Dorado corporativo
+          foreground: "#163928",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -50,18 +50,31 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Paleta extendida de Beige
+        // Paleta verde corporativo (reemplaza beige)
         beige: {
-          50: '#faf8f5',
-          100: '#f5f1ea',
-          200: '#e8dfd0',
-          300: '#d9c9b0',
-          400: '#c9b091',
-          500: '#b89771', // Principal
-          600: '#a07d5d',
-          700: '#7d6149',
-          800: '#5a4536',
-          900: '#372923',
+          50: '#f0f5f2',
+          100: '#dce8e0',
+          200: '#b8d1c0',
+          300: '#8ab89a',
+          400: '#5a9a70',
+          500: '#163928', // Verde principal
+          600: '#123020',
+          700: '#0e261a',
+          800: '#0a1c13',
+          900: '#06120c',
+        },
+        // Paleta dorado corporativo
+        gold: {
+          50: '#fbf8f0',
+          100: '#f5eddb',
+          200: '#eddcb8',
+          300: '#e2c78e',
+          400: '#d2b16b', // Dorado principal
+          500: '#c49d4f',
+          600: '#a68419',
+          700: '#856a14',
+          800: '#64500f',
+          900: '#43360a',
         },
         // Paleta extendida de Gris
         gray: {
