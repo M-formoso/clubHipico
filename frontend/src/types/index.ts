@@ -6,6 +6,7 @@ export * from './usuario';
 export * from './evento';
 export * from './pago';
 export * from './alerta';
+export * from './comprobante';
 
 // User types (auth - versión simplificada)
 export interface User {

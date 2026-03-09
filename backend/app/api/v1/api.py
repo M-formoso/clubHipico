@@ -11,7 +11,8 @@ from app.api.v1.endpoints import (
     alertas,
     reportes,
     dashboard,
-    public
+    public,
+    comprobantes
 )
 
 api_router = APIRouter()
@@ -24,6 +25,7 @@ api_router.include_router(clientes.router, prefix="/clientes", tags=["Clientes"]
 api_router.include_router(caballos.router, prefix="/caballos", tags=["Caballos"])
 api_router.include_router(eventos.router, prefix="/eventos", tags=["Eventos"])
 api_router.include_router(pagos.router, prefix="/pagos", tags=["Pagos"])
+api_router.include_router(comprobantes.router, prefix="/comprobantes", tags=["Comprobantes"])
 api_router.include_router(egresos.router, prefix="/egresos", tags=["Egresos"])
 api_router.include_router(alertas.router, prefix="/alertas", tags=["Alertas"])
 api_router.include_router(reportes.router, prefix="/reportes", tags=["Reportes"])

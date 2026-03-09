@@ -60,6 +60,8 @@ class Cliente(Base):
     caballos = relationship("Caballo", back_populates="propietario", cascade="all, delete-orphan")
     pagos = relationship("Pago", back_populates="cliente", cascade="all, delete-orphan")
     inscripciones = relationship("InscripcionEvento", back_populates="cliente", cascade="all, delete-orphan")
+    comprobantes = relationship("Comprobante", back_populates="cliente", cascade="all, delete-orphan")
+    movimientos_cuenta = relationship("MovimientoCuenta", back_populates="cliente", cascade="all, delete-orphan", order_by="desc(MovimientoCuenta.created_at)")
 
     def __repr__(self):
         return f"<Cliente {self.nombre} {self.apellido} - {self.tipo_cliente}>"

@@ -5,11 +5,11 @@ import {
   Users,
   Calendar,
   UserCog,
-  Briefcase,
   DollarSign,
   FileText,
   Bell,
   X,
+  Receipt,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/stores/authStore';
@@ -53,6 +53,12 @@ const navItems: NavItem[] = [
     title: 'Pagos',
     href: '/pagos',
     icon: DollarSign,
+    roles: ['super_admin', 'admin', 'empleado'],
+  },
+  {
+    title: 'Comprobantes',
+    href: '/comprobantes',
+    icon: Receipt,
     roles: ['super_admin', 'admin', 'empleado'],
   },
   {

@@ -10,6 +10,7 @@ from app.models.evento import Evento
 from app.models.pago import Pago
 from app.models.alerta import Alerta
 from app.models.configuracion import Configuracion
+from app.models.comprobante import Comprobante, ComprobanteItem, PagoComprobante, MovimientoCuenta
 
 __all__ = [
     "Base",
@@ -23,4 +24,8 @@ __all__ = [
     "Pago",
     "Alerta",
     "Configuracion",
+    "Comprobante",
+    "ComprobanteItem",
+    "PagoComprobante",
+    "MovimientoCuenta",
 ]

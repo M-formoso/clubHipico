@@ -46,6 +46,11 @@ const AlertaCreatePage = lazy(() => import('@/pages/alertas/AlertaCreatePage').t
 const AlertaDetailPage = lazy(() => import('@/pages/alertas/AlertaDetailPage').then(m => ({ default: m.AlertaDetailPage })));
 const TiposAlertaPage = lazy(() => import('@/pages/alertas/TiposAlertaPage').then(m => ({ default: m.TiposAlertaPage })));
 
+const ComprobantesListPage = lazy(() => import('@/pages/comprobantes/ComprobantesListPage').then(m => ({ default: m.ComprobantesListPage })));
+const ComprobanteCreatePage = lazy(() => import('@/pages/comprobantes/ComprobanteCreatePage').then(m => ({ default: m.ComprobanteCreatePage })));
+const ComprobanteDetailPage = lazy(() => import('@/pages/comprobantes/ComprobanteDetailPage').then(m => ({ default: m.ComprobanteDetailPage })));
+const CuentaCorrientePage = lazy(() => import('@/pages/comprobantes/CuentaCorrientePage').then(m => ({ default: m.CuentaCorrientePage })));
+
 // Fallback para rutas lazy
 function PageLoader() {
   return (
@@ -235,6 +240,40 @@ function App() {
             element={
               <RoleProtectedRoute allowedRoles={['super_admin', 'admin', 'empleado']}>
                 <Suspense fallback={<PageLoader />}><PagoDetailPage /></Suspense>
+              </RoleProtectedRoute>
+            }
+          />
+
+          {/* Comprobantes */}
+          <Route
+            path="/comprobantes"
+            element={
+              <RoleProtectedRoute allowedRoles={['super_admin', 'admin', 'empleado']}>
+                <Suspense fallback={<PageLoader />}><ComprobantesListPage /></Suspense>
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/comprobantes/nuevo"
+            element={
+              <RoleProtectedRoute allowedRoles={['super_admin', 'admin']}>
+                <Suspense fallback={<PageLoader />}><ComprobanteCreatePage /></Suspense>
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/comprobantes/:id"
+            element={
+              <RoleProtectedRoute allowedRoles={['super_admin', 'admin', 'empleado']}>
+                <Suspense fallback={<PageLoader />}><ComprobanteDetailPage /></Suspense>
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/comprobantes/cuenta-corriente/:clienteId"
+            element={
+              <RoleProtectedRoute allowedRoles={['super_admin', 'admin', 'empleado']}>
+                <Suspense fallback={<PageLoader />}><CuentaCorrientePage /></Suspense>
               </RoleProtectedRoute>
             }
           />

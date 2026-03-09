@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Date, DateTime, Enum as SQLEnum, ForeignKey, Numeric
+from sqlalchemy import Column, String, Date, DateTime, Enum as SQLEnum, ForeignKey, Numeric, Integer
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from datetime import datetime
@@ -23,6 +23,9 @@ class MetodoPagoEnum(str, enum.Enum):
     TRANSFERENCIA = "transferencia"
     TARJETA = "tarjeta"
     CHEQUE = "cheque"
+    DEBITO = "debito"
+    CREDITO = "credito"
+    MERCADO_PAGO = "mercado_pago"
 
 
 class EstadoPagoEnum(str, enum.Enum):
@@ -31,6 +34,7 @@ class EstadoPagoEnum(str, enum.Enum):
     PAGADO = "pagado"
     VENCIDO = "vencido"
     CANCELADO = "cancelado"
+    APLICADO_PARCIAL = "aplicado_parcial"  # Pago aplicado parcialmente a comprobantes
 
 
 class Pago(Base):
@@ -40,10 +44,16 @@ class Pago(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     cliente_id = Column(UUID(as_uuid=True), ForeignKey("clientes.id", ondelete="CASCADE"), nullable=False)
 
+    # Numeración de recibo
+    numero_recibo = Column(Integer, nullable=True)  # Número secuencial de recibo
+    numero_recibo_completo = Column(String(20), nullable=True)  # Ej: "R-0001-00000123"
+
     # Información del pago
     concepto = Column(String(255), nullable=False)
     tipo = Column(SQLEnum(TipoPagoEnum), nullable=False)
-    monto = Column(Numeric(10, 2), nullable=False)
+    monto = Column(Numeric(12, 2), nullable=False)
+    monto_aplicado = Column(Numeric(12, 2), default=0)  # Monto ya aplicado a comprobantes
+    monto_disponible = Column(Numeric(12, 2), nullable=True)  # Monto disponible para aplicar
 
     # Método y estado
     metodo_pago = Column(SQLEnum(MetodoPagoEnum), nullable=True)
@@ -67,6 +77,12 @@ class Pago(Base):
 
     # Relaciones
     cliente = relationship("Cliente", back_populates="pagos")
+    comprobantes_asociados = relationship("PagoComprobante", back_populates="pago", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<Pago {self.concepto} - ${self.monto}>"
+
+    def calcular_monto_disponible(self):
+        """Calcula el monto disponible para aplicar a comprobantes"""
+        self.monto_disponible = self.monto - self.monto_aplicado
+        return self.monto_disponible
