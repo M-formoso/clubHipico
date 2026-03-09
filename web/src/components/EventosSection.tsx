@@ -14,12 +14,12 @@ const tipoEventoLabels: Record<string, string> = {
 }
 
 const tipoEventoColors: Record<string, string> = {
-  clase_grupal: 'from-blue-500 to-indigo-600',
-  clase_privada: 'from-purple-500 to-violet-600',
-  competencia: 'from-red-500 to-rose-600',
-  salida: 'from-emerald-500 to-green-600',
-  evento_social: 'from-amber-500 to-yellow-600',
-  otro: 'from-gray-500 to-gray-600',
+  clase_grupal: 'bg-primary',
+  clase_privada: 'bg-primary',
+  competencia: 'bg-primary',
+  salida: 'bg-primary',
+  evento_social: 'bg-primary',
+  otro: 'bg-primary',
 }
 
 function formatTime(dateStr: string): string {
@@ -115,7 +115,7 @@ export function EventosSection() {
                 </div>
 
                 {/* Type badge */}
-                <div className={`absolute top-5 right-5 bg-gradient-to-r ${tipoEventoColors[evento.tipo] || tipoEventoColors.otro} text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg`}>
+                <div className={`absolute top-5 right-5 ${tipoEventoColors[evento.tipo] || tipoEventoColors.otro} text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg`}>
                   {tipoEventoLabels[evento.tipo] || 'Evento'}
                 </div>
               </div>

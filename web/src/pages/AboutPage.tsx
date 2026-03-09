@@ -88,8 +88,8 @@ export function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Mission */}
             <div className="elegant-card p-10 text-center group">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-8 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                <Target className="text-white" size={36} />
+              <div className="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-8 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                <Target className="text-secondary" size={36} />
               </div>
               <h3 className="text-2xl font-bold text-primary mb-6">Misión</h3>
               <p className="text-gray-600 leading-relaxed">
@@ -101,8 +101,8 @@ export function AboutPage() {
 
             {/* Vision */}
             <div className="elegant-card p-10 text-center group">
-              <div className="w-20 h-20 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-2xl flex items-center justify-center mx-auto mb-8 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                <Award className="text-white" size={36} />
+              <div className="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-8 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                <Award className="text-secondary" size={36} />
               </div>
               <h3 className="text-2xl font-bold text-primary mb-6">Visión</h3>
               <p className="text-gray-600 leading-relaxed">
@@ -114,8 +114,8 @@ export function AboutPage() {
 
             {/* Values */}
             <div className="elegant-card p-10 text-center group">
-              <div className="w-20 h-20 bg-gradient-to-br from-rose-500 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-8 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                <Heart className="text-white" size={36} />
+              <div className="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-8 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                <Heart className="text-secondary" size={36} />
               </div>
               <h3 className="text-2xl font-bold text-primary mb-6">Valores</h3>
               <ul className="text-gray-600 space-y-3 text-left">
@@ -161,14 +161,14 @@ export function AboutPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { title: 'Director General', role: 'Gestión y Administración', gradient: 'from-blue-500 to-indigo-600' },
-              { title: 'Instructor Jefe', role: 'Clases y Entrenamiento', gradient: 'from-emerald-500 to-green-600' },
-              { title: 'Veterinario', role: 'Salud y Bienestar Animal', gradient: 'from-purple-500 to-violet-600' },
-              { title: 'Coordinador de Eventos', role: 'Competencias y Actividades', gradient: 'from-amber-500 to-yellow-600' },
+              { title: 'Director General', role: 'Gestión y Administración' },
+              { title: 'Instructor Jefe', role: 'Clases y Entrenamiento' },
+              { title: 'Veterinario', role: 'Salud y Bienestar Animal' },
+              { title: 'Coordinador de Eventos', role: 'Competencias y Actividades' },
             ].map((member) => (
               <div key={member.title} className="elegant-card p-8 text-center group">
-                <div className={`w-28 h-28 bg-gradient-to-br ${member.gradient} rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-105 transition-transform duration-300 shadow-lg`}>
-                  <Users className="text-white" size={48} />
+                <div className="w-28 h-28 bg-primary rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-105 transition-transform duration-300 shadow-lg">
+                  <Users className="text-secondary" size={48} />
                 </div>
                 <h4 className="font-bold text-xl text-primary mb-2">{member.title}</h4>
                 <p className="text-gray-500">{member.role}</p>

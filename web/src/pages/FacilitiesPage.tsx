@@ -108,8 +108,8 @@ export function FacilitiesPage() {
                   <ul className="space-y-4">
                     {facility.features.map((feature) => (
                       <li key={feature} className="flex items-center gap-4">
-                        <span className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-green-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
-                          <Check className="text-white" size={16} />
+                        <span className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
+                          <Check className="text-secondary" size={16} />
                         </span>
                         <span className="text-gray-700 font-medium">{feature}</span>
                       </li>

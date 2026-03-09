@@ -135,25 +135,21 @@ export function HomePage() {
                 icon: Award,
                 title: 'Excelencia',
                 desc: 'Más de 80 años de trayectoria nos respaldan como líderes en el ámbito ecuestre nacional.',
-                color: 'from-amber-500 to-yellow-600'
               },
               {
                 icon: Users,
                 title: 'Profesionales',
                 desc: 'Contamos con instructores certificados internacionalmente y veterinarios especializados.',
-                color: 'from-blue-500 to-indigo-600'
               },
               {
                 icon: Shield,
                 title: 'Seguridad',
                 desc: 'Instalaciones seguras con protocolos de bienestar animal de primer nivel mundial.',
-                color: 'from-emerald-500 to-green-600'
               },
               {
                 icon: Calendar,
                 title: 'Eventos',
                 desc: 'Organizamos competencias, clínicas y eventos especiales durante todo el año.',
-                color: 'from-purple-500 to-violet-600'
               },
             ].map((item, index) => (
               <div
@@ -161,8 +157,8 @@ export function HomePage() {
                 className="elegant-card p-8 text-center group"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className={`w-20 h-20 bg-gradient-to-br ${item.color} rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                  <item.icon className="text-white" size={36} />
+                <div className="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                  <item.icon className="text-secondary" size={36} />
                 </div>
                 <h3 className="text-2xl font-bold mb-4 text-primary">{item.title}</h3>
                 <p className="text-gray-600 leading-relaxed">

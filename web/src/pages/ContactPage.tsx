@@ -69,8 +69,8 @@ export function ContactPage() {
 
               <div className="space-y-8">
                 <div className="flex items-start gap-5">
-                  <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                    <MapPin className="text-white" size={24} />
+                  <div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <MapPin className="text-secondary" size={24} />
                   </div>
                   <div>
                     <h3 className="font-bold text-xl text-primary mb-1">Dirección</h3>
@@ -80,8 +80,8 @@ export function ContactPage() {
                 </div>
 
                 <div className="flex items-start gap-5">
-                  <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-green-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                    <Phone className="text-white" size={24} />
+                  <div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <Phone className="text-secondary" size={24} />
                   </div>
                   <div>
                     <h3 className="font-bold text-xl text-primary mb-1">Teléfono</h3>
@@ -92,8 +92,8 @@ export function ContactPage() {
                 </div>
 
                 <div className="flex items-start gap-5">
-                  <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                    <Mail className="text-white" size={24} />
+                  <div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <Mail className="text-secondary" size={24} />
                   </div>
                   <div>
                     <h3 className="font-bold text-xl text-primary mb-1">Email</h3>
@@ -104,8 +104,8 @@ export function ContactPage() {
                 </div>
 
                 <div className="flex items-start gap-5">
-                  <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-violet-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                    <Clock className="text-white" size={24} />
+                  <div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <Clock className="text-secondary" size={24} />
                   </div>
                   <div>
                     <h3 className="font-bold text-xl text-primary mb-1">Horarios</h3>
@@ -137,8 +137,8 @@ export function ContactPage() {
 
               {submitted ? (
                 <div className="elegant-card p-12 text-center">
-                  <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                    <CheckCircle className="text-white" size={40} />
+                  <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                    <CheckCircle className="text-secondary" size={40} />
                   </div>
                   <h3 className="text-2xl font-bold text-primary mb-4">¡Mensaje Enviado!</h3>
                   <p className="text-gray-600 text-lg mb-8">
