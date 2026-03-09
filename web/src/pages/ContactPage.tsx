@@ -67,49 +67,44 @@ export function ContactPage() {
               </h2>
               <div className="w-20 h-1 bg-gradient-to-r from-secondary to-secondary-light mb-10" />
 
-              <div className="space-y-6">
-                <div className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm border border-gray-100">
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <MapPin className="text-primary" size={22} />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100 hover:shadow-lg hover:border-secondary/30 transition-all duration-300">
+                  <div className="w-14 h-14 bg-secondary/10 rounded-xl flex items-center justify-center mb-4">
+                    <MapPin className="text-secondary" size={26} />
                   </div>
-                  <div>
-                    <h3 className="font-bold text-lg text-primary">Dirección</h3>
-                    <p className="text-gray-600">Ruta 123, Km 45, Uruguay</p>
-                  </div>
+                  <h3 className="font-bold text-xl text-primary mb-2">Dirección</h3>
+                  <p className="text-gray-600">Ruta 123, Km 45</p>
+                  <p className="text-gray-600">Uruguay</p>
                 </div>
 
-                <div className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm border border-gray-100">
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Phone className="text-primary" size={22} />
+                <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100 hover:shadow-lg hover:border-secondary/30 transition-all duration-300">
+                  <div className="w-14 h-14 bg-secondary/10 rounded-xl flex items-center justify-center mb-4">
+                    <Phone className="text-secondary" size={26} />
                   </div>
-                  <div>
-                    <h3 className="font-bold text-lg text-primary">Teléfono</h3>
-                    <a href="tel:+59899123456" className="text-gray-600 hover:text-secondary transition-colors">
-                      +598 99 123 456
-                    </a>
-                  </div>
+                  <h3 className="font-bold text-xl text-primary mb-2">Teléfono</h3>
+                  <a href="tel:+59899123456" className="text-gray-600 hover:text-secondary transition-colors text-lg">
+                    +598 99 123 456
+                  </a>
                 </div>
 
-                <div className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm border border-gray-100">
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Mail className="text-primary" size={22} />
+                <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100 hover:shadow-lg hover:border-secondary/30 transition-all duration-300">
+                  <div className="w-14 h-14 bg-secondary/10 rounded-xl flex items-center justify-center mb-4">
+                    <Mail className="text-secondary" size={26} />
                   </div>
-                  <div>
-                    <h3 className="font-bold text-lg text-primary">Email</h3>
-                    <a href="mailto:info@clubhipico.com" className="text-gray-600 hover:text-secondary transition-colors">
-                      info@clubhipico.com
-                    </a>
-                  </div>
+                  <h3 className="font-bold text-xl text-primary mb-2">Email</h3>
+                  <a href="mailto:info@clubhipico.com" className="text-gray-600 hover:text-secondary transition-colors">
+                    info@clubhipico.com
+                  </a>
                 </div>
 
-                <div className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm border border-gray-100">
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Clock className="text-primary" size={22} />
+                <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100 hover:shadow-lg hover:border-secondary/30 transition-all duration-300">
+                  <div className="w-14 h-14 bg-secondary/10 rounded-xl flex items-center justify-center mb-4">
+                    <Clock className="text-secondary" size={26} />
                   </div>
-                  <div>
-                    <h3 className="font-bold text-lg text-primary">Horarios</h3>
-                    <p className="text-gray-600 text-sm">Lun-Vie: 7:00-20:00 | Sáb: 8:00-18:00 | Dom: 9:00-14:00</p>
-                  </div>
+                  <h3 className="font-bold text-xl text-primary mb-2">Horarios</h3>
+                  <p className="text-gray-600">Lunes a Viernes: 7:00 - 20:00</p>
+                  <p className="text-gray-600">Sábados: 8:00 - 18:00</p>
+                  <p className="text-gray-600">Domingos: 9:00 - 14:00</p>
                 </div>
               </div>
 
