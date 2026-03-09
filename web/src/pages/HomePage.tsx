@@ -154,13 +154,13 @@ export function HomePage() {
             ].map((item, index) => (
               <div
                 key={item.title}
-                className="elegant-card p-8 text-center group"
+                className="elegant-card p-10 pt-12 pb-12 text-center group"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                <div className="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-8 group-hover:scale-110 transition-transform duration-300 shadow-lg">
                   <item.icon className="text-secondary" size={36} />
                 </div>
-                <h3 className="text-2xl font-bold mb-4 text-primary">{item.title}</h3>
+                <h3 className="text-2xl font-bold mb-5 text-primary">{item.title}</h3>
                 <p className="text-gray-600 leading-relaxed">
                   {item.desc}
                 </p>
