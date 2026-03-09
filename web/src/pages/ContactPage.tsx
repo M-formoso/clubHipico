@@ -67,44 +67,52 @@ export function ContactPage() {
               </h2>
               <div className="w-20 h-1 bg-gradient-to-r from-secondary to-secondary-light mb-10" />
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100 hover:shadow-lg hover:border-secondary/30 transition-all duration-300">
-                  <div className="w-14 h-14 bg-secondary/10 rounded-xl flex items-center justify-center mb-4">
-                    <MapPin className="text-secondary" size={26} />
+              <div className="space-y-10">
+                <div className="flex items-start gap-6">
+                  <div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <MapPin className="text-secondary" size={24} />
                   </div>
-                  <h3 className="font-bold text-xl text-primary mb-2">Dirección</h3>
-                  <p className="text-gray-600">Ruta 123, Km 45</p>
-                  <p className="text-gray-600">Uruguay</p>
+                  <div>
+                    <h3 className="font-bold text-xl text-primary mb-2">Dirección</h3>
+                    <p className="text-gray-600 text-lg">Ruta 123, Km 45</p>
+                    <p className="text-gray-600 text-lg">Uruguay</p>
+                  </div>
                 </div>
 
-                <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100 hover:shadow-lg hover:border-secondary/30 transition-all duration-300">
-                  <div className="w-14 h-14 bg-secondary/10 rounded-xl flex items-center justify-center mb-4">
-                    <Phone className="text-secondary" size={26} />
+                <div className="flex items-start gap-6">
+                  <div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <Phone className="text-secondary" size={24} />
                   </div>
-                  <h3 className="font-bold text-xl text-primary mb-2">Teléfono</h3>
-                  <a href="tel:+59899123456" className="text-gray-600 hover:text-secondary transition-colors text-lg">
-                    +598 99 123 456
-                  </a>
+                  <div>
+                    <h3 className="font-bold text-xl text-primary mb-2">Teléfono</h3>
+                    <a href="tel:+59899123456" className="text-gray-600 text-lg hover:text-secondary transition-colors">
+                      +598 99 123 456
+                    </a>
+                  </div>
                 </div>
 
-                <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100 hover:shadow-lg hover:border-secondary/30 transition-all duration-300">
-                  <div className="w-14 h-14 bg-secondary/10 rounded-xl flex items-center justify-center mb-4">
-                    <Mail className="text-secondary" size={26} />
+                <div className="flex items-start gap-6">
+                  <div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <Mail className="text-secondary" size={24} />
                   </div>
-                  <h3 className="font-bold text-xl text-primary mb-2">Email</h3>
-                  <a href="mailto:info@clubhipico.com" className="text-gray-600 hover:text-secondary transition-colors">
-                    info@clubhipico.com
-                  </a>
+                  <div>
+                    <h3 className="font-bold text-xl text-primary mb-2">Email</h3>
+                    <a href="mailto:info@clubhipico.com" className="text-gray-600 text-lg hover:text-secondary transition-colors">
+                      info@clubhipico.com
+                    </a>
+                  </div>
                 </div>
 
-                <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100 hover:shadow-lg hover:border-secondary/30 transition-all duration-300">
-                  <div className="w-14 h-14 bg-secondary/10 rounded-xl flex items-center justify-center mb-4">
-                    <Clock className="text-secondary" size={26} />
+                <div className="flex items-start gap-6">
+                  <div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <Clock className="text-secondary" size={24} />
                   </div>
-                  <h3 className="font-bold text-xl text-primary mb-2">Horarios</h3>
-                  <p className="text-gray-600">Lunes a Viernes: 7:00 - 20:00</p>
-                  <p className="text-gray-600">Sábados: 8:00 - 18:00</p>
-                  <p className="text-gray-600">Domingos: 9:00 - 14:00</p>
+                  <div>
+                    <h3 className="font-bold text-xl text-primary mb-2">Horarios</h3>
+                    <p className="text-gray-600 text-lg">Lunes a Viernes: 7:00 - 20:00</p>
+                    <p className="text-gray-600 text-lg">Sábados: 8:00 - 18:00</p>
+                    <p className="text-gray-600 text-lg">Domingos: 9:00 - 14:00</p>
+                  </div>
                 </div>
               </div>
 
