@@ -56,16 +56,11 @@ export function Header() {
           <div className="flex items-center justify-between h-20 lg:h-24">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 group">
-              <div
-                className={cn(
-                  'w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 font-bold text-lg',
-                  isTransparent
-                    ? 'bg-white/10 backdrop-blur-md text-white border border-white/30 group-hover:bg-white/20'
-                    : 'bg-primary text-secondary group-hover:scale-105'
-                )}
-              >
-                CH
-              </div>
+              <img
+                src="/logo-192.png"
+                alt="1942 Haras Club"
+                className="w-12 h-12 object-contain transition-all duration-300 group-hover:scale-105"
+              />
               <div className="hidden sm:block">
                 <h1
                   className={cn(
@@ -74,16 +69,8 @@ export function Header() {
                   )}
                   style={{ fontFamily: 'var(--font-serif)' }}
                 >
-                  Club Hípico
+                  1942 Haras Club
                 </h1>
-                <p
-                  className={cn(
-                    'text-xs transition-colors duration-300 -mt-0.5',
-                    isTransparent ? 'text-gray-300' : 'text-gray-500'
-                  )}
-                >
-                  Desde 1942
-                </p>
               </div>
             </Link>
 
@@ -171,14 +158,16 @@ export function Header() {
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-100">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
-                  <span className="text-secondary font-bold">CH</span>
-                </div>
+                <img
+                  src="/logo-192.png"
+                  alt="1942 Haras Club"
+                  className="w-10 h-10 object-contain"
+                />
                 <span
                   className="font-bold text-primary text-lg"
                   style={{ fontFamily: 'var(--font-serif)' }}
                 >
-                  Club Hípico
+                  1942 Haras Club
                 </span>
               </div>
               <button
@@ -226,7 +215,7 @@ export function Header() {
                 <ArrowRight size={18} />
               </a>
               <p className="text-center text-sm text-gray-500">
-                Club Hípico - Desde 1942
+                1942 Haras Club
               </p>
             </div>
           </div>

@@ -18,14 +18,15 @@ export function Footer() {
           {/* Brand Column */}
           <div className="lg:col-span-1">
             <Link to="/" className="flex items-center gap-3 mb-6">
-              <div className="w-14 h-14 bg-secondary rounded-full flex items-center justify-center">
-                <span className="text-primary font-bold text-xl">CH</span>
-              </div>
+              <img
+                src="/logo-192.png"
+                alt="1942 Haras Club"
+                className="w-14 h-14 object-contain"
+              />
               <div>
                 <span className="text-2xl font-bold block" style={{ fontFamily: 'var(--font-serif)' }}>
-                  Club Hípico
+                  1942 Haras Club
                 </span>
-                <span className="text-xs text-gray-400">Desde 1942</span>
               </div>
             </Link>
             <p className="text-gray-400 leading-relaxed mb-8">
@@ -160,7 +161,7 @@ export function Footer() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-gray-500 text-sm">
-              © {currentYear} Club Hípico. Todos los derechos reservados.
+              © {currentYear} 1942 Haras Club. Todos los derechos reservados.
             </p>
             <div className="flex gap-8 text-sm">
               <a href="#" className="text-gray-500 hover:text-secondary transition-colors">
