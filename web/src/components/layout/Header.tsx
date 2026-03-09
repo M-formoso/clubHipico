@@ -92,7 +92,7 @@ export function Header() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={cn(
-                  'inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-base transition-all duration-300',
+                  'inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full font-semibold text-base transition-all duration-300',
                   isTransparent
                     ? 'bg-white/10 backdrop-blur-md text-white border-2 border-white/30 hover:bg-white hover:text-primary'
                     : 'bg-gradient-to-r from-secondary to-secondary-dark text-white shadow-lg hover:shadow-xl hover:-translate-y-0.5'
