@@ -53,13 +53,13 @@ export function Header() {
         )}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-24 lg:h-28">
+          <div className="flex items-center justify-between h-28 lg:h-36">
             {/* Logo */}
             <Link to="/" className="group flex-shrink-0">
               <img
                 src="/logo.png"
                 alt="1942 Haras Club"
-                className="h-16 lg:h-20 w-auto object-contain transition-all duration-300 group-hover:scale-105"
+                className="h-20 lg:h-28 w-auto object-contain transition-all duration-300 group-hover:scale-105"
               />
             </Link>
 
@@ -149,7 +149,7 @@ export function Header() {
               <img
                 src="/logo.png"
                 alt="1942 Haras Club"
-                className="h-14 w-auto object-contain"
+                className="h-16 w-auto object-contain"
               />
               <button
                 onClick={() => setIsMenuOpen(false)}
