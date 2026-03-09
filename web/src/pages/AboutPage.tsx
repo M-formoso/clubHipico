@@ -77,7 +77,7 @@ export function AboutPage() {
       {/* Mission, Vision, Values */}
       <section className="py-24 lg:py-32 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-20">
             <span className="text-secondary font-semibold tracking-widest uppercase text-sm">Nuestros Pilares</span>
             <h2 className="text-4xl sm:text-5xl font-bold text-primary mt-4 mb-6">
               Misión, Visión y Valores
@@ -85,61 +85,58 @@ export function AboutPage() {
             <div className="section-divider" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
+          <div className="space-y-12">
             {/* Mission */}
-            <div className="elegant-card p-10 pt-14 pb-14 text-center group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 cursor-default">
-              <div className="w-24 h-24 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-10 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-lg group-hover:shadow-xl">
-                <Target className="text-secondary group-hover:scale-110 transition-transform duration-500" size={42} />
+            <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16 p-8 lg:p-12 bg-gradient-to-r from-gray-50 to-white rounded-3xl border border-gray-100 hover:shadow-lg transition-all duration-500">
+              <div className="flex-shrink-0">
+                <div className="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center shadow-lg">
+                  <Target className="text-secondary" size={36} />
+                </div>
               </div>
-              <h3 className="text-2xl font-bold text-primary mb-6 group-hover:text-secondary transition-colors duration-300">Misión</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Promover la equitación como deporte y estilo de vida, brindando servicios
-                de excelencia en el cuidado de caballos y la formación de jinetes,
-                en un ambiente seguro y familiar.
-              </p>
+              <div className="text-center lg:text-left">
+                <h3 className="text-2xl font-bold text-primary mb-4">Misión</h3>
+                <p className="text-gray-600 leading-relaxed text-lg">
+                  Promover la equitación como deporte y estilo de vida, brindando servicios
+                  de excelencia en el cuidado de caballos y la formación de jinetes,
+                  en un ambiente seguro y familiar.
+                </p>
+              </div>
             </div>
 
             {/* Vision */}
-            <div className="elegant-card p-10 pt-14 pb-14 text-center group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 cursor-default md:-mt-4 md:mb-4">
-              <div className="w-24 h-24 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-10 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-lg group-hover:shadow-xl">
-                <Award className="text-secondary group-hover:scale-110 transition-transform duration-500" size={42} />
+            <div className="flex flex-col lg:flex-row-reverse items-center gap-8 lg:gap-16 p-8 lg:p-12 bg-gradient-to-l from-gray-50 to-white rounded-3xl border border-gray-100 hover:shadow-lg transition-all duration-500">
+              <div className="flex-shrink-0">
+                <div className="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center shadow-lg">
+                  <Award className="text-secondary" size={36} />
+                </div>
               </div>
-              <h3 className="text-2xl font-bold text-primary mb-6 group-hover:text-secondary transition-colors duration-300">Visión</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Ser el centro hípico de referencia en la región, reconocido por la
-                calidad de nuestras instalaciones, la profesionalidad de nuestro
-                equipo y el bienestar de nuestros caballos.
-              </p>
+              <div className="text-center lg:text-right">
+                <h3 className="text-2xl font-bold text-primary mb-4">Visión</h3>
+                <p className="text-gray-600 leading-relaxed text-lg">
+                  Ser el centro hípico de referencia en la región, reconocido por la
+                  calidad de nuestras instalaciones, la profesionalidad de nuestro
+                  equipo y el bienestar de nuestros caballos.
+                </p>
+              </div>
             </div>
 
             {/* Values */}
-            <div className="elegant-card p-10 pt-14 pb-14 text-center group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 cursor-default">
-              <div className="w-24 h-24 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-10 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-lg group-hover:shadow-xl">
-                <Heart className="text-secondary group-hover:scale-110 transition-transform duration-500" size={42} />
+            <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16 p-8 lg:p-12 bg-gradient-to-r from-gray-50 to-white rounded-3xl border border-gray-100 hover:shadow-lg transition-all duration-500">
+              <div className="flex-shrink-0">
+                <div className="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center shadow-lg">
+                  <Heart className="text-secondary" size={36} />
+                </div>
               </div>
-              <h3 className="text-2xl font-bold text-primary mb-6 group-hover:text-secondary transition-colors duration-300">Valores</h3>
-              <ul className="text-gray-600 space-y-4 text-left">
-                <li className="flex items-center gap-3 group-hover:translate-x-1 transition-transform duration-300">
-                  <span className="w-2.5 h-2.5 bg-secondary rounded-full flex-shrink-0" />
-                  Respeto por los animales
-                </li>
-                <li className="flex items-center gap-3 group-hover:translate-x-1 transition-transform duration-300 delay-75">
-                  <span className="w-2.5 h-2.5 bg-secondary rounded-full flex-shrink-0" />
-                  Excelencia en el servicio
-                </li>
-                <li className="flex items-center gap-3 group-hover:translate-x-1 transition-transform duration-300 delay-100">
-                  <span className="w-2.5 h-2.5 bg-secondary rounded-full flex-shrink-0" />
-                  Compromiso con la comunidad
-                </li>
-                <li className="flex items-center gap-3 group-hover:translate-x-1 transition-transform duration-300 delay-150">
-                  <span className="w-2.5 h-2.5 bg-secondary rounded-full flex-shrink-0" />
-                  Tradición e innovación
-                </li>
-                <li className="flex items-center gap-3 group-hover:translate-x-1 transition-transform duration-300 delay-200">
-                  <span className="w-2.5 h-2.5 bg-secondary rounded-full flex-shrink-0" />
-                  Trabajo en equipo
-                </li>
-              </ul>
+              <div className="text-center lg:text-left flex-1">
+                <h3 className="text-2xl font-bold text-primary mb-4">Valores</h3>
+                <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
+                  {['Respeto por los animales', 'Excelencia en el servicio', 'Compromiso con la comunidad', 'Tradición e innovación', 'Trabajo en equipo'].map((valor) => (
+                    <span key={valor} className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                      {valor}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
