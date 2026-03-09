@@ -67,50 +67,33 @@ export function ContactPage() {
               </h2>
               <div className="w-20 h-1 bg-gradient-to-r from-secondary to-secondary-light mb-10" />
 
-              <div className="space-y-8">
-                <div className="flex items-center gap-6">
-                  <div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                    <MapPin className="text-secondary" size={24} />
+              <div className="space-y-6">
+                {[
+                  { icon: MapPin, title: 'Dirección', content: 'Villa Carlos Paz, Córdoba, Argentina', href: null },
+                  { icon: Phone, title: 'Teléfono', content: '+598 99 123 456', href: 'tel:+59899123456' },
+                  { icon: Mail, title: 'Email', content: 'info@clubhipico.com', href: 'mailto:info@clubhipico.com' },
+                  { icon: Clock, title: 'Horarios', content: 'Lun-Vie: 7:00-20:00 · Sáb: 8:00-18:00 · Dom: 9:00-14:00', href: null },
+                ].map((item, index) => (
+                  <div
+                    key={item.title}
+                    className="flex items-center gap-6 p-4 rounded-2xl hover:bg-white hover:shadow-md transition-all duration-300 cursor-default group"
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
+                    <div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                      <item.icon className="text-secondary" size={24} />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-xl text-primary mb-1 group-hover:text-secondary transition-colors duration-300">{item.title}</h3>
+                      {item.href ? (
+                        <a href={item.href} className="text-gray-600 text-lg hover:text-secondary transition-colors">
+                          {item.content}
+                        </a>
+                      ) : (
+                        <p className="text-gray-600 text-lg">{item.content}</p>
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-bold text-xl text-primary mb-1">Dirección</h3>
-                    <p className="text-gray-600 text-lg">Villa Carlos Paz, Córdoba, Argentina</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-6">
-                  <div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                    <Phone className="text-secondary" size={24} />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-xl text-primary mb-1">Teléfono</h3>
-                    <a href="tel:+59899123456" className="text-gray-600 text-lg hover:text-secondary transition-colors">
-                      +598 99 123 456
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-6">
-                  <div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                    <Mail className="text-secondary" size={24} />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-xl text-primary mb-1">Email</h3>
-                    <a href="mailto:info@clubhipico.com" className="text-gray-600 text-lg hover:text-secondary transition-colors">
-                      info@clubhipico.com
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-6">
-                  <div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                    <Clock className="text-secondary" size={24} />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-xl text-primary mb-1">Horarios</h3>
-                    <p className="text-gray-600 text-lg">Lun-Vie: 7:00-20:00 · Sáb: 8:00-18:00 · Dom: 9:00-14:00</p>
-                  </div>
-                </div>
+                ))}
               </div>
 
               {/* Google Maps */}
