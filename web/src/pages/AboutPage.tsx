@@ -68,7 +68,7 @@ export function AboutPage() {
                   className="w-full h-[500px] object-cover"
                 />
               </div>
-              <div className="absolute -bottom-8 -right-8 w-48 h-48 border-4 border-secondary rounded-2xl -z-10 hidden lg:block" />
+              <div className="absolute -bottom-8 -right-8 w-48 h-48 border-4 border-secondary rounded-none -z-10 hidden lg:block" />
             </div>
           </div>
         </div>

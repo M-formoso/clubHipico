@@ -88,7 +88,7 @@ export function FacilitiesPage() {
                     />
                   </div>
                   {/* Decorative element */}
-                  <div className={`absolute -bottom-6 ${index % 2 === 1 ? '-left-6' : '-right-6'} w-32 h-32 border-4 border-secondary rounded-2xl -z-10 hidden lg:block`} />
+                  <div className={`absolute -bottom-6 ${index % 2 === 1 ? '-left-6' : '-right-6'} w-32 h-32 border-4 border-secondary rounded-none -z-10 hidden lg:block`} />
                 </div>
 
                 {/* Content */}

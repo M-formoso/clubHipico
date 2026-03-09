@@ -175,9 +175,9 @@
 
 /* Borders */
 .rounded-full { border-radius: 9999px; }
-.rounded-xl { border-radius: 0.75rem; }
-.rounded-2xl { border-radius: 1rem; }
-.rounded-lg { border-radius: 0.5rem; }
+.rounded-xl { border-radius: 0; }
+.rounded-2xl { border-radius: 0; }
+.rounded-lg { border-radius: 0; }
 
 .border { border-width: 1px; }
 .border-2 { border-width: 2px; }
@@ -554,7 +554,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Elegant card style */
 .elegant-card {
   background: white;
-  border-radius: 16px;
+  border-radius: 0;
   overflow: visible;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -634,7 +634,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Image zoom effect */
 .img-zoom {
   overflow: hidden;
-  border-radius: 16px;
+  border-radius: 0;
 }
 
 .img-zoom img {
@@ -694,7 +694,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   padding: 16px 20px;
   border: 2px solid #e5e7eb;
-  border-radius: 12px;
+  border-radius: 0;
   font-size: 1rem;
   transition: all 0.3s ease;
   background: white;
@@ -715,7 +715,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 80px;
   height: 80px;
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
-  border-radius: 20px;
+  border-radius: 0;
   display: flex;
   align-items: center;
   justify-content: center;

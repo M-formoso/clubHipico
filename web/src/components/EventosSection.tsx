@@ -105,7 +105,7 @@ export function EventosSection() {
                 )}
 
                 {/* Date badge */}
-                <div className="absolute top-5 left-5 bg-white rounded-xl px-4 py-3 shadow-lg text-center min-w-[70px]">
+                <div className="absolute top-5 left-5 bg-white rounded-none px-4 py-3 shadow-lg text-center min-w-[70px]">
                   <p className="text-3xl font-bold text-primary leading-none">
                     {new Date(evento.fecha_inicio).getDate()}
                   </p>

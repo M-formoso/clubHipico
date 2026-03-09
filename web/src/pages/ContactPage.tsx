@@ -76,10 +76,10 @@ export function ContactPage() {
                 ].map((item, index) => (
                   <div
                     key={item.title}
-                    className="flex items-center gap-6 p-4 rounded-2xl hover:bg-white hover:shadow-md transition-all duration-300 cursor-default group"
+                    className="flex items-center gap-6 p-4 rounded-none hover:bg-white hover:shadow-md transition-all duration-300 cursor-default group"
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
-                    <div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                    <div className="w-14 h-14 bg-primary rounded-none flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
                       <item.icon className="text-secondary" size={24} />
                     </div>
                     <div>
@@ -106,7 +106,7 @@ export function ContactPage() {
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  className="rounded-2xl shadow-lg"
+                  className="rounded-none shadow-lg"
                   title="Ubicación del Club Hípico"
                 />
               </div>

@@ -154,10 +154,10 @@ export function HomePage() {
             ].map((item, index) => (
               <div
                 key={item.title}
-                className="bg-white rounded-2xl px-8 py-12 text-center group flex flex-col items-center shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-gray-100"
+                className="bg-white rounded-none px-8 py-12 text-center group flex flex-col items-center shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-gray-100"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="w-14 h-14 bg-primary rounded-xl flex items-center justify-center mb-8 group-hover:scale-110 transition-all duration-500 shadow-md">
+                <div className="w-14 h-14 bg-primary rounded-none flex items-center justify-center mb-8 group-hover:scale-110 transition-all duration-500 shadow-md">
                   <item.icon className="text-secondary" size={26} />
                 </div>
                 <h3 className="text-xl font-bold mb-4 text-primary group-hover:text-secondary transition-colors duration-300">{item.title}</h3>
@@ -213,13 +213,13 @@ export function HomePage() {
               </div>
 
               {/* Floating Stats Card */}
-              <div className="absolute bottom-4 left-4 bg-primary text-white p-6 rounded-2xl shadow-2xl hidden lg:block">
+              <div className="absolute bottom-4 left-4 bg-primary text-white p-6 rounded-none shadow-2xl hidden lg:block">
                 <p className="stat-number">80+</p>
                 <p className="text-gray-300 font-medium mt-2">Años de experiencia</p>
               </div>
 
               {/* Decorative elements */}
-              <div className="absolute -top-6 -right-6 w-32 h-32 border-2 border-secondary rounded-2xl -z-10 hidden lg:block" />
+              <div className="absolute -top-6 -right-6 w-32 h-32 border-2 border-secondary rounded-none -z-10 hidden lg:block" />
               <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-secondary/20 rounded-full -z-10 hidden lg:block" />
             </div>
           </div>
