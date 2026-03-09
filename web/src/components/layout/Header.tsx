@@ -64,17 +64,17 @@ export function Header() {
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-2">
+            <nav className="hidden lg:flex items-center gap-3">
               {navItems.map((item) => (
                 <Link
                   key={item.path}
                   to={item.path}
                   className={cn(
-                    'px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 relative',
+                    'px-6 py-3 rounded-full text-base font-semibold transition-all duration-300',
                     isTransparent
                       ? location.pathname === item.path
-                        ? 'bg-white/20 text-white'
-                        : 'text-white/80 hover:text-white hover:bg-white/10'
+                        ? 'bg-white/20 text-white backdrop-blur-sm'
+                        : 'text-white hover:text-white hover:bg-white/10'
                       : location.pathname === item.path
                         ? 'bg-primary text-white'
                         : 'text-gray-700 hover:text-primary hover:bg-gray-100'
@@ -92,14 +92,14 @@ export function Header() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={cn(
-                  'inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-300',
+                  'inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-base transition-all duration-300',
                   isTransparent
-                    ? 'bg-white/10 backdrop-blur-md text-white border border-white/30 hover:bg-white hover:text-primary'
+                    ? 'bg-white/10 backdrop-blur-md text-white border-2 border-white/30 hover:bg-white hover:text-primary'
                     : 'bg-gradient-to-r from-secondary to-secondary-dark text-white shadow-lg hover:shadow-xl hover:-translate-y-0.5'
                 )}
               >
                 Acceder al Sistema
-                <ArrowRight size={16} />
+                <ArrowRight size={18} />
               </a>
             </div>
 
