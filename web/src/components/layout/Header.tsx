@@ -59,7 +59,7 @@ export function Header() {
               <img
                 src="/logo.png"
                 alt="1942 Haras Club"
-                className="h-20 lg:h-28 w-auto object-contain transition-all duration-300 group-hover:scale-105"
+                className="h-24 lg:h-32 w-auto object-contain transition-all duration-300 group-hover:scale-105"
               />
             </Link>
 
