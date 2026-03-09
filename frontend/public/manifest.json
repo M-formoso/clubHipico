@@ -1,11 +1,11 @@
 {
-  "name": "Sistema de Gestión - Club Hípico",
-  "short_name": "Club Hípico",
-  "description": "Sistema de Gestión Integral para Club Hípico",
+  "name": "1942 Haras Club - Sistema de Gestión",
+  "short_name": "1942 Haras Club",
+  "description": "Sistema de Gestión Integral - 1942 Haras Club",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#8B7355",
+  "theme_color": "#163928",
   "orientation": "portrait-primary",
   "icons": [
     {
