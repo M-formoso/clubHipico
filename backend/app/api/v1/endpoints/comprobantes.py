@@ -5,7 +5,7 @@ from uuid import UUID
 from datetime import date
 
 from app.db.session import get_db
-from app.core.deps import get_current_user, get_current_admin
+from app.core.deps import get_current_user, require_admin
 from app.models.usuario import Usuario
 from app.models.comprobante import TipoComprobanteEnum, EstadoComprobanteEnum
 from app.schemas.comprobante import (
@@ -26,7 +26,7 @@ router = APIRouter()
 def crear_comprobante(
     data: ComprobanteCreate,
     db: Session = Depends(get_db),
-    current_user: Usuario = Depends(get_current_admin)
+    current_user: Usuario = Depends(require_admin)
 ):
     """Crea un nuevo comprobante"""
     try:
@@ -110,7 +110,7 @@ def actualizar_comprobante(
     comprobante_id: UUID,
     data: ComprobanteUpdate,
     db: Session = Depends(get_db),
-    current_user: Usuario = Depends(get_current_admin)
+    current_user: Usuario = Depends(require_admin)
 ):
     """Actualiza un comprobante (solo en borrador)"""
     try:
@@ -126,7 +126,7 @@ def actualizar_comprobante(
 def emitir_comprobante(
     comprobante_id: UUID,
     db: Session = Depends(get_db),
-    current_user: Usuario = Depends(get_current_admin)
+    current_user: Usuario = Depends(require_admin)
 ):
     """Emite un comprobante en borrador"""
     try:
@@ -141,7 +141,7 @@ def anular_comprobante(
     comprobante_id: UUID,
     data: AnularComprobanteRequest,
     db: Session = Depends(get_db),
-    current_user: Usuario = Depends(get_current_admin)
+    current_user: Usuario = Depends(require_admin)
 ):
     """Anula un comprobante"""
     try:
@@ -156,7 +156,7 @@ def aplicar_pago_a_comprobante(
     comprobante_id: UUID,
     data: AplicarPagoRequest,
     db: Session = Depends(get_db),
-    current_user: Usuario = Depends(get_current_admin)
+    current_user: Usuario = Depends(require_admin)
 ):
     """Aplica un pago a un comprobante"""
     try:
@@ -197,7 +197,7 @@ def reporte_ventas(
     fecha_inicio: date = Query(...),
     fecha_fin: date = Query(...),
     db: Session = Depends(get_db),
-    current_user: Usuario = Depends(get_current_admin)
+    current_user: Usuario = Depends(require_admin)
 ):
     """Genera reporte de ventas/facturación"""
     if fecha_inicio > fecha_fin:
@@ -212,7 +212,7 @@ def reporte_cobranzas(
     fecha_inicio: date = Query(...),
     fecha_fin: date = Query(...),
     db: Session = Depends(get_db),
-    current_user: Usuario = Depends(get_current_admin)
+    current_user: Usuario = Depends(require_admin)
 ):
     """Genera reporte de cobranzas"""
     if fecha_inicio > fecha_fin:
@@ -226,7 +226,7 @@ def reporte_cobranzas(
 def reporte_deudores(
     fecha_corte: Optional[date] = None,
     db: Session = Depends(get_db),
-    current_user: Usuario = Depends(get_current_admin)
+    current_user: Usuario = Depends(require_admin)
 ):
     """Genera reporte de deudores"""
     service = get_comprobante_service(db)
