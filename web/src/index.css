@@ -555,7 +555,7 @@ h1, h2, h3, h4, h5, h6 {
 .elegant-card {
   background: white;
   border-radius: 16px;
-  overflow: hidden;
+  overflow: visible;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid rgba(0, 0, 0, 0.05);
