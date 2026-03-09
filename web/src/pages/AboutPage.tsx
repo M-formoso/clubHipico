@@ -5,7 +5,7 @@ export function AboutPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden pt-28 lg:pt-36">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
@@ -14,7 +14,7 @@ export function AboutPage() {
         />
         <div className="page-hero-overlay" />
 
-        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center py-32">
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center py-16 lg:py-32">
           <span className="luxury-badge mb-6 inline-flex animate-fade-in-down">
             <Sparkles size={16} />
             Nuestra Historia
