@@ -75,68 +75,53 @@ export function AboutPage() {
       </section>
 
       {/* Mission, Vision, Values */}
-      <section className="py-24 lg:py-32 bg-white">
+      <section className="py-24 lg:py-32 bg-primary">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
+          <div className="text-center mb-16">
             <span className="text-secondary font-semibold tracking-widest uppercase text-sm">Nuestros Pilares</span>
-            <h2 className="text-4xl sm:text-5xl font-bold text-primary mt-4 mb-6">
+            <h2 className="text-4xl sm:text-5xl font-bold text-white mt-4 mb-6">
               Misión, Visión y Valores
             </h2>
-            <div className="section-divider" />
+            <div className="w-20 h-1 bg-gradient-to-r from-secondary to-secondary-light mx-auto" />
           </div>
 
-          <div className="space-y-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Mission */}
-            <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16 p-8 lg:p-12 bg-gradient-to-r from-gray-50 to-white rounded-3xl border border-gray-100 hover:shadow-lg transition-all duration-500">
-              <div className="flex-shrink-0">
-                <div className="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center shadow-lg">
-                  <Target className="text-secondary" size={36} />
-                </div>
+            <div className="text-center">
+              <div className="w-16 h-16 border-2 border-secondary rounded-full flex items-center justify-center mx-auto mb-6">
+                <Target className="text-secondary" size={28} />
               </div>
-              <div className="text-center lg:text-left">
-                <h3 className="text-2xl font-bold text-primary mb-4">Misión</h3>
-                <p className="text-gray-600 leading-relaxed text-lg">
-                  Promover la equitación como deporte y estilo de vida, brindando servicios
-                  de excelencia en el cuidado de caballos y la formación de jinetes,
-                  en un ambiente seguro y familiar.
-                </p>
-              </div>
+              <h3 className="text-2xl font-bold text-white mb-4">Misión</h3>
+              <p className="text-gray-300 leading-relaxed">
+                Promover la equitación como deporte y estilo de vida, brindando servicios
+                de excelencia en el cuidado de caballos y la formación de jinetes,
+                en un ambiente seguro y familiar.
+              </p>
             </div>
 
             {/* Vision */}
-            <div className="flex flex-col lg:flex-row-reverse items-center gap-8 lg:gap-16 p-8 lg:p-12 bg-gradient-to-l from-gray-50 to-white rounded-3xl border border-gray-100 hover:shadow-lg transition-all duration-500">
-              <div className="flex-shrink-0">
-                <div className="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center shadow-lg">
-                  <Award className="text-secondary" size={36} />
-                </div>
+            <div className="text-center">
+              <div className="w-16 h-16 border-2 border-secondary rounded-full flex items-center justify-center mx-auto mb-6">
+                <Award className="text-secondary" size={28} />
               </div>
-              <div className="text-center lg:text-right">
-                <h3 className="text-2xl font-bold text-primary mb-4">Visión</h3>
-                <p className="text-gray-600 leading-relaxed text-lg">
-                  Ser el centro hípico de referencia en la región, reconocido por la
-                  calidad de nuestras instalaciones, la profesionalidad de nuestro
-                  equipo y el bienestar de nuestros caballos.
-                </p>
-              </div>
+              <h3 className="text-2xl font-bold text-white mb-4">Visión</h3>
+              <p className="text-gray-300 leading-relaxed">
+                Ser el centro hípico de referencia en la región, reconocido por la
+                calidad de nuestras instalaciones, la profesionalidad de nuestro
+                equipo y el bienestar de nuestros caballos.
+              </p>
             </div>
 
             {/* Values */}
-            <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16 p-8 lg:p-12 bg-gradient-to-r from-gray-50 to-white rounded-3xl border border-gray-100 hover:shadow-lg transition-all duration-500">
-              <div className="flex-shrink-0">
-                <div className="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center shadow-lg">
-                  <Heart className="text-secondary" size={36} />
-                </div>
+            <div className="text-center">
+              <div className="w-16 h-16 border-2 border-secondary rounded-full flex items-center justify-center mx-auto mb-6">
+                <Heart className="text-secondary" size={28} />
               </div>
-              <div className="text-center lg:text-left flex-1">
-                <h3 className="text-2xl font-bold text-primary mb-4">Valores</h3>
-                <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
-                  {['Respeto por los animales', 'Excelencia en el servicio', 'Compromiso con la comunidad', 'Tradición e innovación', 'Trabajo en equipo'].map((valor) => (
-                    <span key={valor} className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">
-                      {valor}
-                    </span>
-                  ))}
-                </div>
-              </div>
+              <h3 className="text-2xl font-bold text-white mb-4">Valores</h3>
+              <p className="text-gray-300 leading-relaxed">
+                Respeto por los animales, excelencia en el servicio, compromiso con la comunidad,
+                tradición e innovación, y trabajo en equipo.
+              </p>
             </div>
           </div>
         </div>
