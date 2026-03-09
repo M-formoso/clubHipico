@@ -154,13 +154,13 @@ export function HomePage() {
             ].map((item, index) => (
               <div
                 key={item.title}
-                className="bg-white rounded-2xl px-6 py-10 text-center group flex flex-col items-center shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-gray-100"
+                className="bg-white rounded-2xl px-8 py-12 text-center group flex flex-col items-center shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-gray-100"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="w-14 h-14 bg-primary rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-all duration-500 shadow-md">
+                <div className="w-14 h-14 bg-primary rounded-xl flex items-center justify-center mb-8 group-hover:scale-110 transition-all duration-500 shadow-md">
                   <item.icon className="text-secondary" size={26} />
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-primary group-hover:text-secondary transition-colors duration-300">{item.title}</h3>
+                <h3 className="text-xl font-bold mb-4 text-primary group-hover:text-secondary transition-colors duration-300">{item.title}</h3>
                 <p className="text-gray-600 leading-relaxed text-sm">
                   {item.desc}
                 </p>
