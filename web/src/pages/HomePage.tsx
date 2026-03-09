@@ -50,7 +50,7 @@ export function HomePage() {
         {!videoError && (
           <button
             onClick={toggleSound}
-            className="absolute bottom-24 right-6 z-20 w-14 h-14 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center text-white border border-white/20 hover:bg-white/20 transition-all duration-300 group"
+            className="absolute bottom-44 sm:bottom-24 right-6 z-20 w-14 h-14 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center text-white border border-white/20 hover:bg-white/20 transition-all duration-300 group"
             aria-label={isMuted ? 'Activar sonido' : 'Silenciar'}
           >
             {isMuted ? (

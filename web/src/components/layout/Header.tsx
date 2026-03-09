@@ -167,7 +167,7 @@ export function Header() {
                     key={item.path}
                     to={item.path}
                     className={cn(
-                      'block px-5 py-4 rounded-xl text-lg font-medium transition-all duration-300',
+                      'block px-5 py-4 rounded-none text-lg font-medium transition-all duration-300',
                       location.pathname === item.path
                         ? 'bg-primary text-white'
                         : 'text-gray-700 hover:bg-gray-50 hover:text-primary'
