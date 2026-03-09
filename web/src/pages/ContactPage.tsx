@@ -74,17 +74,7 @@ export function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-xl text-primary mb-1">Dirección</h3>
-                    <p className="text-gray-600 text-lg">Ruta 123, Km 45 - Uruguay</p>
-                  </div>
-                </div>
-
-                {/* Map */}
-                <div className="ml-20">
-                  <div className="rounded-2xl shadow-lg h-48 bg-gray-200 flex items-center justify-center overflow-hidden">
-                    <div className="text-center">
-                      <MapPin className="text-gray-400 mx-auto mb-2" size={32} />
-                      <p className="text-gray-500 font-medium text-sm">Mapa de ubicación</p>
-                    </div>
+                    <p className="text-gray-600 text-lg">Villa Carlos Paz, Córdoba, Argentina</p>
                   </div>
                 </div>
 
@@ -121,6 +111,21 @@ export function ContactPage() {
                     <p className="text-gray-600 text-lg">Lun-Vie: 7:00-20:00 · Sáb: 8:00-18:00 · Dom: 9:00-14:00</p>
                   </div>
                 </div>
+              </div>
+
+              {/* Google Maps */}
+              <div className="mt-10">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d54455.86535455981!2d-64.5457847!3d-31.4240459!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x942d67e47aef4c8f%3A0x51f8c1b94ff8d0e8!2sVilla%20Carlos%20Paz%2C%20C%C3%B3rdoba%2C%20Argentina!5e0!3m2!1ses!2sar!4v1699999999999!5m2!1ses!2sar"
+                  width="100%"
+                  height="300"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="rounded-2xl shadow-lg"
+                  title="Ubicación del Club Hípico"
+                />
               </div>
             </div>
 
