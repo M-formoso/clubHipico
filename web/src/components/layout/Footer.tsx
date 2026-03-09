@@ -21,7 +21,7 @@ export function Footer() {
               <img
                 src="/logo.png"
                 alt="1942 Haras Club"
-                className="h-16 w-auto object-contain"
+                className="h-20 w-auto object-contain brightness-0 invert"
               />
             </Link>
             <p className="text-gray-400 leading-relaxed mb-8">
