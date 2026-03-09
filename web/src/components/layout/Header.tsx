@@ -55,23 +55,12 @@ export function Header() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20 lg:h-24">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-3 group">
+            <Link to="/" className="group">
               <img
-                src="/logo-192.png"
+                src="/logo.png"
                 alt="1942 Haras Club"
-                className="w-12 h-12 object-contain transition-all duration-300 group-hover:scale-105"
+                className="h-14 lg:h-16 w-auto object-contain transition-all duration-300 group-hover:scale-105"
               />
-              <div className="hidden sm:block">
-                <h1
-                  className={cn(
-                    'text-xl font-bold transition-colors duration-300',
-                    isTransparent ? 'text-white' : 'text-primary'
-                  )}
-                  style={{ fontFamily: 'var(--font-serif)' }}
-                >
-                  1942 Haras Club
-                </h1>
-              </div>
             </Link>
 
             {/* Desktop Navigation */}
@@ -157,19 +146,11 @@ export function Header() {
           <div className="flex flex-col h-full">
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-100">
-              <div className="flex items-center gap-3">
-                <img
-                  src="/logo-192.png"
-                  alt="1942 Haras Club"
-                  className="w-10 h-10 object-contain"
-                />
-                <span
-                  className="font-bold text-primary text-lg"
-                  style={{ fontFamily: 'var(--font-serif)' }}
-                >
-                  1942 Haras Club
-                </span>
-              </div>
+              <img
+                src="/logo.png"
+                alt="1942 Haras Club"
+                className="h-12 w-auto object-contain"
+              />
               <button
                 onClick={() => setIsMenuOpen(false)}
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -214,9 +195,6 @@ export function Header() {
                 Acceder al Sistema
                 <ArrowRight size={18} />
               </a>
-              <p className="text-center text-sm text-gray-500">
-                1942 Haras Club
-              </p>
             </div>
           </div>
         </div>

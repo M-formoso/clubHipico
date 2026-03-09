@@ -17,17 +17,12 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
           {/* Brand Column */}
           <div className="lg:col-span-1">
-            <Link to="/" className="flex items-center gap-3 mb-6">
+            <Link to="/" className="inline-block mb-6">
               <img
-                src="/logo-192.png"
+                src="/logo.png"
                 alt="1942 Haras Club"
-                className="w-14 h-14 object-contain"
+                className="h-16 w-auto object-contain"
               />
-              <div>
-                <span className="text-2xl font-bold block" style={{ fontFamily: 'var(--font-serif)' }}>
-                  1942 Haras Club
-                </span>
-              </div>
             </Link>
             <p className="text-gray-400 leading-relaxed mb-8">
               Tradición y excelencia ecuestre. Un lugar donde la pasión por los caballos

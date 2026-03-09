@@ -5,6 +5,7 @@
   --font-sans: 'Montserrat', system-ui, sans-serif;
   --font-serif: 'Cormorant Garamond', Georgia, serif;
 
+  /* Colores corporativos 1942 Haras Club */
   --color-primary: #163928;
   --color-primary-light: #1e4d36;
   --color-primary-dark: #0e261a;
@@ -17,6 +18,34 @@
   --color-accent-light: #1e4d36;
   --color-accent-dark: #0e261a;
 }
+
+/* Utilidades de color personalizadas */
+.bg-primary { background-color: #163928; }
+.bg-primary-light { background-color: #1e4d36; }
+.bg-primary-dark { background-color: #0e261a; }
+.bg-secondary { background-color: #d2b16b; }
+.bg-secondary-light { background-color: #dfc48a; }
+.bg-secondary-dark { background-color: #b8994d; }
+
+.text-primary { color: #163928; }
+.text-primary-light { color: #1e4d36; }
+.text-primary-dark { color: #0e261a; }
+.text-secondary { color: #d2b16b; }
+.text-secondary-light { color: #dfc48a; }
+.text-secondary-dark { color: #b8994d; }
+
+.border-primary { border-color: #163928; }
+.border-secondary { border-color: #d2b16b; }
+
+.from-secondary { --tw-gradient-from: #d2b16b; }
+.to-secondary-dark { --tw-gradient-to: #b8994d; }
+.from-secondary-dark { --tw-gradient-from: #b8994d; }
+.to-secondary-light { --tw-gradient-to: #dfc48a; }
+
+.hover\:bg-primary:hover { background-color: #163928; }
+.hover\:text-primary:hover { color: #163928; }
+.hover\:text-secondary:hover { color: #d2b16b; }
+.hover\:border-primary:hover { border-color: #163928; }
 
 * {
   margin: 0;
