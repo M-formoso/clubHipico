@@ -5,7 +5,7 @@ from uuid import UUID
 from datetime import date
 
 from app.db.session import get_db
-from app.api.deps import get_current_user, get_current_admin
+from app.core.deps import get_current_user, get_current_admin
 from app.models.usuario import Usuario
 from app.models.comprobante import TipoComprobanteEnum, EstadoComprobanteEnum
 from app.schemas.comprobante import (
