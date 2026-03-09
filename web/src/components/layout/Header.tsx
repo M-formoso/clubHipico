@@ -57,7 +57,7 @@ export function Header() {
             {/* Logo */}
             <Link to="/" className="group flex-shrink-0">
               <img
-                src="/logo.png"
+                src={isTransparent ? "/logo-light.png" : "/logo.png"}
                 alt="1942 Haras Club"
                 className="h-24 lg:h-32 w-auto object-contain transition-all duration-300 group-hover:scale-105"
               />
