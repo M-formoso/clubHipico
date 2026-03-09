@@ -203,7 +203,7 @@ export function HomePage() {
             </div>
 
             {/* Image */}
-            <div className="order-1 lg:order-2 relative">
+            <div className="order-1 lg:order-2 relative overflow-visible">
               <div className="img-zoom shadow-2xl">
                 <img
                   src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80"
@@ -213,7 +213,7 @@ export function HomePage() {
               </div>
 
               {/* Floating Stats Card */}
-              <div className="absolute -bottom-8 -left-8 bg-primary text-white p-8 rounded-2xl shadow-2xl hidden lg:block">
+              <div className="absolute bottom-4 left-4 bg-primary text-white p-6 rounded-2xl shadow-2xl hidden lg:block">
                 <p className="stat-number">80+</p>
                 <p className="text-gray-300 font-medium mt-2">Años de experiencia</p>
               </div>
