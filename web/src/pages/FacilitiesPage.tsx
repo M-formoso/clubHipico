@@ -1,44 +1,5 @@
-import { Check, ArrowRight, Sparkles } from 'lucide-react'
+import { ArrowRight, Sparkles } from 'lucide-react'
 import { Link } from 'react-router-dom'
-
-const facilities = [
-  {
-    title: 'Caballerizas',
-    description: 'Boxes amplios y ventilados con capacidad para más de 100 caballos, equipados con sistemas de alimentación y bebederos automáticos.',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80',
-    features: ['Boxes de 4x4 metros', 'Ventilación natural', 'Cámaras de seguridad', 'Iluminación LED'],
-  },
-  {
-    title: 'Pistas de Entrenamiento',
-    description: 'Contamos con pistas de arena de sílice para todas las disciplinas, mantenidas diariamente para garantizar la seguridad.',
-    image: 'https://images.unsplash.com/photo-1566251037378-5e04e3bec343?auto=format&fit=crop&w=800&q=80',
-    features: ['Pista techada 60x30m', 'Pista exterior 80x40m', 'Arena de sílice', 'Sistema de riego'],
-  },
-  {
-    title: 'Paddocks',
-    description: 'Amplios paddocks para el esparcimiento de los caballos, con sombra natural y bebederos.',
-    image: 'https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=800&q=80',
-    features: ['10 hectáreas de praderas', 'Cercado seguro', 'Sombra natural', 'Bebederos automáticos'],
-  },
-  {
-    title: 'Club House',
-    description: 'Espacio social con cafetería, salón de eventos y terrazas con vista a las pistas de competencia.',
-    image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80',
-    features: ['Cafetería', 'Salón de eventos', 'Terrazas panorámicas', 'Wi-Fi gratuito'],
-  },
-  {
-    title: 'Veterinaria',
-    description: 'Clínica veterinaria equipada con tecnología de punta para atención de emergencias y tratamientos especializados.',
-    image: 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?auto=format&fit=crop&w=800&q=80',
-    features: ['Atención 24/7', 'Quirófano equipado', 'Rayos X', 'Ecografía'],
-  },
-  {
-    title: 'Guadarnés',
-    description: 'Espacios individuales para el almacenamiento de monturas y equipos, con sistemas de seguridad.',
-    image: 'https://images.unsplash.com/photo-1508761140435-e84362e87e0e?auto=format&fit=crop&w=800&q=80',
-    features: ['Casilleros individuales', 'Control de humedad', 'Sistema de seguridad', 'Limpieza diaria'],
-  },
-]
 
 export function FacilitiesPage() {
   return (
@@ -69,109 +30,51 @@ export function FacilitiesPage() {
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#fafafa] to-transparent" />
       </section>
 
-      {/* Facilities Grid */}
-      <section className="py-24 lg:py-32 bg-[#fafafa]">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="space-y-32">
-            {facilities.map((facility, index) => (
-              <div
-                key={facility.title}
-                className={`grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center`}
-              >
-                {/* Image */}
-                <div className={`relative ${index % 2 === 1 ? 'lg:order-2' : ''}`}>
-                  <div className="img-zoom shadow-2xl">
-                    <img
-                      src={facility.image}
-                      alt={facility.title}
-                      className="w-full h-[400px] lg:h-[500px] object-cover"
-                    />
-                  </div>
-                  {/* Decorative element */}
-                  <div className={`absolute -bottom-6 ${index % 2 === 1 ? '-left-6' : '-right-6'} w-32 h-32 border-4 border-secondary rounded-none -z-10 hidden lg:block`} />
-                </div>
-
-                {/* Content */}
-                <div className={index % 2 === 1 ? 'lg:order-1' : ''}>
-                  <span className="text-secondary font-semibold tracking-widest uppercase text-sm">
-                    Instalación {String(index + 1).padStart(2, '0')}
-                  </span>
-                  <h2 className="text-4xl sm:text-5xl font-bold text-primary mt-4 mb-6">
-                    {facility.title}
-                  </h2>
-                  <div className="w-20 h-1 bg-gradient-to-r from-secondary to-secondary-light mb-8" />
-
-                  <p className="text-gray-600 text-lg leading-relaxed mb-8">
-                    {facility.description}
-                  </p>
-
-                  <ul className="space-y-4">
-                    {facility.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-4">
-                        <span className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
-                          <Check className="text-secondary" size={16} />
-                        </span>
-                        <span className="text-gray-700 font-medium">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Gallery Section */}
-      <section className="py-24 lg:py-32 bg-white">
+      <section className="py-24 lg:py-32 bg-[#fafafa]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <span className="text-secondary font-semibold tracking-widest uppercase text-sm">Galería</span>
             <h2 className="text-4xl sm:text-5xl font-bold text-primary mt-4 mb-6">
-              Galería de Imágenes
+              Conoce Nuestro Espacio
             </h2>
             <div className="section-divider" />
-            <p className="text-gray-600 max-w-2xl mx-auto text-lg mt-8">
-              Descubre nuestras instalaciones a través de estas imágenes.
-            </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
-            <div className="col-span-2 row-span-2">
-              <div className="img-zoom h-full shadow-xl">
-                <img
-                  src="/instalaciones.jpg"
-                  alt="Instalaciones 1942 Haras Club"
-                  className="w-full h-full object-cover min-h-[400px]"
-                />
-              </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="img-zoom shadow-xl">
+              <img
+                src="/instalaciones.jpg"
+                alt="Instalaciones 1942 Haras Club"
+                className="w-full h-72 object-cover"
+              />
             </div>
             <div className="img-zoom shadow-xl">
               <img
                 src="/caballo.jpg"
                 alt="Caballo en las instalaciones"
-                className="w-full h-48 lg:h-56 object-cover"
+                className="w-full h-72 object-cover"
               />
             </div>
             <div className="img-zoom shadow-xl">
               <img
                 src="/alumnas.jpg"
                 alt="Alumnas de equitación"
-                className="w-full h-48 lg:h-56 object-cover"
+                className="w-full h-72 object-cover"
               />
             </div>
             <div className="img-zoom shadow-xl">
               <img
                 src="/jinete-caballo.jpg"
                 alt="Jinete con caballo"
-                className="w-full h-48 lg:h-56 object-cover"
+                className="w-full h-72 object-cover"
               />
             </div>
-            <div className="img-zoom shadow-xl">
+            <div className="img-zoom shadow-xl lg:col-span-2">
               <img
                 src="/ninos-caballo.jpg"
                 alt="Niños cuidando caballos"
-                className="w-full h-48 lg:h-56 object-cover"
+                className="w-full h-72 object-cover"
               />
             </div>
           </div>
