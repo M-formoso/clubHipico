@@ -9,7 +9,7 @@ export function AboutPage() {
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1920&q=80)',
+            backgroundImage: 'url(/instalaciones.jpg)',
           }}
         />
         <div className="page-hero-overlay" />
@@ -63,8 +63,8 @@ export function AboutPage() {
             <div className="relative">
               <div className="img-zoom shadow-2xl">
                 <img
-                  src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=800&q=80"
-                  alt="Historia del Club Hípico"
+                  src="/alumnas.jpg"
+                  alt="Alumnas del Club Hípico 1942 Haras Club"
                   className="w-full h-[500px] object-cover"
                 />
               </div>

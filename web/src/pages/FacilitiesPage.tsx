@@ -48,7 +48,7 @@ export function FacilitiesPage() {
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1920&q=80)',
+            backgroundImage: 'url(/caballo.jpg)',
           }}
         />
         <div className="page-hero-overlay" />
@@ -140,37 +140,37 @@ export function FacilitiesPage() {
             <div className="col-span-2 row-span-2">
               <div className="img-zoom h-full shadow-xl">
                 <img
-                  src="https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=600&q=80"
-                  alt="Club Hípico"
+                  src="/instalaciones.jpg"
+                  alt="Instalaciones 1942 Haras Club"
                   className="w-full h-full object-cover min-h-[400px]"
                 />
               </div>
             </div>
             <div className="img-zoom shadow-xl">
               <img
-                src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=300&q=80"
-                alt="Caballerizas"
+                src="/caballo.jpg"
+                alt="Caballo en las instalaciones"
                 className="w-full h-48 lg:h-56 object-cover"
               />
             </div>
             <div className="img-zoom shadow-xl">
               <img
-                src="https://images.unsplash.com/photo-1516466723877-e4ec1d736c8a?auto=format&fit=crop&w=300&q=80"
-                alt="Pistas"
+                src="/alumnas.jpg"
+                alt="Alumnas de equitación"
                 className="w-full h-48 lg:h-56 object-cover"
               />
             </div>
             <div className="img-zoom shadow-xl">
               <img
-                src="https://images.unsplash.com/photo-1508761140435-e84362e87e0e?auto=format&fit=crop&w=300&q=80"
-                alt="Equipamiento"
+                src="/jinete-caballo.jpg"
+                alt="Jinete con caballo"
                 className="w-full h-48 lg:h-56 object-cover"
               />
             </div>
             <div className="img-zoom shadow-xl">
               <img
-                src="https://images.unsplash.com/photo-1450052590821-8bf91254a353?auto=format&fit=crop&w=300&q=80"
-                alt="Paddocks"
+                src="/ninos-caballo.jpg"
+                alt="Niños cuidando caballos"
                 className="w-full h-48 lg:h-56 object-cover"
               />
             </div>

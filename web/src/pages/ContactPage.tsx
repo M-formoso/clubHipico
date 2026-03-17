@@ -34,7 +34,7 @@ export function ContactPage() {
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=1920&q=80)',
+            backgroundImage: 'url(/jinete-caballo.jpg)',
           }}
         />
         <div className="page-hero-overlay" />
@@ -69,10 +69,10 @@ export function ContactPage() {
 
               <div className="space-y-6">
                 {[
-                  { icon: MapPin, title: 'Dirección', content: 'Villa Carlos Paz, Córdoba, Argentina', href: null },
-                  { icon: Phone, title: 'Teléfono', content: '+598 99 123 456', href: 'tel:+59899123456' },
-                  { icon: Mail, title: 'Email', content: 'info@clubhipico.com', href: 'mailto:info@clubhipico.com' },
-                  { icon: Clock, title: 'Horarios', content: 'Lun-Vie: 7:00-20:00 · Sáb: 8:00-18:00 · Dom: 9:00-14:00', href: null },
+                  { icon: MapPin, title: 'Dirección', content: 'Calle Pública S/N, Pedanía La Lagunilla, Falda del Carmen, Córdoba', href: null },
+                  { icon: Phone, title: 'Teléfono', content: '+54 9 3515 20-5936 (Andrés Minuzzi)', href: 'tel:+5493515205936' },
+                  { icon: Mail, title: 'Email', content: '1942harasclub@gmail.com', href: 'mailto:1942harasclub@gmail.com' },
+                  { icon: Clock, title: 'Horarios', content: 'Lun-Vie: 8:30-20:30 · Sáb-Dom: 10:00-19:00', href: null },
                 ].map((item, index) => (
                   <div
                     key={item.title}
@@ -99,7 +99,7 @@ export function ContactPage() {
               {/* Google Maps */}
               <div className="mt-10">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d54455.86535455981!2d-64.5457847!3d-31.4240459!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x942d67e47aef4c8f%3A0x51f8c1b94ff8d0e8!2sVilla%20Carlos%20Paz%2C%20C%C3%B3rdoba%2C%20Argentina!5e0!3m2!1ses!2sar!4v1699999999999!5m2!1ses!2sar"
+                  src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3399.8352759659742!2d-64.459628!3d-31.556135!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzHCsDMzJzIyLjEiUyA2NMKwMjcnMzQuNyJX!5e0!3m2!1ses-419!2sar!4v1773759082098!5m2!1ses-419!2sar"
                   width="100%"
                   height="300"
                   style={{ border: 0 }}
@@ -107,7 +107,7 @@ export function ContactPage() {
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   className="rounded-none shadow-lg"
-                  title="Ubicación del Club Hípico"
+                  title="Ubicación de 1942 Haras Club"
                 />
               </div>
             </div>
@@ -183,7 +183,7 @@ export function ContactPage() {
                         value={formData.telefono}
                         onChange={handleChange}
                         className="elegant-input"
-                        placeholder="+598 99 123 456"
+                        placeholder="+54 9 3515 20-5936"
                       />
                     </div>
                     <div>

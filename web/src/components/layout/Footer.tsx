@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Facebook, Instagram, Mail, MapPin, Phone, Clock, ArrowRight } from 'lucide-react'
+import { Instagram, Mail, MapPin, Phone, Clock, ArrowRight } from 'lucide-react'
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -31,16 +31,7 @@ export function Footer() {
             {/* Social Media */}
             <div className="flex gap-3">
               <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center hover:bg-secondary hover:text-primary transition-all duration-300 group"
-                aria-label="Facebook"
-              >
-                <Facebook size={20} className="group-hover:scale-110 transition-transform" />
-              </a>
-              <a
-                href="https://instagram.com"
+                href="https://instagram.com/1942harasclub"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center hover:bg-secondary hover:text-primary transition-all duration-300 group"
@@ -89,24 +80,25 @@ export function Footer() {
                   <MapPin size={18} className="text-secondary" />
                 </div>
                 <div className="text-gray-400">
-                  <span className="block">Ruta 123, Km 45</span>
-                  <span>Uruguay</span>
+                  <span className="block">Calle Pública S/N</span>
+                  <span className="block">Pedanía La Lagunilla</span>
+                  <span>Falda del Carmen, Córdoba</span>
                 </div>
               </li>
               <li className="flex items-center gap-4">
                 <div className="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Phone size={18} className="text-secondary" />
                 </div>
-                <a href="tel:+59899123456" className="text-gray-400 hover:text-secondary transition-colors">
-                  +598 99 123 456
+                <a href="tel:+5493515205936" className="text-gray-400 hover:text-secondary transition-colors">
+                  +54 9 3515 20-5936
                 </a>
               </li>
               <li className="flex items-center gap-4">
                 <div className="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Mail size={18} className="text-secondary" />
                 </div>
-                <a href="mailto:info@clubhipico.com" className="text-gray-400 hover:text-secondary transition-colors">
-                  info@clubhipico.com
+                <a href="mailto:1942harasclub@gmail.com" className="text-gray-400 hover:text-secondary transition-colors">
+                  1942harasclub@gmail.com
                 </a>
               </li>
             </ul>
@@ -125,7 +117,7 @@ export function Footer() {
                 </div>
                 <div>
                   <p className="text-white font-medium">Lun - Vie</p>
-                  <p className="text-gray-400">7:00 - 20:00</p>
+                  <p className="text-gray-400">8:30 - 20:30</p>
                 </div>
               </li>
               <li className="flex items-start gap-4">
@@ -133,17 +125,19 @@ export function Footer() {
                   <Clock size={18} className="text-secondary" />
                 </div>
                 <div>
-                  <p className="text-white font-medium">Sábados</p>
-                  <p className="text-gray-400">8:00 - 18:00</p>
+                  <p className="text-white font-medium">Sáb - Dom</p>
+                  <p className="text-gray-400">10:00 - 19:00</p>
                 </div>
               </li>
               <li className="flex items-start gap-4">
                 <div className="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Clock size={18} className="text-secondary" />
+                  <div className="w-5 h-5 rounded-full bg-secondary flex items-center justify-center">
+                    <span className="text-primary text-xs font-bold">AM</span>
+                  </div>
                 </div>
                 <div>
-                  <p className="text-white font-medium">Domingos</p>
-                  <p className="text-gray-400">9:00 - 14:00</p>
+                  <p className="text-white font-medium">Profesor</p>
+                  <p className="text-gray-400">Andrés Minuzzi</p>
                 </div>
               </li>
             </ul>

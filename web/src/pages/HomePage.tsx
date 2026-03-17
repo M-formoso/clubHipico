@@ -206,8 +206,8 @@ export function HomePage() {
             <div className="order-1 lg:order-2 relative overflow-visible">
               <div className="img-zoom shadow-2xl">
                 <img
-                  src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80"
-                  alt="Caballos en el club"
+                  src="/ninos-caballo.jpg"
+                  alt="Niños cuidando caballos en 1942 Haras Club"
                   className="w-full h-[400px] lg:h-[600px] object-cover"
                 />
               </div>
@@ -274,7 +274,7 @@ export function HomePage() {
               <ArrowRight size={20} />
             </Link>
             <a
-              href="tel:+59899123456"
+              href="tel:+5493515205936"
               className="inline-flex items-center justify-center gap-2 text-lg font-semibold text-primary border-2 border-primary px-8 py-4 rounded-full hover:bg-primary hover:text-white transition-all"
             >
               Llamar Ahora
